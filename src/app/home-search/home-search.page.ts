@@ -229,7 +229,7 @@ this.destinations = window.localStorage.getItem('coop_destinations');
     const matchingMainObjItems = this.mainObj
       .filter((item: any) => {
         const name = item.name?.toLowerCase();
-        return name && name.includes(normalizedSearch);
+        return name && name.startsWith(normalizedSearch);
       })
       .map((item: any) => {
         const key = item.name.toLowerCase();
@@ -255,7 +255,7 @@ this.destinations = window.localStorage.getItem('coop_destinations');
           })
           .filter((item: any) => {
             const cityKey = item.cityName?.toLowerCase();
-            return cityKey && cityKey.includes(normalizedSearch) && !matchedKeys.has(cityKey);
+            return cityKey && cityKey.startsWith(normalizedSearch) && !matchedKeys.has(cityKey);
           })
           .map((item: any) => {
             matchedKeys.add(item.cityName.toLowerCase());
@@ -269,7 +269,7 @@ this.destinations = window.localStorage.getItem('coop_destinations');
     const matchingZoneListItems = this.zoneList
       .filter((item: any) => {
         const name = item.name?.toLowerCase();
-        return name && name.includes(normalizedSearch);
+        return name && name.startsWith(normalizedSearch);
       })
       .map((item: any) => {
         const key = item.name.toLowerCase();

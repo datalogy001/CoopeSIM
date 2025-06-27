@@ -18,7 +18,7 @@ export class UpdateAppPage implements OnInit {
      //  window.open('https://apps.apple.com/us/app/telitravel-global-esim-data/id6740319979', '_system');
     } else if (this.platform.is('android')) {
       // Redirect to the Google Play Store
-      this.market.open('com.coop.eSIM');
+      this.market.open('com.cooptraveleSIM');
     }
 
     // Note: Do not dismiss the modal here

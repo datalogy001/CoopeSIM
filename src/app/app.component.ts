@@ -359,7 +359,7 @@ export class AppComponent {
 
    // Initialize OneSignal Push Notifications
    initOneSignal() {
-    OneSignalPlugin.setAppId('008e3afb-91f1-408b-a077-7342c8e6250f');
+    OneSignalPlugin.setAppId('6bacd441-2725-432b-9c48-0cf95e377be8');
     OneSignalPlugin.setNotificationOpenedHandler((jsonData: any) => {
       console.log('Notification opened:', jsonData);
       let data = jsonData.notification.additionalData;

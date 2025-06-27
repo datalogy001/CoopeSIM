@@ -177,7 +177,7 @@ export class Tab2Page {
   
     // Search in `mainObj` with is_destination = false
     const matchingMainObjItems = this.mainObj
-      .filter((item: any) => item.name?.toLowerCase().includes(normalizedSearch))
+      .filter((item: any) => item.name?.toLowerCase().startsWith(normalizedSearch))
       .map((item: any) => ({
         ...item,
         is_destination: false,
@@ -194,14 +194,14 @@ export class Tab2Page {
             country_name:this.translate.instant(`COUNTRIES.${item.iso}`)
           }))
           .filter((item: any) =>
-            item.cityName?.toLowerCase().includes(normalizedSearch)
+            item.cityName?.toLowerCase().startsWith(normalizedSearch)
           )
       : [];
        // 🔍 Search in `zoneList` as a third source
     const matchingZoneListItems = Array.isArray(this.zoneList)
     ? this.zoneList
         .filter((item: any) =>
-          item.name?.toLowerCase().includes(normalizedSearch)
+          item.name?.toLowerCase().startsWith(normalizedSearch)
         )
         .map((item: any) => ({
           ...item,

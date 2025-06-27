@@ -21,7 +21,7 @@ export class OnboardTwoPage implements OnInit {
     //Notification Permission Popup 
     this.platform.ready().then(() => {
       if (this.platform.is('android') || this.platform.is('ios')) {
-        OneSignalPlugin.setAppId('008e3afb-91f1-408b-a077-7342c8e6250f');
+        OneSignalPlugin.setAppId('6bacd441-2725-432b-9c48-0cf95e377be8');
       }
     });
 
