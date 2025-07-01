@@ -4,7 +4,7 @@ svg.radial-progress {
     padding: 0;
     transform: rotate(-90deg);
     width: 100%;
-    background-color: var(--theme-color-2);
+    background-color: var(--theme-gray);
     border-radius: 50%;
     transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out; 
   }
@@ -45,7 +45,7 @@ svg.radial-progress {
     stroke-dasharray: 219.91148575129;
     stroke: var(--theme-color-1);
     stroke-dashoffset: 219.91148575129;
-    stroke-width: 7px;
+    stroke-width: 8px;
     stroke-linecap: round;
     transition: stroke-dashoffset 0.1s linear; 
   }
@@ -73,11 +73,13 @@ svg.radial-progress {
   
   .message-container {
     font-size: 15px;
-    color: var(--theme-color-2);
+    //color: var(--theme-color-2);
+     color: #fff;
     margin: 10px 20px 0;
     text-align: center;
     p{
-      color: var(--theme-color-2);
+      //color: var(--theme-color-2);
+      color: #fff;
     }
   }
   

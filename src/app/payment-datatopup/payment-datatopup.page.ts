@@ -22,7 +22,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { ModalCouponaddedPage } from '../modal-couponadded/modal-couponadded.page';
 import { ModalCodenotworkPage } from '../modal-codenotwork/modal-codenotwork.page';
 import { DelModelCoupenPage } from '../del-model-coupen/del-model-coupen.page';
-
+import { SplitPaymentPage } from '../split-payment/split-payment.page';
 declare var sgap: any;
 
 
@@ -38,7 +38,7 @@ export class PaymentDatatopupPage implements OnInit {
   swiperRef: ElementRef | undefined;
   swiper?: Swiper;
   tempDetails: any = [];
-  checkoutObj: any = { "is_couped_applied" :0, "original_amount" : "","coupon_code" :"", "payment_type" :"","percentage" : "","discount_amount" :"",'networkLogos': [], 'networksData': [], 'iccid': '', 'status': '', 'user_id': '', 'id': '', 'actualAmount': '', 'extraAmount': '', 'currency': '', 'bundleData': [], 'paymentId': '', 'PayerID': '', 'token': '' };
+  checkoutObj: any = { "is_couped_applied": 0, "original_amount": "", "coupon_code": "", "payment_type": "", "percentage": "", "discount_amount": "", 'networkLogos': [], 'networksData': [], 'iccid': '', 'status': '', 'user_id': '', 'id': '', 'actualAmount': '', 'extraAmount': '', 'currency': '', 'bundleData': [], 'paymentId': '', 'PayerID': '', 'token': '' };
   accessToken: any = '';
   userDetails: any = [];
   isLogin: any = '';
@@ -51,7 +51,7 @@ export class PaymentDatatopupPage implements OnInit {
   stripe_key: any = this.service.stripePubliserKey;
   iccid: any;
   networks: any = [];
-  stripeCardObj: any = { "is_couped_applied" :0, "original_amount" : "","coupon_code" :"", "payment_type" :"","percentage" : "","discount_amount" :"",'payment_intent': [], 'customer_id': '', 'card_source': '', 'card_id': '', 'currency': '', 'bundle': '', 'isTermsSelected': false, 'iccid': '' };
+  stripeCardObj: any = { "is_split_payment": false, "total_amount": "", "wallet_amount": "", "amt_from_other_payment": "", "is_couped_applied": 0, "original_amount": "", "coupon_code": "", "payment_type": "", "percentage": "", "discount_amount": "", 'payment_intent': [], 'customer_id': '', 'card_source': '', 'card_id': '', 'currency': '', 'bundle': '', 'isTermsSelected': false, 'iccid': '' };
   paymentMethod: any = [];
   isDataAvail: any = true;
   clientSecret: any = '';
@@ -73,9 +73,14 @@ export class PaymentDatatopupPage implements OnInit {
 
   @ViewChild(IonContent, { static: false }) content?: IonContent;
   constructor(private zone: NgZone,private keyboard: Keyboard,private translate: TranslateService, private popoverController: PopoverController, private loadingScreen: LoadingScreenAppPage, private platform: Platform, private loadCtr: LoadingController, private service: ServicesService, private navController: NavController, private toastController: ToastController, private Router: Router, private modalController: ModalController) {
-    if (this.platform.is('android') || this.platform.is('ios')) {
-      sgap.setKey(this.service.stripePubliserKey);
-    }
+    this.platform.ready().then(() => {
+  if ((this.platform.is('android') || this.platform.is('ios')) && typeof sgap !== 'undefined') {
+    sgap.setKey(this.service.stripePubliserKey);
+  } else {
+    console.warn('Stripe plugin not available or running in browser.');
+    // Optionally mock stripe behavior or skip
+  }
+});
   
   }
 
@@ -265,8 +270,13 @@ selectedLang:any;
 
   actualPrice:any; 
 
-   // Event handler for radio button change
-   onPaymentTypeChange(event: any) {
+  // Event handler for radio button change
+  onPaymentTypeChange(event: any) {
+    this.stripeCardObj.is_split_payment = false;
+    this.stripeCardObj.total_amount = '';
+    this.stripeCardObj.wallet_amount = '';
+    this.stripeCardObj.amt_from_other_payment = '';
+
     this.selectedPaymentType = event.detail.value;
     if (this.selectedPaymentType == 'google-pay') {
       this.creditDebitType = '';
@@ -277,22 +287,9 @@ selectedLang:any;
     else if (this.selectedPaymentType == 'wallet-pay') {
       this.creditDebitType = '';
       this.isCardSelected = false;
-      this.actualPrice = this.stripeCardObj.is_couped_applied ==0? this.stripeCardObj.bundle.extraAmount: this.stripeCardObj.original_amount;
-      //Check balance 
-      if (Number(this.walletBalance) >= Number(this.actualPrice))
-      {
-          //Can debit from wallet
-          this.selectedPaymentType = 'wallet-pay';
-        }else{
-          //Insufficent Balance popup 
-          this.gotoNocreditbalance(this.translate.instant("you_dont_have_credit"), this.translate.instant("you_dont_have_credit_desc"), 8000);
-          setTimeout(() => {
-            this.selectedPaymentType = 'google-pay';  
-          }, 100);
-          
-        }
     }
   }
+
   async gotoNocreditbalance(buttonText: any, msg: any, times: any) {
     const modal = await this.modalController.create({
       component: ModalNocreditBalancePage,
@@ -422,12 +419,134 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
   }
 }
 
-  
+  //Calling Split Payment 
+
+  tempSplitPaymentsObj: any = { "is_split_payment": false, "total_amount": "", "wallet_amount": "", "amt_from_other_payment": "", "selected_payment_method": "", "card_id": "", "customer_id": "", "card_source": "", "isExistigCard": false };
+
+  async callSplitPayment(actualAmt: any) {
+    this.tempSplitPaymentsObj.total_amount = actualAmt;
+    this.tempSplitPaymentsObj.wallet_amount = this.walletBalance;
+
+    const modalparitalPay = await this.modalController.create({
+      component: SplitPaymentPage,
+      componentProps: { splitObj: this.tempSplitPaymentsObj }
+    });
+
+    // ✅ FIRST present the modal
+    await modalparitalPay.present();
+
+    // ✅ THEN wait for dismissal
+    const { data, role } = await modalparitalPay.onDidDismiss();
+
+    if (data) {
+
+      if (data.isClose == false) {
+        this.stripeCardObj.is_split_payment = data.splitDatas.is_split_payment;
+        this.stripeCardObj.total_amount = data.splitDatas.total_amount;
+        this.stripeCardObj.wallet_amount = data.splitDatas.wallet_amount;
+        this.stripeCardObj.amt_from_other_payment = data.splitDatas.amt_from_other_payment;
+
+        //For Split Google pay functionality 
+        if (data.splitDatas.selected_payment_method == 'google-pay') {
+
+          
+        
+
+          //First step: Generate client secret key
+          console.log("Google Pay" + JSON.stringify(this.stripeCardObj));
+          await this.loadingScreen.presentLoading();
+          this.paymentIntentObj.currency = this.currencyCode;
+          this.paymentIntentObj.amount = this.stripeCardObj.amt_from_other_payment;
+          this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
+          this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
+            if (res.code == 200) {
+              this.clientSecret = res.data[0].client_secret;
+              this.loadingScreen.dismissLoading();
+              this.setupGooglePay(this.paymentIntentObj.amount, this.currencyCode);
+            } else {
+              this.loadingScreen.dismissLoading();
+              this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
+              this.clientSecret = '';
+            }
+          }).catch(err => {
+            this.loadingScreen.dismissLoading();
+            this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
+            this.clientSecret = '';
+          })
+        } else {
+
+          console.log("Card payments with Add card" + data.splitDatas.isExistigCard);
+
+          if (data.splitDatas.isExistigCard == false) {
+            let navigationExtras: NavigationExtras = {
+              state: {
+                stripeCardData: this.stripeCardObj,
+                fromPayment: true,
+                cashBackRes: this.cashBackRes
+              }
+            };
+            this.Router.navigate(['/add-card-fpay'], navigationExtras);
+          } else {
+            //Existing card 
+            this.stripeCardObj.card_id = data.splitDatas.card_id;
+            this.stripeCardObj.customer_id = data.splitDatas.customer_id;
+            this.stripeCardObj.card_source = data.splitDatas.card_source;
+
+            await this.loadingScreen.presentLoading();
+            this.stripeCardObj.isTermsSelected = true;
+            // Step 1-> Get Client secret key from Server side 
+            this.paymentIntentObj.currency = this.currencyCode;
+            this.paymentIntentObj.amount = this.stripeCardObj.amt_from_other_payment;
+            console.log("stripe=>" + this.paymentIntentObj.amount);
+            this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
+            this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
+
+              if (res.code == 200) {
+                // this.presentToast("Initialize Payment Intent", "Success");
+                this.clientSecret = res.data[0].client_secret;
+                this.cardIntentObj.card_id = this.stripeCardObj.card_id;
+                this.cardIntentObj.intent_id = res.data[0].id;
+                this.callPaymentIntentFromApp(this.cardIntentObj);
+
+              } else {
+                this.loadingScreen.dismissLoading();
+                this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
+                this.clientSecret = '';
+              }
+            }).catch(err => {
+              this.loadingScreen.dismissLoading();
+              this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
+              this.clientSecret = '';
+            })
+
+          }
+
+        }
+      } else {
+        console.log("Close Modal");
+      }
+    }
+  }
+
+
   async proceedForPayment() {
-    if (this.selectedPaymentType == 'wallet-pay')
-      {
-        //Purchase eSIM using App credits 
-        //No Cashback when wallet pay selected 
+    if (this.selectedPaymentType == 'wallet-pay') {
+ 
+      this.actualPrice = this.stripeCardObj.is_couped_applied == 0 ? this.stripeCardObj.bundle.extraAmount : this.stripeCardObj.original_amount;
+      console.log("walletBalance => " + this.walletBalance);
+      console.log("actualPrice => " + this.actualPrice);
+      const wallet = Number(this.walletBalance);
+      const price = Number(this.actualPrice);
+
+      if (wallet === 0) {
+        // Case 1: Wallet is 0
+        this.gotoNocreditbalance(
+          this.translate.instant("you_dont_have_credit"),
+          this.translate.instant("you_dont_have_credit_desc"),
+          8000
+        );
+      } else if (wallet >= price) {
+        // Case 2: Full payment from wallet
         this.cashBackRes = { "is_cashback_applicable": 0, "amount_type": "", "percentage": "", "amount": "", "currency": "" };
         console.log("cashBackRes" + JSON.stringify(this.cashBackRes));
         
@@ -437,41 +556,50 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
         });
         modalFirstOpt.onDidDismiss();
         return await modalFirstOpt.present();
-      }
-      else 
-    if (this.selectedPaymentType == 'google-pay') {
-   
-      //this.errorMSGModal(this.translate.instant('VALIDATION_MSG_BUTTON'), this.translate.instant('SERVICE_NOT_AVAIABLE'));
-      if (this.platform.is('android') || this.platform.is('ios')) {
-      //First step: Generate client secret key
-      await this.loadingScreen.presentLoading();
-      this.paymentIntentObj.currency = this.currencyCode;
-      this.paymentIntentObj.amount = this.stripeCardObj.is_couped_applied ==0? this.stripeCardObj.bundle.extraAmount: this.stripeCardObj.original_amount; 
-      this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
-      this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
-        if (res.code == 200) {
-          this.clientSecret = res.data[0].client_secret;
+      } else {
+        // Case 3: Partial wallet, needs split payment
+        await this.loadingScreen.presentLoading();
+        setTimeout(() => {
           this.loadingScreen.dismissLoading();
-          this.setupGooglePay(this.paymentIntentObj.amount,  this.currencyCode);
+          console.log("Partial wallet, needs split payment");
+          this.callSplitPayment(this.actualPrice);
+        }, 500);
+      }
+    }
+    else
+      if (this.selectedPaymentType == 'google-pay') {
+      
+        //this.errorMSGModal(this.translate.instant('VALIDATION_MSG_BUTTON'), this.translate.instant('SERVICE_NOT_AVAIABLE'));
+        if (this.platform.is('android') || this.platform.is('ios')) {
+          //First step: Generate client secret key
+          await this.loadingScreen.presentLoading();
+          this.paymentIntentObj.currency = this.currencyCode;
+          this.paymentIntentObj.amount = this.stripeCardObj.is_couped_applied == 0 ? this.stripeCardObj.bundle.extraAmount : this.stripeCardObj.original_amount;
+          this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
+          this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
+            if (res.code == 200) {
+              this.clientSecret = res.data[0].client_secret;
+              this.loadingScreen.dismissLoading();
+              this.setupGooglePay(this.paymentIntentObj.amount, this.currencyCode);
+            } else {
+              this.loadingScreen.dismissLoading();
+              this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
+              this.clientSecret = '';
+            }
+          }).catch(err => {
+            this.loadingScreen.dismissLoading();
+            this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
+            this.clientSecret = '';
+          })
         } else {
-          this.loadingScreen.dismissLoading();
-          this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('ERROR_MESSAGE'));
-          this.clientSecret = '';
+          console.log("We are in web");
         }
-      }).catch(err => {
-        this.loadingScreen.dismissLoading();
-        this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('ERROR_MESSAGE'));
-        this.clientSecret = '';
-      })
-        }else{
-        console.log("We are in web");
-        }  
-    }else {
-      if (this.cardList.length > 0 && this.isCardSelected == false) {
-        this.gotoPernissionModel();
-      }
-      else {
-      if (this.isCardSelected == true) {
+      } else {
+        if (this.cardList.length > 0 && this.isCardSelected == false) {
+          this.gotoPernissionModel();
+        }
+        else {
+          if (this.isCardSelected == true) {
 
         await this.loadingScreen.presentLoading();
         this.stripeCardObj.isTermsSelected = true;

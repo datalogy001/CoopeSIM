@@ -879,6 +879,13 @@ ion-modal {
     ion-content::part(background) { border-radius: 0 0 0px 0px; }
   }
 
+  ion-button{
+    &.button-outline{
+      --color:#fff;
+      --border-color:#fff;
+    }
+  }
+
 }
 
 app-date-picker-fpay {

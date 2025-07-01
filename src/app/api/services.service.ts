@@ -8,17 +8,20 @@ import { Observable } from 'rxjs';
 })
 export class ServicesService {
   
-  //Live server for v3 
+  //Live server for Coop v3 
   //restAPI: string = "https://app.travelroam.com/api/v3/"; // V3 with live 
-  //ftelWhiteLable: any = "39";
-  //clientToken:any = 'P1xJe67SvguJVvIngbnGHUaNFTvaeEBEiLXyHxTXf14u0hfCQRlPLplDRxp8';
-  //stripePubliserKey: string = 'pk_live_51PBxf92LMpZgR6oaLYbVe3unRi4OG2imwT5Imo2KBOPK8m9yEowNfyNaH9n0lCF29Ut1zeKsegsx3sWajOkwA2Xw00jAHlvTPY';
+  //stripePubliserKey: string = 'pk_live_51ReDyUGzg6l7xu0e5NeN74opJoIQkxDouaxsqDTZDD7ibliD56uuC7xC0hFxprsroP8wcg5MeaoWmCgy3mT5RLs600cFWutvtO';
+  //whiteLabelId: any = "18";
+  //clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX';
+  
 
-  //Development  Mode 
-    restAPI: string = "https://goldenesim.devdemo.biz/api/v3/";
-    stripePubliserKey: string = 'pk_test_51RDpoeRv8wsTvjpIU3KeTbQ0hkNjhsX3mvmbanIhB718VS2SM01ws84NTarhmoUITRe8gchF9IVZgyMR0dn4rpq900cKkKnBoH';
-    clientToken:any = 'P1xJe67SvguJVvIngbnGHUaNFTvaeEBEiLXyHxTXf14u0hfCQRlPLplDRxp8';
-    ftelWhiteLable: any = "39";
+  
+//Development server for Coop V3
+  restAPI: string = "https://coop.devdemo.biz/api/v3/"; // V3 with development 
+  stripePubliserKey: string = 'pk_test_51ReDyUGzg6l7xu0eHe8yFHx4Cfkkhs8VgcUoWEmJp1qw0zczINr5me0fhiXJGyoqYFMItiEzMO2iOmKUfFZ0rvPY00y3gsIKb3';     
+  whiteLabelId: any = "18";
+  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX';
+
 
   constructor(private http: HttpClient) { }
 
@@ -28,7 +31,7 @@ export class ServicesService {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
 
       return this.http.post(this.restAPI + 'pay', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -45,7 +48,7 @@ export class ServicesService {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'orderCheckout', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -61,7 +64,7 @@ export class ServicesService {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'googlepay', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -77,7 +80,7 @@ export class ServicesService {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'applepay', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -94,7 +97,7 @@ export class ServicesService {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'user/deletecardDetails', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -109,7 +112,7 @@ export class ServicesService {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'delteNotification', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -126,7 +129,7 @@ export class ServicesService {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'cashbackEligable', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -142,7 +145,7 @@ applyCoupenCode(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'getCouponCode', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -159,7 +162,7 @@ applyCoupenCode(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'delPaymentHistory', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -175,7 +178,7 @@ applyCoupenCode(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'restlogin', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -191,7 +194,7 @@ applyCoupenCode(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'checkuserdeleted', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -222,7 +225,7 @@ applyCoupenCode(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'fpay_payment', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -243,7 +246,7 @@ applyCoupenCode(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'user/stripePayment', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -261,7 +264,7 @@ applyCoupenCode(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'card/pay/topup', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -281,7 +284,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'walletpay', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -300,7 +303,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'stripegooglepay', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -318,7 +321,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'google/pay/topup', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -338,7 +341,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'paymentCardIntent', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -359,7 +362,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('currency',this.selectedCurrency)
         .set('client-token', this.clientToken)
@@ -379,7 +382,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('currency',this.selectedCurrency)
         .set('client-token', this.clientToken)
         .set('language', this.selectedLang)
@@ -398,7 +401,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('currency',this.selectedCurrency)
         .set('client-token', this.clientToken)
@@ -417,7 +420,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'googlelogin', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -437,7 +440,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('currency',this.selectedCurrency)
         .set('client-token', this.clientToken)
@@ -456,7 +459,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'forgotPassword', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -472,7 +475,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'retrivePassword', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -490,7 +493,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
         .set('Authorization', 'Bearer ' + this.authToken)
       return this.http.post(this.restAPI + 'geteSIMGODatabalance', JSON.stringify(this.dataObj), { headers }).subscribe((res: any) => {
@@ -506,7 +509,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     var objData = { 'iso': code, 'type': searchItem };
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
-      .set('whitelabel', this.ftelWhiteLable)
+      .set('whitelabel', this.whiteLabelId)
       .set('client-token', this.clientToken)
       .set('Content-Type', 'application/json; charset=utf-8')
        return this.http.post(this.restAPI + 'user/choosebundle', JSON.stringify(objData), { headers }).subscribe((res: any) => {
@@ -521,7 +524,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.get('https://api.exchangerate.host/latest?base=' + currencyCode, { headers }).subscribe((res: any) => {
         resolve(res);
@@ -536,7 +539,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'networks/' + countryName, { headers }).subscribe((res: any) => {
         resolve(res);
@@ -553,7 +556,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'privacy_policies', { headers }).subscribe((res: any) => {
@@ -571,7 +574,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'term_conditions', { headers }).subscribe((res: any) => {
@@ -588,7 +591,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'about_us', { headers }).subscribe((res: any) => {
@@ -607,7 +610,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'faq', { headers }).subscribe((res: any) => {
@@ -625,7 +628,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'verifyEmail', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -647,7 +650,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + this.authToken)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('currency',this.selectedCurrency)
         .set('client-token', this.clientToken)
@@ -667,7 +670,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'wallet/transactions', { headers }).subscribe((res: any) => {
@@ -685,7 +688,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
         const headers = new HttpHeaders()
           .set('Authorization', 'Bearer ' + access_token)
           .set('Content-Type', 'application/json; charset=utf-8')
-          .set('whitelabel', this.ftelWhiteLable)
+          .set('whitelabel', this.whiteLabelId)
           .set('language', this.selectedLang)
           .set('client-token', this.clientToken)
         return this.http.get(this.restAPI + 'refferel_history', { headers }).subscribe((res: any) => {
@@ -703,7 +706,7 @@ getShareAmount(obj: any, access_token:any) {
     const headers = new HttpHeaders()
       .set('Authorization', 'Bearer ' + access_token)
       .set('Content-Type', 'application/json; charset=utf-8')
-      .set('whitelabel', this.ftelWhiteLable)
+      .set('whitelabel', this.whiteLabelId)
       .set('language', this.selectedLang)
       .set('client-token', this.clientToken)
     return this.http.get(this.restAPI + 'referal/amounts', { headers }).subscribe((res: any) => {
@@ -723,7 +726,7 @@ earnWalletRefer(obj: any) {
   return new Promise((resolve, reject) => {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json; charset=utf-8')
-      .set('whitelabel', this.ftelWhiteLable)
+      .set('whitelabel', this.whiteLabelId)
       .set('language', this.selectedLang)
       .set('client-token', this.clientToken)
       .set('Authorization', 'Bearer ' + this.authToken)
@@ -741,7 +744,7 @@ validate_refer_code(obj: any) {
   return new Promise((resolve, reject) => {
     const headers = new HttpHeaders()
       .set('Content-Type', 'application/json; charset=utf-8')
-      .set('whitelabel', this.ftelWhiteLable)
+      .set('whitelabel', this.whiteLabelId)
       .set('client-token', this.clientToken)
       .set('language', this.selectedLang)
     return this.http.post(this.restAPI + 'validate/referal',JSON.stringify(obj),  { headers }).subscribe((res: any) => {
@@ -758,7 +761,7 @@ validate_voucher_code(obj: any, access_token:any) {
     const headers = new HttpHeaders()
      .set('Authorization', 'Bearer ' + access_token)
       .set('Content-Type', 'application/json; charset=utf-8')
-      .set('whitelabel', this.ftelWhiteLable)
+      .set('whitelabel', this.whiteLabelId)
       .set('language', this.selectedLang)
       .set('client-token', this.clientToken)
     return this.http.post(this.restAPI + 'voucher/purchase',JSON.stringify(obj),  { headers }).subscribe((res: any) => {
@@ -776,7 +779,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'notifications', { headers }).subscribe((res: any) => {
@@ -792,7 +795,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'notifications/' + user_id, { headers }).subscribe((res: any) => {
         resolve(res);
@@ -811,7 +814,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + this.authToken)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('currency',this.selectedCurrency)
         .set('client-token', this.clientToken)
@@ -829,7 +832,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + access_token)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'updateUserLanguage', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -848,7 +851,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + access_token)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
         .set('language', this.selectedLang)
       return this.http.post(this.restAPI + 'delete/profile/image', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -866,7 +869,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + access_token)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'app_service', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -882,7 +885,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + access_token)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'app_payment', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -899,7 +902,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + access_token)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'app_promotions', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -916,7 +919,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + access_token)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'promotion_email', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -933,7 +936,7 @@ validate_voucher_code(obj: any, access_token:any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'contact_form', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -951,7 +954,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'user/bundle_expired', { headers }).subscribe((res: any) => {
@@ -969,7 +972,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'user/paymentHistory', { headers }).subscribe((res: any) => {
@@ -987,7 +990,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'add_card_fpay', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -1005,7 +1008,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'user/addcardDetails', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -1023,7 +1026,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'save_card_list_fpay', { headers }).subscribe((res: any) => {
         resolve(res);
@@ -1040,7 +1043,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'user/cardDetails', { headers }).subscribe((res: any) => {
         resolve(res);
@@ -1056,7 +1059,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Authorization', 'Bearer ' + access_token)
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'user/deleteAccount', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -1072,7 +1075,7 @@ validate_voucher_code(obj: any, access_token:any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'versions/' + obj.app_platform, { headers }).subscribe((res: any) => {
         resolve(res);
@@ -1087,7 +1090,7 @@ validate_voucher_code(obj: any, access_token:any) {
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'esimcountries', JSON.stringify(paramObj), { headers }).subscribe((res: any) => {
         resolve(res);
@@ -1106,13 +1109,13 @@ validate_voucher_code(obj: any, access_token:any) {
       {
       var  headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
         .set('Authorization', 'Bearer ' + this.authToken)
       }else{
         var headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
       }
       return this.http.post(this.restAPI + 'choosebundle', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -1130,7 +1133,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + authToken)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'createIntentApp', JSON.stringify(obj), { headers }).subscribe((res: any) => {
@@ -1147,7 +1150,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + authToken)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.get(this.restAPI + 'cardsetup', { headers }).subscribe((res: any) => {
@@ -1165,7 +1168,7 @@ validate_voucher_code(obj: any, access_token:any) {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('Authorization', 'Bearer ' + authToken)
-        .set('whitelabel', this.ftelWhiteLable)
+        .set('whitelabel', this.whiteLabelId)
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'user/updateprofile', JSON.stringify(obj), { headers }).subscribe((res: any) => {

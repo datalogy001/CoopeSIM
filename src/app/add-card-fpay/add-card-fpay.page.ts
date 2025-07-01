@@ -20,7 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class AddCardFpayPage implements OnInit {
   tempDetails: any = [];
-  stripeCardObj: any = { "is_couped_applied" :0,  "original_amount" : "","coupon_code" :"", "payment_type" :"","percentage" : "","discount_amount" :"",'customer_id': '', 'card_source': '', 'card_id': '', 'currency': '', 'bundle': '', 'isTermsSelected': false, 'iccid': '' };
+  stripeCardObj: any = { "is_split_payment": false, "total_amount" : "","wallet_amount":"",  "amt_from_other_payment":"", "is_couped_applied" :0,  "original_amount" : "","coupon_code" :"", "payment_type" :"","percentage" : "","discount_amount" :"",'customer_id': '', 'card_source': '', 'card_id': '', 'currency': '', 'bundle': '', 'isTermsSelected': false, 'iccid': '' };
   @ViewChild('swiper')
   swiperRef: ElementRef | undefined;
   swiper?: Swiper;
@@ -82,14 +82,22 @@ export class AddCardFpayPage implements OnInit {
       this.stripeCardObj.percentage =  this.tempDetails.stripeCardData.percentage;
       this.stripeCardObj.discount_amount =  this.tempDetails.stripeCardData.discount_amount;
 
+      this.stripeCardObj.is_split_payment =  this.tempDetails.stripeCardData.is_split_payment;
+      this.stripeCardObj.total_amount =  this.tempDetails.stripeCardData.total_amount;
+      this.stripeCardObj.wallet_amount =  this.tempDetails.stripeCardData.wallet_amount;
+      this.stripeCardObj.amt_from_other_payment =  this.tempDetails.stripeCardData.amt_from_other_payment;
+
+
       this.stripeCardObj.currency = this.tempDetails.stripeCardData.currency;
       this.stripeCardObj.iccid = this.tempDetails.stripeCardData.bundle.iccid;
       // Step 1-> Get Client secret key from Server side 
       this.paymentIntentObj.currency = this.stripeCardObj.currency;
       console.log(this.stripeCardObj.bundle.extraAmount);
       console.log(this.stripeCardObj.original_amount);
-
+      if(this.stripeCardObj.is_split_payment ==false)
       this.paymentIntentObj.amount = this.stripeCardObj.is_couped_applied ==0? this.stripeCardObj.bundle.extraAmount: this.stripeCardObj.original_amount; 
+      else
+        this.paymentIntentObj.amount = this.stripeCardObj.amt_from_other_payment; 
       this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
       console.log(this.paymentIntentObj.amount);
     }else{

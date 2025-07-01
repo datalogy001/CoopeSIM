@@ -70,11 +70,11 @@ console.log(this.txt);
     this.translate.get('EMAIL_SUBJECT', {
       email: this.userDetails.email,
       orderSummary: this.txt,
-      iccid: this.iccid
+      iccid: this.iccid,
+       url: this.sharingData.qr_img_link
     }).subscribe((translatedMessage: string) => {
       const options = {
-        message: translatedMessage,
-        url: this.sharingData.qr_img_link
+        message: translatedMessage
       };
 
       this.socialSharing.shareWithOptions(options)

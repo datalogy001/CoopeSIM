@@ -52,10 +52,14 @@ export class PaymentTopupPage implements OnInit {
 
   
     constructor(private translate: TranslateService,private popoverController: PopoverController, private loadingScreen: LoadingScreenAppPage, private platform: Platform, private loadCtr: LoadingController, private service: ServicesService, private navController: NavController, private toastController: ToastController, private Router: Router, private modalController: ModalController) {
-      
-      if (this.platform.is('android') || this.platform.is('ios')) {
-        sgap.setKey(this.service.stripePubliserKey);
-      }
+  this.platform.ready().then(() => {
+  if ((this.platform.is('android') || this.platform.is('ios')) && typeof sgap !== 'undefined') {
+    sgap.setKey(this.service.stripePubliserKey);
+  } else {
+    console.warn('Stripe plugin not available or running in browser.');
+    // Optionally mock stripe behavior or skip
+  }
+});
     }
 
     swiperSlideChanged(e: any) {
@@ -134,7 +138,7 @@ export class PaymentTopupPage implements OnInit {
      this.paymentType = '';
         this.loadPaymentMethods();
         this.initStripeFun();
-        this.paymentMethod = [{ 'type': 1, 'text': 'Credit/Debit', 'img': 'assets/img/credit-card.png' }, { 'type': 2, 'text': 'Google Pay', 'img': 'assets/img/googlepay.png' }];
+        this.paymentMethod = [{ 'type': 1, 'text': 'Credit/Debit', 'img': 'assets/img/credit-card-dark.png' }, { 'type': 2, 'text': 'Google Pay', 'img': 'assets/img/googlepay.png' }];
         this.tempDetails = this.Router.getCurrentNavigation()?.extras.state;
     
         this.checkoutObj = this.tempDetails.topupAMTData;

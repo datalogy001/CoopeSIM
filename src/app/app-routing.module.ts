@@ -463,6 +463,9 @@ const routes: Routes = [
   {
     path: 'credit-topup-new',
     loadChildren: () => import('./credit-topup-new/credit-topup-new.module').then( m => m.CreditTopupNewPageModule)
+  },
+    { path: 'split-payment',
+    loadChildren: () => import('./split-payment/split-payment.module').then( m => m.SplitPaymentPageModule)
   }
  
  

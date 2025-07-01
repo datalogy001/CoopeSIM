@@ -62,37 +62,39 @@ export class SharenowPage implements OnInit {
   }
 
 
-  async sharewithall() {
-    
-    await this.loadingScreen.presentLoading();
-    setTimeout(() => {
-      this.loadingScreen.dismissLoading();
-    }, 500);
+async sharewithall() {
+  await this.loadingScreen.presentLoading();
+  setTimeout(() => {
+    this.loadingScreen.dismissLoading();
+  }, 500);
 
-    // Translate the email subject message and replace placeholders
-    this.translate.get('EMAIL_SUBJECT', {
-      email: this.tempDetails.email,
-      orderSummary: this.value1,
-      iccid: this.value
-    }).subscribe((translatedMessage: string) => {
-      const options = {
-        message: translatedMessage,
-        url: this.value2
-      };
+  this.translate.get('EMAIL_SUBJECT', {
+    email: this.tempDetails.email,
+    orderSummary: this.value1,
+    iccid: this.value,
+    url: this.value2 // <== include URL here
+  }).subscribe((translatedMessage: string) => {
+    const options = {
+      message: translatedMessage,
+      // url is not needed here now, since we include it in the message as a clickable link
+    };
 
-      console.log(options);
-      
-      this.socialSharing.shareWithOptions(options)
-        .then(() => {
-          this.modalCtrl.dismiss();
-          this.Router.navigate(['tab1']);
-        })
-        .catch((error: any) => {
-          this.modalCtrl.dismiss();
-          this.errorMSGModal(this.translate.instant('ERROR_MODAL_BUTTON'), this.translate.instant('ERROR_SHARE_MSG'));
-        });
-    });
-  }
-  
+    console.log(options);
+
+    this.socialSharing.shareWithOptions(options)
+      .then(() => {
+        this.modalCtrl.dismiss();
+        this.Router.navigate(['tab1']);
+      })
+      .catch((error: any) => {
+        this.modalCtrl.dismiss();
+        this.errorMSGModal(
+          this.translate.instant('ERROR_MODAL_BUTTON'),
+          this.translate.instant('ERROR_SHARE_MSG')
+        );
+      });
+  });
+}
+
 
 }

@@ -754,7 +754,7 @@ this.navController.navigateRoot('profile');
       chunkedMode: false,
       mimeType: 'image/jpeg',
       headers: {
-        'whitelabel': this.service.ftelWhiteLable,
+        'whitelabel': this.service.whiteLabelId,
         'client-token': this.service.clientToken,
         'Authorization': 'Bearer '+ this.token // Use your actual token here
       }

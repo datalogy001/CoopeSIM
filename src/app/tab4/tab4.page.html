@@ -64,22 +64,19 @@
                   *ngIf="paymentItem.recharge_type !='New' ">{{ 'TOP_UP' | translate }}</span>
               </h5>
               <h6>
-                <span>{{datefilter(paymentItem.date) }}</span><span
-                  *ngIf="paymentItem.payment_method == 'Visa' || paymentItem.payment_method == 'MasterCard' "><img
-                    src="assets/img/credit-card.png" alt="">{{paymentItem.payment_method}} </span>
-                <span *ngIf="paymentItem.payment_method == 'Google Pay'"><img src="assets/img/googlepay.png"
+                <span>{{datefilter(paymentItem.date) }}</span>
+                <span
+                  *ngIf="(paymentItem.is_split_payment==false) && (paymentItem.payment_method == 'Visa' || paymentItem.payment_method == 'MasterCard' || paymentItem.payment_method == 'Stripe')"><img
+                    src="assets/img/credit-card-dark.png" alt="">{{paymentItem.payment_method}} </span>
+                <span *ngIf="paymentItem.is_split_payment==false && paymentItem.payment_method == 'Google Pay'"><img src="assets/img/googlepay-dark.png"
                     alt="">{{paymentItem.payment_method}} </span>
-                <span *ngIf="paymentItem.payment_method == 'Apple Pay'"><img src="assets/img/applepay-dark.png"
+                <span *ngIf="paymentItem.is_split_payment==false && paymentItem.payment_method == 'Apple Pay'"><img src="assets/img/applepay-dark.png"
                     alt="">{{paymentItem.payment_method}} </span>
-                <span *ngIf="paymentItem.payment_method == 'Paypal'"><img src="assets/img/paypal1.png"
+                <span *ngIf="paymentItem.is_split_payment==false && paymentItem.payment_method == 'Paypal'"><img src="assets/img/paypal1.png"
                     alt="">{{paymentItem.payment_method}} </span>
-                <span *ngIf="paymentItem.payment_method == 'App Credit' || paymentItem.payment_method == 'Wallet Pay'"><img src="assets/img/app-credit-dark.png" alt="">{{
+                <span *ngIf="paymentItem.is_split_payment==false && paymentItem.payment_method == 'App Credit' || paymentItem.payment_method == 'Wallet Pay'"><img src="assets/img/app-credit-dark.png" alt="">{{
                   'App_credit' | translate }} </span>
 
-                  <!--<span *ngIf="paymentItem.payment_method == 'Voucher'"> Voucher Top up</span> -->
-  
-                <span *ngIf="paymentItem.payment_method == 'Freedom Pay'"><img class="freedom-pay"
-                    src="assets/img/freedompay-white.png" alt=""></span>
               </h6>
             </ion-col>
             <ion-col size="5" class="text-right">              
@@ -111,6 +108,44 @@
               <span  *ngIf="paymentItem.payment_method == 'Voucher'" class="couponapplied">{{'Voucher_Top_up' | translate}}</span>
             </ion-col>
           </ion-row>
+           <p *ngIf="paymentItem.is_split_payment==true" class="splittitle">{{ 'splitPayment' | translate }}</p>
+              <ion-row *ngIf="paymentItem.is_split_payment==true">
+                <ion-col size="12">
+                  <div class="card-div">
+                    <div  *ngIf="paymentItem.payment_method == 'Visa' || paymentItem.payment_method == 'MasterCard' || paymentItem.payment_method == 'Stripe'  ">
+                     <img
+                        src="assets/img/credit-card-dark.png" alt="">{{paymentItem.payment_method}}
+                    </div>    
+                    
+                    <div  *ngIf="paymentItem.payment_method == 'Google Pay'">
+                      <img src="assets/img/googlepay-dark.png" alt="">{{paymentItem.payment_method}}
+                     </div>    
+                     
+                     <div  *ngIf=" paymentItem.payment_method == 'Apple Pay'"><img src="assets/img/applepay-dark.png"
+                      alt="">{{paymentItem.payment_method}} 
+                     </div>    
+                    
+                    <span class="price">{{paymentItem.amt_from_other_payment | currency:paymentItem.currency_symbol }}</span>
+                  </div>
+                </ion-col>
+                <ion-col size="12">
+                  <div class="card-div">
+                    <div>
+                      <img src="assets/img/app-credit-dark.png"> <span>{{
+                        'App_credit' | translate }} </span>
+                    </div>                
+                    <span class="price">{{paymentItem.wallet_amount | currency:paymentItem.currency_symbol }}</span>
+                  </div>
+                </ion-col>
+                <ion-col size="12">
+                  <div class="card-div total">
+                    <div>
+                      <span>{{'total' | translate }}  </span>
+                    </div>                
+                    <span class="totalprice">{{paymentItem.total_amount | currency:paymentItem.currency_symbol }} </span>
+                  </div>
+                </ion-col>
+              </ion-row>
         </ion-card>
       </div>
 
