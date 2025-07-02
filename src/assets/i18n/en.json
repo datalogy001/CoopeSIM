@@ -253,7 +253,7 @@
   "SHARE_TITLE": "Share now",
   "SHARE_INFO_MESSAGE": "Share this eSIM with another device or person using your phone's share settings",
   "SHARE_BUTTON_TEXT": "Share Now",
-  "EMAIL_SUBJECT": "Hello,\n\nYou have received an eSIM QR code from {{email}}\n\nOrder summary: {{orderSummary}}\n\nICCID: {{iccid}}\n[Click Here to Open eSIM QR code]({{url}})\n\nContact us: support@coopTraveleSIM.com\n\nThanks!",
+  "EMAIL_SUBJECT": "Hello,\n\nYou have received an eSIM QR code from {{email}}\n\nOrder summary: {{orderSummary}}\n\nICCID: {{iccid}}\n\neSIM QR code: ({{url}})\n\nContact us: support@coopTraveleSIM.com\n\nThanks!",
 
 "share_refer_code_msg_android": "🎉 Hiya... I’ve got a travel tip for you! Join *cooptraveleSIM* and get instant credits just for signing up with my referral code: *[{{refer_code}}]*.\n✅ Save on roaming.\n✅ Stay connected anywhere.\n✅ Save your money for suncream.\n*Download the app now and start saving!* 🚀" ,
   "ERROR_SHARE_MSG": "Error while sharing eSIM QR code",

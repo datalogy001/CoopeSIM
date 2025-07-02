@@ -392,8 +392,11 @@ export class PaymentDaysPage implements OnInit {
         this.translate.instant('PAYMENT_CONFIRMATION_FAILED')
       );
     } else if (paymentIntent && paymentIntent.status == 'succeeded') {
-
+    //  alert("1=>" + JSON.stringify(paymentIntent));
+     
       this.stripeCardObj.payment_intent = paymentIntent;
+  //     alert("2=>" + JSON.stringify(this.stripeCardObj));
+
       this.loadingScreen.dismissLoading();
       const modalFirstOpt = await this.modalController.create({
         component: ProcessingBarGooglePayPage,
