@@ -68,7 +68,7 @@
                 <span
                   *ngIf="(paymentItem.is_split_payment==false) && (paymentItem.payment_method == 'Visa' || paymentItem.payment_method == 'MasterCard' || paymentItem.payment_method == 'Stripe')"><img
                     src="assets/img/credit-card-dark.png" alt="">{{paymentItem.payment_method}} </span>
-                <span *ngIf="paymentItem.is_split_payment==false && paymentItem.payment_method == 'Google Pay'"><img src="assets/img/googlepay.png"
+                <span *ngIf="paymentItem.is_split_payment==false && paymentItem.payment_method == 'Google Pay'"><img src="assets/img/googlepay-new.png"
                     alt="">{{paymentItem.payment_method}} </span>
                 <span *ngIf="paymentItem.is_split_payment==false && paymentItem.payment_method == 'Apple Pay'"><img src="assets/img/applepay-dark.png"
                     alt="">{{paymentItem.payment_method}} </span>
@@ -118,7 +118,7 @@
                     </div>    
                     
                     <div  *ngIf="paymentItem.payment_method == 'Google Pay'">
-                      <img src="assets/img/googlepay.png" alt="">{{paymentItem.payment_method}}
+                      <img src="assets/img/googlepay-new.png" alt="">{{paymentItem.payment_method}}
                      </div>    
                      
                      <div  *ngIf=" paymentItem.payment_method == 'Apple Pay'"><img src="assets/img/applepay-dark.png"

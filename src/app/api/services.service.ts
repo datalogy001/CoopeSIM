@@ -1179,5 +1179,23 @@ validate_voucher_code(obj: any, access_token:any) {
     });
   }
 
+  //API to Manage Logs 
+  appSideLogs(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'applog', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
 }
 

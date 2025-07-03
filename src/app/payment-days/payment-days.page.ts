@@ -421,11 +421,12 @@ export class PaymentDaysPage implements OnInit {
 
     if (confirmError) {
       this.loadingScreen.dismissLoading();
+       this.managingAppLogs("From App Step 3: Card Confirmation Payment Failed:" + JSON.stringify(confirmError),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('PAYMENT_CONFIRMATION_FAILED'));
     } else if (paymentIntent && paymentIntent.status == 'succeeded') {
       this.stripeCardObj.payment_intent = paymentIntent;
       // For Card selected Credit/debit card 
-      console.log("Card PARAM=> " + JSON.stringify(this.stripeCardObj));
+       this.managingAppLogs("From App Step 3: Card Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.loadingScreen.dismissLoading();
       const modalFirstOpt = await this.modalController.create({
         component: ProcessingBarFpayPage,
@@ -551,6 +552,49 @@ export class PaymentDaysPage implements OnInit {
     }
   }
   
+// Common functions for Logs 
+  async managingAppLogs(label: string, currencyCode: string, amount: number, plan: string): Promise<void> {
+  let devicePlatform = 'Unknown';
+
+  if (this.platform.is('android')) {
+    devicePlatform = 'Android';
+  } else if (this.platform.is('ios')) {
+    devicePlatform = 'iOS';
+  } else if (this.platform.is('desktop')) {
+    devicePlatform = 'Desktop';
+  } else if (this.platform.is('mobileweb')) {
+    devicePlatform = 'Mobile Web';
+  }
+
+  const paymentEvent = {
+    label,
+    data: {
+      Action: label,
+      Device: devicePlatform,
+      Customer_name: `${this.userDetails.first_name} ${this.userDetails.last_name}`,
+      Customer_email: this.userDetails.email,
+      Amount: amount,
+      Currency: currencyCode,
+      Plan: plan
+    }
+  };
+
+  console.log('Event log:', paymentEvent);
+
+ try {
+  const response = await this.service.appSideLogs(paymentEvent, this.accessToken) as { code: number };
+  if (response.code === 200) {
+    console.log('Logs managed successfully');
+  } else {
+    console.error('Error managing logs:', response);
+  }
+} catch (error) {
+  console.error('Server error while managing logs:', error);
+}
+}
+
+// End of Common functions for Logs 
+
   async proceedForPayment() {
 
     if (this.validate()) {
@@ -592,8 +636,6 @@ export class PaymentDaysPage implements OnInit {
         }
       }
       else if (this.selectedPaymentType == 'google-pay') {
-
-     
  
         //First step: Generate client secret key
         console.log("Google Pay" + JSON.stringify(this.stripeCardObj));
@@ -628,12 +670,10 @@ export class PaymentDaysPage implements OnInit {
             this.stripeCardObj.isTermsSelected = true;
             // Step 1-> Get Client secret key from Server side 
             this.paymentIntentObj.currency = this.currencyCode;
-            console.log("this.stripeCardObj.is_couped_applied=>" + this.stripeCardObj.is_couped_applied);
             this.paymentIntentObj.amount = this.stripeCardObj.is_couped_applied == 0 ? this.stripeCardObj.bundle.extraAmount : this.stripeCardObj.original_amount;
-            console.log("stripe=>" + this.paymentIntentObj.amount);
             this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
+            this.managingAppLogs("From App Step 1: Card Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
             this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
-
               if (res.code == 200) {
                 // this.presentToast("Initialize Payment Intent", "Success");
                 this.clientSecret = res.data[0].client_secret;
@@ -674,6 +714,8 @@ export class PaymentDaysPage implements OnInit {
 
   //Step 2 : Send Intent and card Id to server 
   async callPaymentIntentFromApp(paymentObj: any) {
+
+    this.managingAppLogs("From App Step 2: Payment Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
 
     this.service.paymentCardIntent(paymentObj, this.accessToken).then((res: any) => {
       if (res.code == 200) {
