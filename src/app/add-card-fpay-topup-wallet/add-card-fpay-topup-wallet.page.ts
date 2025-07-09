@@ -140,14 +140,14 @@ export class AddCardFpayTopupWalletPage implements OnInit {
       console.error('Stripe failed to initialize');
       return;
     }
-    const style = {
+        const style = {
       base: {
-        color: '#ffffff',
+        color: '#112042',
         fontFamily: 'Roboto, sans-serif',
         fontWeight: '300',
          opacity: '0.8',
         '::placeholder': {
-          color: '#ffffff',
+          color: '#112042',
           fontFamily: 'Roboto, sans-serif',
           fontWeight: '300',
           opacity: '0.8'
@@ -191,6 +191,47 @@ export class AddCardFpayTopupWalletPage implements OnInit {
     //Service End 
   }
 
+  // Common functions for Logs 
+  async managingAppLogs(label: string, currencyCode: string, amount: number, plan: string): Promise<void> {
+  let devicePlatform = 'Unknown';
+
+  if (this.platform.is('android')) {
+    devicePlatform = 'Android';
+  } else if (this.platform.is('ios')) {
+    devicePlatform = 'iOS';
+  } else if (this.platform.is('desktop')) {
+    devicePlatform = 'Desktop';
+  } else if (this.platform.is('mobileweb')) {
+    devicePlatform = 'Mobile Web';
+  }
+
+  const paymentEvent = {
+    label,
+    data: {
+      Action: label,
+      Device: devicePlatform,
+      Customer_name: `${this.tempUserData.first_name}${this.tempUserData.last_name ? ' ' + this.tempUserData.last_name : ''}`,
+      Customer_email: this.tempUserData.email,
+      Amount: amount,
+      Currency: currencyCode,
+      Plan: plan
+    }
+  };
+
+  console.log('Event log:', paymentEvent);
+
+ try {
+  const response = await this.service.appSideLogs(paymentEvent, this.token) as { code: number };
+  if (response.code === 200) {
+    console.log('Logs managed successfully');
+  } else {
+    console.error('Error managing logs:', response);
+  }
+} catch (error) {
+  console.error('Server error while managing logs:', error);
+}
+}
+
 
 //Goto Submit 
   async gotoSubmit() {
@@ -232,9 +273,10 @@ export class AddCardFpayTopupWalletPage implements OnInit {
     const { token, error } = await this.stripe.createToken(this.creditCardObj.cardNumber);
 
     if (error) {
-     
+     this.managingAppLogs("From App Step 1 Credit Topup: Card Payment- Add Card- Create Token Error: "+ JSON.stringify(error),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.errorMSGModal( this.translate.instant('OK_BUTTON'),error.message);
     } else {
+      this.managingAppLogs("From App Step 1 Credit Topup:  Card Payment- Add Card- Create Token Success: "+ JSON.stringify(token),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       //  Calling service to insert it into DB 
       this.paramForDB.last4 = token.card?.last4;
       this.paramForDB.expireMonth = token.card?.exp_month;
@@ -311,6 +353,7 @@ export class AddCardFpayTopupWalletPage implements OnInit {
 
   //Step 2 : Send Intent and card Id to server 
   async callPaymentIntentFromApp(paymentObj: any) {
+    this.managingAppLogs("From App Step 2 Credit Topup: Add Card- Payment Intent Started",this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
     this.service.paymentCardIntent(paymentObj, this.token).then((res: any) => {
       if (res.code == 200) {
        // this.successMSGModal("Your payment intent has been successfully created and is ready for processing.","Payment Intent Created", "1500");
@@ -338,11 +381,13 @@ export class AddCardFpayTopupWalletPage implements OnInit {
 
     if (confirmError) {
       this.loadingScreen.dismissLoading();
+      this.managingAppLogs("From App Step 3 Credit Top-up: Add Card Confirmation Payment Failed:" + JSON.stringify(confirmError),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('PAYMENT_CONFIRMATION_FAILED'));
     } else if (paymentIntent && paymentIntent.status == 'succeeded') {
      
       this.stripeCardObj.payment_intent = paymentIntent;
       this.stripeCardObj.isTermsSelected = this.creditCardObj.isTermsSelected;
+      this.managingAppLogs("From App Step 3 Credit Top-up: Add Card Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       // For Card selected Credit/debit card 
       this.loadingScreen.dismissLoading();
       const modalFirstOpt = await this.modalController.create({

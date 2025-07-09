@@ -32,27 +32,28 @@ export class ProcessingBarFpayPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.accessToken = window.localStorage.getItem('coop_auth_token');
     this.userDetails = window.localStorage.getItem('coop_userDetails');
+    this.userDetails = JSON.parse(this.userDetails);
     window.localStorage.setItem('coop_user_result',  "false");
     this.startProgress();
-    console.log(JSON.stringify(this.value));
-     this.managingAppLogs("From App Step 4: Card payment QR code generation started:",this.value.bundle.bundleData.name);
+    console.log(JSON.stringify(this.value.bundle.extraAmount));
+     this.managingAppLogs("From App Step 4: Card payment QR code generation started:",this.value.bundle.extraAmount, this.value.bundle.bundleData.name);
     this.service.stripePayment(this.value, this.value1).then((res: any) => {
       if (res.code == 200) {
         this.result = res.data[0];
         window.localStorage.setItem('coop_user_result',  "true");
-         this.managingAppLogs("From App Step 5: Card payment Success:",this.value.bundle.bundleData.name);
+         this.managingAppLogs("From App Step 5: Card payment Success:",this.value.bundle.extraAmount,this.value.bundle.bundleData.name);
       } else {
-          this.managingAppLogs("From App Step 5: Card payment Error:" + JSON.stringify(res),this.value.bundle.bundleData.name);
+          this.managingAppLogs("From App Step 5: Card payment Error:" + JSON.stringify(res),this.value.bundle.extraAmount,this.value.bundle.bundleData.name);
       //  this.error = true;
       }
     }).catch(err => {
-        this.managingAppLogs("From App Step 5: Card payment Error from API:" + JSON.stringify(err),this.value.bundle.bundleData.name);
+        this.managingAppLogs("From App Step 5: Card payment Error from API:" + JSON.stringify(err),this.value.bundle.extraAmount,this.value.bundle.bundleData.name);
      // this.error = true;
     })  
   }
 
 // Common functions for Logs 
-  async managingAppLogs(label: string,plan: string): Promise<void> {
+  async managingAppLogs(label: any,amount: any, plan: any): Promise<void> {
   let devicePlatform = 'Unknown';
 
   if (this.platform.is('android')) {
@@ -70,8 +71,9 @@ export class ProcessingBarFpayPage implements OnInit, OnDestroy {
     data: {
       Action: label,
       Device: devicePlatform,
-      Customer_name: `${this.userDetails.first_name} ${this.userDetails.last_name}`,
+      Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' ' + this.userDetails.last_name : ''}`,
       Customer_email: this.userDetails.email,
+      Amount: amount,
       Plan: plan
     }
   };

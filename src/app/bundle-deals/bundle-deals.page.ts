@@ -78,7 +78,7 @@ export class BundleDealsPage implements OnInit {
     if (this.tempData.iso == 'North America') {
       this.bundleiSO = 'North_America';
     } else if (this.tempData.iso == 'Middle East') {
-      this.bundleiSO = 'Middle_East';
+       this.bundleiSO = 'Middle_East';
     }  else if (this.tempData.iso == 'CY') {
       this.bundleiSO = 'CY';
     

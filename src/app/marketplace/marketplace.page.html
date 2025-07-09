@@ -1,19 +1,17 @@
-<ion-header [translucent]="true">
+
+
+<ion-content class="ion-padding" [fullscreen]="true">
+ 
+  <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
      <h3>{{ 'Travel_Marketplace' | translate }}</h3>
      <p>{{ 'get_more_spend_less' | translate }}</p>
     </ion-title>
-    <!-- <ion-buttons slot="end">
-      <ion-button fill="clear" (click)="gotoBack()">
-        <ion-icon name="arrow-back-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons> -->
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding" [fullscreen]="true">
-  
   <div class="loungepassbox">
     <div class="airport">
       <img src="assets/img/airport-lounge.png" alt="">
@@ -33,16 +31,22 @@
       <h4>{{ 'lounge_pass' | translate }}</h4>
       <p>{{ 'comming_soon' | translate }}</p>
     </div>
-    <div class="datablock">
-      <img src="assets/img/insurance.png" alt="">
-      <h4>{{ 'insurance' | translate }}</h4>
-      <p>{{ 'comming_soon' | translate }}</p>
-    </div>
-    <div class="datablock">
-      <img src="assets/img/medical.png" alt="">
-      <h4>{{ 'medical' | translate }}</h4>
-      <p>{{ 'comming_soon' | translate }}</p>
-    </div>
+  <div class="datablock blockimg" (click)="openInAppBrowser('https://broadband.yourcoop.coop/mobile/', 'Coop Mobile')">
+  <img src="assets/img/Mobile_logo.png" alt="Coop Mobile">
+</div>
+
+<div class="datablock blockimg" (click)="openInAppBrowser('https://broadband.yourcoop.coop/broadband/', 'Coop Broadband')">
+  <img src="assets/img/Broadband_logo.png" alt="Coop Broadband">
+</div>
+
+<div class="datablock blockimg" (click)="openInAppBrowser('https://www.coop.co.uk/insurance', 'Coop Insurance')">
+  <img src="assets/img/Cooptravel_insurance.png" alt="Coop Insurance">
+</div>
+
+<div class="datablock blockimg" (click)="openInAppBrowser('https://www.cooptravel.co.uk/', 'Coop Holidays')">
+  <img src="assets/img/Travel_logo.png" alt="Coop Holidays">
+</div>
+
   </div>
 
 </ion-content>

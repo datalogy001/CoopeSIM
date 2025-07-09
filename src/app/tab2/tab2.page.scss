@@ -131,7 +131,7 @@ ion-segment{
   ion-segment-button{
     --background:transparent;
     --background-checked:transparent;
-    --color:var(--theme-gray);
+   --color:rgba(17,32,66,0.5);
     --color-checked:var(--theme-color-1);
     --indicator-height:0;
     border-radius: 0px;  

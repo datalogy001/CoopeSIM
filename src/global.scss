@@ -132,7 +132,7 @@ ion-header{
 
 ion-checkbox{
   // font-family: 'Inter'; 
-  font-weight: 100;
+  font-weight: 300;
   font-family: 'Roboto';
 }
 
@@ -202,7 +202,7 @@ ion-input{
 .sc-ion-input-md-h{ 
   font-family: 'Roboto'; 
   font-weight: 300;
-  --placeholder-opacity:0.8;
+  --placeholder-opacity:0.6;
 }
 ion-textarea{
   font-family: 'Roboto'; 
@@ -639,9 +639,10 @@ app-push-notification {
 
 /******************************* Modal *************************************/
 
+
 ion-modal {
   --background: transparent;
-  --backdrop-opacity: 0;
+  --backdrop-opacity: 0.7;
 
   .ion-page{
     border-radius: 12px; 

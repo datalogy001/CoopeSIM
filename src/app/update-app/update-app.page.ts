@@ -15,7 +15,7 @@ export class UpdateAppPage implements OnInit {
   updateNow() {
     if (this.platform.is('ios')) {
       // Redirect to the iOS App Store
-     //  window.open('https://apps.apple.com/us/app/telitravel-global-esim-data/id6740319979', '_system');
+     //  window.open('https://apps.apple.com/us/app/coop-travel-esim-global-data/id6748068641', '_system');
     } else if (this.platform.is('android')) {
       // Redirect to the Google Play Store
       this.market.open('com.cooptraveleSIM');

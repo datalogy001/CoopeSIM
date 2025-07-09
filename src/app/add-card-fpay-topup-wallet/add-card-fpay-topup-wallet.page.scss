@@ -13,9 +13,13 @@ ion-header{
       
       &.titlebar{
           --min-height: 40px; 
-          height: 80px;       
+          height: 60px;       
       }  
   }
+}
+
+ion-content {
+  --background: #fff;
 }
 
 .list-md{ 
@@ -59,7 +63,7 @@ ion-row{
 }
 
 ion-checkbox{  
-  color: var(--theme-color-2);
+  color: var(--theme-color-2); 
   font-size: 15px;
 
   --border-width:1px;
@@ -68,7 +72,7 @@ ion-checkbox{
   --checkbox-background-checked:var(--theme-color-2);
   --border-color-checked:var(--theme-color-2);
 
-  --checkmark-color:var(--theme-color-2);
+  --checkmark-color:var(--theme-color-1);
   --checkmark-width: 3;
   --checkbox-background-checked: transparent;
   --border-color-checked: transparent;
@@ -91,7 +95,7 @@ ion-row{
 }
   ion-card {
       --background:var(--card-bg);
-      --color: rgba(17,32,66,0.5);
+  --color: rgba(17,32,66,0.5);
       margin-inline: 0;
       box-shadow: none;
       border-radius: 16px;
@@ -154,7 +158,7 @@ ion-row{
         background: var(--theme-color-2);
     }
     &::part(bullet){
-        background: #fff;
+        background: var(--theme-color-2);
     }
 }
   
@@ -165,13 +169,13 @@ ion-radio-group{
 .cardoption{
   margin-top: 30px;
   ion-radio{
-      background-color: #101026;
+      background-color: var(--input-bg);
       padding: 15px 15px;
       display: block;
       border-radius: 10px;
       margin: 0 0 15px;
-      border: 1px solid #181839;
-      color: #fff;
+      // border: 1px solid var(--item-border);
+      color: rgba(17,32,66,0.5);
       font-size: 15px;
 
       img{
@@ -228,7 +232,7 @@ ion-button{
 .countryselectrow{
   display: flex; flex-direction: row; align-content: center;
   .countryselect{
-    width: 88px; background: rgba(0,155,197,0.2); border-radius: 10px; margin-right: 10px; color: #fff; display: flex; align-items: center; padding: 12px;
+    width: 88px; background: var(--input-bg); border-radius: 10px; margin-right: 10px; color: #fff; display: flex; align-items: center; padding: 12px;
 
     .countryimg{ width: 25px; margin-right: 5px; border-radius: 2px;}
     .countrycode{ color: var(--theme-color-2); }
@@ -237,29 +241,30 @@ ion-button{
     flex: 1 0 0;
   }
 }
-   
+ 
+
+
+
+
+
+/**************************************************************/
+/***** iPad 11, iPad Pro, iPad mini ****/
+@media only screen 
+and (min-device-width: 768px) 
+and (min-device-height: 1024px) 
+// and (max-device-width: 1024px) 
+// and (max-device-height: 1366px)  
+and (-webkit-min-device-pixel-ratio: 2){
+
+  ion-header ion-toolbar ion-title .ftel-logo{ width: 260px; }
+  ion-header ion-toolbar{ height: 110px;   }
+  ion-checkbox { font-size: 23px;}
+  ion-row.checkrow ion-col ion-checkbox { padding: 24px 20px; }
+  ion-list ion-item{ --min-height: 80px; }  
   
-  
-  
-  
-  
-  /**************************************************************/
-  /***** iPad 11, iPad Pro, iPad mini ****/
-  @media only screen 
-  and (min-device-width: 768px) 
-  and (max-device-width: 1024px) 
-  and (min-device-height: 1024px) 
-  and (max-device-height: 1366px) 
-  and (-webkit-min-device-pixel-ratio: 2){
-  
-    ion-header ion-toolbar{ height: auto;   }
-    ion-checkbox { font-size: 23px;}
-    ion-row.checkrow ion-col ion-checkbox { padding: 24px 20px; }
-    ion-list ion-item{ --min-height: 80px; }  
-    
-    .countryselectrow .countryselect{ width: 150px;}
-    .countryselectrow .countryselect .countryimg {  width: 45px;  margin-right: 10px;  }
-    .countryselectrow .countryselect .countrycode { font-size: 30px; }
-  
-  
-  }
+  .countryselectrow .countryselect{ width: 150px;}
+  .countryselectrow .countryselect .countryimg {  width: 45px;  margin-right: 10px;  }
+  .countryselectrow .countryselect .countrycode { font-size: 30px; }
+
+
+}

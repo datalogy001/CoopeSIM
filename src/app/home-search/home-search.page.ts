@@ -201,8 +201,9 @@ this.destinations = window.localStorage.getItem('coop_destinations');
 
     if (searchTerm) {
       this.searchData = this.findMatchingItems(searchTerm, this.langDefault);
-      console.log(this.searchData);
-      this.isSearch = true;
+     this.isSearch = true;
+     this.searchMatched = this.searchData.length > 0;  // ✅ Track match
+     this.itemClicked = false;   
     } else {
       this.isearchIMg = '';
       this.searchDiv.nativeElement.classList.remove('searching');
@@ -221,93 +222,87 @@ this.destinations = window.localStorage.getItem('coop_destinations');
   }
 
   findMatchingItems(searchTerm: string, language: string): any[] {
-    const normalizedSearch = searchTerm.toLowerCase();
-    const languageField = `city_${language}_name`;
-    const matchedKeys = new Set<string>(); // 🧠 Keeps track of already matched items
-  
-    // 1️⃣ Search in `mainObj`
-    const matchingMainObjItems = this.mainObj
-      .filter((item: any) => {
-        const name = item.name?.toLowerCase();
-        return name && name.startsWith(normalizedSearch);
-      })
-      .map((item: any) => {
-        const key = item.name.toLowerCase();
-        matchedKeys.add(key); // ✅ Save key to avoid duplication later
-        return {
-          ...item,
-          is_destination: false,
-          country_name: item.name
-        };
-      });
-  
-    // 2️⃣ Search in `destinations` only if not already matched
-    const matchingDestinationItems = Array.isArray(this.destinations)
-      ? this.destinations
-          .map((item: any) => {
-            const cityName = item[languageField];
-            return {
-              ...item,
-              cityName,
-              is_destination: true,
-              country_name: this.translate.instant(`COUNTRIES.${item.iso}`)
-            };
-          })
-          .filter((item: any) => {
-            const cityKey = item.cityName?.toLowerCase();
-            return cityKey && cityKey.startsWith(normalizedSearch) && !matchedKeys.has(cityKey);
-          })
-          .map((item: any) => {
-            matchedKeys.add(item.cityName.toLowerCase());
-            return item;
-          })
-      : [];
-  
-    // 3️⃣ Search in `zoneList`, only if not already matched
-    
-    // 1️⃣ Search in `mainObj`
-    const matchingZoneListItems = this.zoneList
-      .filter((item: any) => {
-        const name = item.name?.toLowerCase();
-        return name && name.startsWith(normalizedSearch);
-      })
-      .map((item: any) => {
-        const key = item.name.toLowerCase();
-        console.log(item.name);
-        matchedKeys.add(key); // ✅ Save key to avoid duplication later
-        return {
-          ...item,
-          is_destination: false,
-          country_name: item.name
-        };
-      });
+  const normalize = (str: string) =>
+    str?.toLowerCase().trim().replace(/\s+/g, ''); // remove all extra spaces
 
-     console.log(JSON.stringify(matchingDestinationItems));
+  const normalizedSearch = normalize(searchTerm);
+  const languageField = `city_${language}_name`;
+  const matchedKeys = new Set<string>();
 
-     console.log(JSON.stringify(matchingZoneListItems));
+  // 1️⃣ Search in `mainObj`
+  const matchingMainObjItems = this.mainObj
+    .filter((item: any) => {
+      const name = normalize(item.name);
+      return name && name.startsWith(normalizedSearch);
+    })
+    .map((item: any) => {
+      const key = normalize(item.name);
+      matchedKeys.add(key);
+      return {
+        ...item,
+        is_destination: false,
+        country_name: item.name
+      };
+    });
 
-       // Combine all sources
+  // 2️⃣ Search in `destinations`
+  const matchingDestinationItems = Array.isArray(this.destinations)
+    ? this.destinations
+        .map((item: any) => {
+          const cityName = item[languageField];
+          return {
+            ...item,
+            cityName,
+            is_destination: true,
+            country_name: this.translate.instant(`COUNTRIES.${item.iso}`)
+          };
+        })
+        .filter((item: any) => {
+          const cityKey = normalize(item.cityName);
+          return cityKey && cityKey.startsWith(normalizedSearch) && !matchedKeys.has(cityKey);
+        })
+        .map((item: any) => {
+          matchedKeys.add(normalize(item.cityName));
+          return item;
+        })
+    : [];
+
+  // 3️⃣ Search in `zoneList`
+  const matchingZoneListItems = this.zoneList
+    .filter((item: any) => {
+      const name = normalize(item.name);
+      return name && name.startsWith(normalizedSearch);
+    })
+    .map((item: any) => {
+      const key = normalize(item.name);
+      matchedKeys.add(key);
+      return {
+        ...item,
+        is_destination: false,
+        country_name: item.name
+      };
+    });
+
   const combinedResults = [
     ...matchingMainObjItems,
     ...matchingDestinationItems,
     ...matchingZoneListItems
   ];
-  
 
-// Remove duplicates by name or cityName
-const uniqueItemsMap = new Map<string, any>();
-combinedResults.forEach((item: any) => {
-  const key = (item.name || item.cityName)?.toLowerCase();
-  if (key) {
-    uniqueItemsMap.set(key, item);
-  }
-});
+  // 🧹 Remove duplicates
+  const uniqueItemsMap = new Map<string, any>();
+  combinedResults.forEach((item: any) => {
+    const key = normalize(item.name || item.cityName);
+    if (key && !uniqueItemsMap.has(key)) {
+      uniqueItemsMap.set(key, item);
+    }
+  });
 
-    console.log("Unique "+JSON.stringify(Array.from(uniqueItemsMap.values())));
+  return Array.from(uniqueItemsMap.values());
+}
 
-    return Array.from(uniqueItemsMap.values());
-  }
-  
+  searchMatched: boolean = false;
+  itemClicked: boolean = false;
   typeOfCountries:any;
   zoneCountries:any=[]; 
   isDestinations:any=false;
@@ -335,6 +330,7 @@ combinedResults.forEach((item: any) => {
   gotoSelect(name: any, iso: any, type: any, isDestinations:any, country_name:any) {
   //  console.log(name);
   this.isDestinations =isDestinations;
+  this.itemClicked = true;  // ✅ Track selection
   this.country_name = country_name;
   this.typeOfCountries= this.getLocationLabel(iso);
       if (this.typeOfCountries == 'region')
@@ -357,36 +353,53 @@ combinedResults.forEach((item: any) => {
     this.types = type;
   }
 
+  afterSearchData: any[] = [];
+
+afterSearch(event: any): boolean {
+  this.afterSearchData = this.findMatchingItems(event,this.langDefault);
+  return this.afterSearchData.length > 0;
+}
+
   gotoFindDeails() {
+  if (this.afterSearch(this.searchTerm)) {
+    // ✅ Check if user clicked an item from search results
+    if (this.searchMatched && !this.itemClicked) {
+      this.errorMSGModal(this.translate.instant("Ok"), this.translate.instant('CHOOSE_DESTINATION_ERROR'));
+      return;
+    }
+
     if (this.searchTerm == '') {
       this.errorMSGModal(this.translate.instant("Ok"), this.translate.instant('CHOOSE_DESTINATION_ERROR'));
     } else {
-      
-    
       let navigationExtras: NavigationExtras = {
         state: {
           name: this.searchTerm,
-          isDestinations:this.isDestinations,
+          isDestinations: this.isDestinations,
           country_name: this.country_name,
           iso: this.iso,
-           type:  this.typeOfCountries,
+          type: this.typeOfCountries,
           iccid: '',
           opt: this.selectedDays,
           zoneCountries: this.zoneCountries,
         }
       };
-       this.router.navigate(['bundle-deals'], navigationExtras);
-       setTimeout(() => {
+      this.router.navigate(['bundle-deals'], navigationExtras);
+
+      setTimeout(() => {
         this.searchTerm = '';
         this.searchDiv.nativeElement.classList.remove('searching');
         this.isearchIMg = '';
         this.iso = '';
         this.types = '';
         this.selectedDays = '7plusdays';
-     
-       }, 200);
+        this.searchMatched = false; // Reset state
+        this.itemClicked = false;
+      }, 200);
     }
+  } else {
+    this.errorMSGModal(this.translate.instant("Ok"), this.translate.instant('NO_DESTINATION_FOUND'));
   }
+}
 
   async errorMSGModal(buttonText: any, msg: any) {
     const modal = await this.modalCtrl.create({

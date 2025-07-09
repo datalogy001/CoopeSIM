@@ -25,32 +25,70 @@ export class ProcessingBarGooglePayPage implements OnInit, OnDestroy {
   error:any = true;
   result:any=[]; 
   resValue:any=''; 
+  accessToken:any;
+  userDetails:any=[]; 
   constructor(private platform: Platform,private translate: TranslateService,private Router: Router, private service: ServicesService,private modalController: ModalController, private renderer: Renderer2, private el: ElementRef) {}
   
   ngOnInit() {
+    this.accessToken = window.localStorage.getItem('coop_auth_token');
+    this.userDetails = window.localStorage.getItem('coop_userDetails');
+    this.userDetails = JSON.parse(this.userDetails);
+    
     window.localStorage.setItem('coop_user_result',"false");
     this.startProgress();
-   // alert("PARAM" + JSON.stringify(this.value));
+   this.managingAppLogs("From App Step 4: Google Pay payment QR code generation started:",this.value.bundle.extraAmount, this.value.bundle.bundleData.name);
     this.service.stripeGooglePay(this.value, this.value1).then((res: any) => {
       if (res.code == 200) {
      //   alert("Success");
         this.result = res.data[0];
         window.localStorage.setItem('coop_user_result',"true");
-      //   alert(window.localStorage.getItem('coop_user_result'));
-       
-
-      
-          
+      this.managingAppLogs("From App Step 5: Google Pay payment Success:",this.value.bundle.extraAmount,this.value.bundle.bundleData.name);
       } else {
-       // alert("Error");
-       // this.error = true;
+       this.managingAppLogs("From App Step 5: Google pay payment Error:" + JSON.stringify(res),this.value.bundle.extraAmount,this.value.bundle.bundleData.name);
       }
     }).catch(err => {
- //     alert(JSON.stringify(err));
-      //this.error = true;
-    })  
+ this.managingAppLogs("From App Step 5: Google pay payment Error from API:" + JSON.stringify(err),this.value.bundle.extraAmount,this.value.bundle.bundleData.name);   })  
   }
 
+  // Common functions for Logs 
+  async managingAppLogs(label: any, amount: any, plan: any): Promise<void> {
+  let devicePlatform = 'Unknown';
+
+  if (this.platform.is('android')) {
+    devicePlatform = 'Android';
+  } else if (this.platform.is('ios')) {
+    devicePlatform = 'iOS';
+  } else if (this.platform.is('desktop')) {
+    devicePlatform = 'Desktop';
+  } else if (this.platform.is('mobileweb')) {
+    devicePlatform = 'Mobile Web';
+  }
+
+  const paymentEvent = {
+    label,
+    data: {
+      Action: label,
+      Device: devicePlatform,
+    Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' ' + this.userDetails.last_name : ''}`,
+      Customer_email: this.userDetails.email,
+      Amount: amount,
+      Plan: plan
+    }
+  };
+
+  console.log('Event log:', paymentEvent);
+
+ try {
+  const response = await this.service.appSideLogs(paymentEvent, this.accessToken) as { code: number };
+  if (response.code === 200) {
+    console.log('Logs managed successfully');
+  } else {
+    console.error('Error managing logs:', response);
+  }
+} catch (error) {
+  console.error('Server error while managing logs:', error);
+}
+}
  
   startProgress() {
     this.interval = setInterval(() => {

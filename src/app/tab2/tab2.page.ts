@@ -171,64 +171,86 @@ export class Tab2Page {
     this.searchData = this.tempAllCountry;
   }
 
+
   findMatchingItems(searchTerm: string, language: string): any[] {
-    const normalizedSearch = searchTerm.toLowerCase();
-    const languageField = `city_${language}_name`; // Dynamically select city field
-  
-    // Search in `mainObj` with is_destination = false
-    const matchingMainObjItems = this.mainObj
-      .filter((item: any) => item.name?.toLowerCase().startsWith(normalizedSearch))
-      .map((item: any) => ({
+  const normalize = (str: string) =>
+    str?.toLowerCase().trim().replace(/\s+/g, ''); // remove all extra spaces
+
+  const normalizedSearch = normalize(searchTerm);
+  const languageField = `city_${language}_name`;
+  const matchedKeys = new Set<string>();
+
+  // 1️⃣ Search in `mainObj`
+  const matchingMainObjItems = this.mainObj
+    .filter((item: any) => {
+      const name = normalize(item.name);
+      return name && name.startsWith(normalizedSearch);
+    })
+    .map((item: any) => {
+      const key = normalize(item.name);
+      matchedKeys.add(key);
+      return {
         ...item,
         is_destination: false,
         country_name: item.name
-      }));
-  
-    // Search in `destinations` with is_destination = true
-    const matchingDestinationItems = Array.isArray(this.destinations)
-      ? this.destinations
-          .map((item: any) => ({
+      };
+    });
+
+  // 2️⃣ Search in `destinations`
+  const matchingDestinationItems = Array.isArray(this.destinations)
+    ? this.destinations
+        .map((item: any) => {
+          const cityName = item[languageField];
+          return {
             ...item,
-            cityName: item[languageField],
+            cityName,
             is_destination: true,
-            country_name:this.translate.instant(`COUNTRIES.${item.iso}`)
-          }))
-          .filter((item: any) =>
-            item.cityName?.toLowerCase().startsWith(normalizedSearch)
-          )
-      : [];
-       // 🔍 Search in `zoneList` as a third source
-    const matchingZoneListItems = Array.isArray(this.zoneList)
-    ? this.zoneList
-        .filter((item: any) =>
-          item.name?.toLowerCase().startsWith(normalizedSearch)
-        )
-        .map((item: any) => ({
-          ...item,
-          is_destination: false, // or true, depending on how you want to mark them
-          country_name: this.translate.instant(`ZONES.${item.iso}`)
-        }))
+            country_name: this.translate.instant(`COUNTRIES.${item.iso}`)
+          };
+        })
+        .filter((item: any) => {
+          const cityKey = normalize(item.cityName);
+          return cityKey && cityKey.startsWith(normalizedSearch) && !matchedKeys.has(cityKey);
+        })
+        .map((item: any) => {
+          matchedKeys.add(normalize(item.cityName));
+          return item;
+        })
     : [];
 
-  // Combine all sources
+  // 3️⃣ Search in `zoneList`
+  const matchingZoneListItems = this.zoneList
+    .filter((item: any) => {
+      const name = normalize(item.name);
+      return name && name.startsWith(normalizedSearch);
+    })
+    .map((item: any) => {
+      const key = normalize(item.name);
+      matchedKeys.add(key);
+      return {
+        ...item,
+        is_destination: false,
+        country_name: item.name
+      };
+    });
+
   const combinedResults = [
     ...matchingMainObjItems,
     ...matchingDestinationItems,
     ...matchingZoneListItems
   ];
-  
 
-    // Remove duplicates by name or cityName
-    const uniqueItemsMap = new Map<string, any>();
-  
-    combinedResults.forEach((item: any) => {
-      const key = (item.name || item.cityName)?.toLowerCase();
-      if (key) {
-        uniqueItemsMap.set(key, item);
-      }
-    });
-    return Array.from(uniqueItemsMap.values());
-  }
+  // 🧹 Remove duplicates
+  const uniqueItemsMap = new Map<string, any>();
+  combinedResults.forEach((item: any) => {
+    const key = normalize(item.name || item.cityName);
+    if (key && !uniqueItemsMap.has(key)) {
+      uniqueItemsMap.set(key, item);
+    }
+  });
+
+  return Array.from(uniqueItemsMap.values());
+}
 
   gotoHomeSearch() {
     this.navController.navigateRoot('home-search');

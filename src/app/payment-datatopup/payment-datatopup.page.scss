@@ -163,7 +163,7 @@ ion-radio-group{
 
       &::part(container){ background: var(--theme-color-2); border-color: var(--theme-color-2); }
       &::part(mark){ background: var(--theme-color-1);}
-      &::part(label){ color: #fff; }
+      &::part(label){ color: var(--theme-color-2); }
     }
   }
 }

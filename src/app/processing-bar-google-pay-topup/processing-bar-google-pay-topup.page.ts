@@ -23,9 +23,15 @@ export class ProcessingBarGooglePayTopupPage implements OnInit, OnDestroy {
   error:any = false;
   result:any=[]; 
   resValue:any=''; 
+    accessToken:any;
+  userDetails:any=[]; 
   constructor(private platform: Platform,private translate: TranslateService,private Router: Router, private service: ServicesService,private modalController: ModalController, private renderer: Renderer2, private el: ElementRef) {}
   
   ngOnInit() {
+      this.accessToken = window.localStorage.getItem('coop_auth_token');
+    this.userDetails = window.localStorage.getItem('coop_userDetails');
+    this.userDetails = JSON.parse(this.userDetails);
+     this.managingAppLogs("From App Step 4 Credit-topup: Google Pay payment QR code generation started:",this.value.amount,"Credit Top-up");
     window.localStorage.setItem('coop_user_result',  "false");
     this.startProgress();
     this.service.stripeGooglePayTopUpWallet(this.value, this.value1).then((res: any) => {
@@ -34,18 +40,57 @@ export class ProcessingBarGooglePayTopupPage implements OnInit, OnDestroy {
         window.localStorage.setItem('coop_user_result',  "true");
       //  alert(window.localStorage.getItem('coop_user_result'));
         window.localStorage.setItem('coop_user_wallets',  res.data[0]['user_wallet']);
-      
-
-        
-        
-        
+        this.managingAppLogs("From App Step 5 Credit-topup: Google Pay payment Success:",this.value.amount,"Credit Top-up");
       } else {
-        //window.localStorage.setItem('coop_user_result',  "false");
+        this.managingAppLogs("From App Step 5 Credit-topup: Google pay payment Error:" + JSON.stringify(res),this.value.amount,"Credit Top-up");
       }
     }).catch(err => {
-     // window.localStorage.setItem('coop_user_result',  "false");
+     this.managingAppLogs("From App Step 5 Credit-topup: Google pay payment Error from API:" + JSON.stringify(err),this.value.amount,"Credit Top-up");
+     
     })  
   }
+
+
+  
+  // Common functions for Logs 
+  async managingAppLogs(label: any,amount: any, plan: any): Promise<void> {
+  let devicePlatform = 'Unknown';
+
+  if (this.platform.is('android')) {
+    devicePlatform = 'Android';
+  } else if (this.platform.is('ios')) {
+    devicePlatform = 'iOS';
+  } else if (this.platform.is('desktop')) {
+    devicePlatform = 'Desktop';
+  } else if (this.platform.is('mobileweb')) {
+    devicePlatform = 'Mobile Web';
+  }
+
+  const paymentEvent = {
+    label,
+    data: {
+      Action: label,
+      Device: devicePlatform,
+      Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' ' + this.userDetails.last_name : ''}`,
+      Customer_email: this.userDetails.email,
+      Amount: amount,
+      Plan: plan
+    }
+  };
+
+  console.log('Event log:', paymentEvent);
+
+ try {
+  const response = await this.service.appSideLogs(paymentEvent, this.accessToken) as { code: number };
+  if (response.code === 200) {
+    console.log('Logs managed successfully');
+  } else {
+    console.error('Error managing logs:', response);
+  }
+} catch (error) {
+  console.error('Server error while managing logs:', error);
+}
+}
 
   startProgress() {
     this.interval = setInterval(() => {

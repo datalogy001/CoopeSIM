@@ -29,7 +29,7 @@ export class AddCardFpayPage implements OnInit {
   private cardNumber: StripeCardNumberElement | null = null;
   private cardExpiry: StripeCardExpiryElement | null = null;
   private cardCvc: StripeCardCvcElement | null = null;
-
+  accessToken:any;
   clientSecret: any = '';
   paymentIntentObj: any = { 'amount': '', 'currency': '', 'plan': '' };
   cardIntentObj: any = { 'card_id': '', 'intent_id': '' };
@@ -92,8 +92,6 @@ export class AddCardFpayPage implements OnInit {
       this.stripeCardObj.iccid = this.tempDetails.stripeCardData.bundle.iccid;
       // Step 1-> Get Client secret key from Server side 
       this.paymentIntentObj.currency = this.stripeCardObj.currency;
-      console.log(this.stripeCardObj.bundle.extraAmount);
-      console.log(this.stripeCardObj.original_amount);
       if(this.stripeCardObj.is_split_payment ==false)
       this.paymentIntentObj.amount = this.stripeCardObj.is_couped_applied ==0? this.stripeCardObj.bundle.extraAmount: this.stripeCardObj.original_amount; 
       else
@@ -166,8 +164,14 @@ export class AddCardFpayPage implements OnInit {
 
 
   currencyCodeEvent:any= 'USD';
+  userDetails:any=[]; 
+
   async ngOnInit() {
     
+
+        this.userDetails = window.localStorage.getItem('coop_userDetails');
+       this.userDetails = JSON.parse(this.userDetails);
+
       //Current currency 
       if (window.localStorage.getItem("coop_currency") == null) {
         this.currencyCodeEvent = 'USD';
@@ -281,10 +285,11 @@ export class AddCardFpayPage implements OnInit {
     const { token, error } = await this.stripe.createToken(this.creditCardObj.cardNumber);
 
     if (error) {
-     
+    this.managingAppLogs("From App Step 1 : Card Payment- Add Card- Create Token Error: "+ JSON.stringify(error),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.errorMSGModal( this.translate.instant('OK_BUTTON'),error.message);
     } else {
       //  Calling service to insert it into DB 
+      this.managingAppLogs("From App Step 1: Card Payment- Add Card- Create Token Success: "+ JSON.stringify(token),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.paramForDB.last4 = token.card?.last4;
       this.paramForDB.expireMonth = token.card?.exp_month;
       this.paramForDB.expireYear = token.card?.exp_year;
@@ -331,6 +336,52 @@ export class AddCardFpayPage implements OnInit {
 
   }
 
+  
+// Common functions for Logs 
+  async managingAppLogs(label: string, currencyCode: string, amount: number, plan: string): Promise<void> {
+  let devicePlatform = 'Unknown';
+
+  if (this.platform.is('android')) {
+    devicePlatform = 'Android';
+  } else if (this.platform.is('ios')) {
+    devicePlatform = 'iOS';
+  } else if (this.platform.is('desktop')) {
+    devicePlatform = 'Desktop';
+  } else if (this.platform.is('mobileweb')) {
+    devicePlatform = 'Mobile Web';
+  }
+
+  const paymentEvent = {
+    label,
+    data: {
+      Action: label,
+      Device: devicePlatform,
+      Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' ' + this.userDetails.last_name : ''}`,
+      Customer_email: this.userDetails.email,
+      Amount: amount,
+      Currency: currencyCode,
+      Plan: plan
+    }
+  };
+
+  console.log('Event log:', paymentEvent);
+
+ try {
+  const response = await this.service.appSideLogs(paymentEvent, this.token) as { code: number };
+  if (response.code === 200) {
+    console.log('Logs managed successfully');
+  } else {
+    console.error('Error managing logs:', response);
+  }
+} catch (error) {
+  console.error('Server error while managing logs:', error);
+}
+}
+
+// End of Common functions for Logs 
+
+
+
   goBack() {
     this.navController.pop();
   }
@@ -360,6 +411,7 @@ export class AddCardFpayPage implements OnInit {
 
   //Step 2 : Send Intent and card Id to server 
   async callPaymentIntentFromApp(paymentObj: any) {
+    this.managingAppLogs("From App Step 2: Add Card- Payment Intent Started",this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
     this.service.paymentCardIntent(paymentObj, this.token).then((res: any) => {
       if (res.code == 200) {
        // this.successMSGModal("Your payment intent has been successfully created and is ready for processing.","Payment Intent Created", "1500");
@@ -387,9 +439,10 @@ export class AddCardFpayPage implements OnInit {
 
     if (confirmError) {
       this.loadingScreen.dismissLoading();
+      this.managingAppLogs("From App Step 3: Add Card Confirmation Payment Failed:" + JSON.stringify(confirmError),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('PAYMENT_CONFIRMATION_FAILED'));
     } else if (paymentIntent && paymentIntent.status == 'succeeded') {
-     
+     this.managingAppLogs("From App Step 3: Add Card Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.paymentIntentObj.currency,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.stripeCardObj.payment_intent = paymentIntent;
       this.stripeCardObj.isTermsSelected = this.creditCardObj.isTermsSelected;
       // For Card selected Credit/debit card 

@@ -165,12 +165,16 @@ export class PaymentTopupPage implements OnInit {
         sgap
           .requestPayment(totalAmount.toString(), currency)
           .then((responsePayment: any) => {
+            this.managingAppLogs("From App Step 2 Credit-topup: Google Pay Native SDK Success: " + JSON.stringify(responsePayment) ,this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
             this.actualStripePaymentGooglrPay(this.clientSecret, responsePayment);
           })
           .catch((errorPayment: any) => {
+               this.managingAppLogs("From App Step 2 Credit-topup: Google Pay Native SDK Error: " + JSON.stringify(errorPayment) ,this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+         
             this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('payment_cancelled') );
           });
       }).catch((error: any) => {
+        this.managingAppLogs("From App Step 2 Credit-topup: Google Pay Native SDK Payment Cancelled : " + JSON.stringify(error) ,this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
         this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('payment_cancelled') );
       });
     } else {
@@ -197,6 +201,7 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
 
   if (confirmError) {
     this.loadingScreen.dismissLoading();
+    this.managingAppLogs("From App Step 3 Credit-topup: Google Pay confirmation Payment Failed:" + JSON.stringify(confirmError),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
     this.errorMSGModal(
       this.translate.instant('ERROR_TRY_AGAIN'),
       this.translate.instant('PAYMENT_CONFIRMATION_FAILED')
@@ -205,6 +210,7 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
     
     this.checkoutObj.payment_intent = paymentIntent;
     this.loadingScreen.dismissLoading();
+    this.managingAppLogs("From App Step 3 Credit-topup: Google Pay Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);   
     const modalFirstOpt = await this.modalController.create({
       component: ProcessingBarGooglePayTopupPage,
       componentProps: { value: this.checkoutObj, value1: this.accessToken},
@@ -228,11 +234,13 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
 
     if (confirmError) {
       this.loadingScreen.dismissLoading();
+      this.managingAppLogs("From App Step 3 Credit Topup: Card Confirmation Payment Failed:" + JSON.stringify(confirmError),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('PAYMENT_CONFIRMATION_FAILED'));
     } else if (paymentIntent && paymentIntent.status == 'succeeded') {
       this.checkoutObj.payment_intent = paymentIntent;
       // For Card selected Credit/debit card 
       console.log("Card PARAM=> " + JSON.stringify(this.checkoutObj));
+      this.managingAppLogs("From App Step 3 Credit Topup: Card Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
       this.loadingScreen.dismissLoading();
       const modalFirstOpt = await this.modalController.create({
         component: ProcessingBarFpayTopupPage,
@@ -245,6 +253,49 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
 
   }
 
+  // Common functions for Logs 
+  async managingAppLogs(label: string, currencyCode: string, amount: number, plan: string): Promise<void> {
+  let devicePlatform = 'Unknown';
+
+  if (this.platform.is('android')) {
+    devicePlatform = 'Android';
+  } else if (this.platform.is('ios')) {
+    devicePlatform = 'iOS';
+  } else if (this.platform.is('desktop')) {
+    devicePlatform = 'Desktop';
+  } else if (this.platform.is('mobileweb')) {
+    devicePlatform = 'Mobile Web';
+  }
+
+  const paymentEvent = {
+    label,
+    data: {
+      Action: label,
+      Device: devicePlatform,
+      Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' ' + this.userDetails.last_name : ''}`,
+      Customer_email: this.userDetails.email,
+      Amount: amount,
+      Currency: currencyCode,
+      Plan: plan
+    }
+  };
+
+  console.log('Event log:', paymentEvent);
+
+ try {
+  const response = await this.service.appSideLogs(paymentEvent, this.accessToken) as { code: number };
+  if (response.code === 200) {
+    console.log('Logs managed successfully');
+  } else {
+    console.error('Error managing logs:', response);
+  }
+} catch (error) {
+  console.error('Server error while managing logs:', error);
+}
+}
+
+// End of Common functions for Logs 
+
    async proceedForPayment() {
   
        if (this.selectedPaymentType == 'google-pay') {
@@ -253,6 +304,7 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
           this.paymentIntentObj.currency = this.currencyCode;
           this.paymentIntentObj.amount = this.checkoutObj.amount;
           this.paymentIntentObj.plan = "TOP-UP";
+          this.managingAppLogs("From App Step 1 Credit-Topup: Google Pay Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
           this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
             if (res.code == 200) {
               this.clientSecret = res.data[0].client_secret;
@@ -283,6 +335,7 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
           this.paymentIntentObj.currency = this.currencyCode;
           this.paymentIntentObj.amount = this.checkoutObj.amount;
           this.paymentIntentObj.plan = "TOP-UP";
+          this.managingAppLogs("From App Step 1 Credit-Topup Card Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
           this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
   
             if (res.code == 200) {
@@ -321,7 +374,7 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
 
     //Step 2 : Send Intent and card Id to server 
   async callPaymentIntentFromApp(paymentObj: any) {
-    
+    this.managingAppLogs("From App Step 2 Credit Top-up: Payment Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
     this.service.paymentCardIntent(paymentObj, this.accessToken).then((res: any) => {
       if (res.code == 200) {
         this.actualStripePayment(this.clientSecret, res.data[0].payment_method);
