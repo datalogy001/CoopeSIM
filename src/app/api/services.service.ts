@@ -13,7 +13,8 @@ export class ServicesService {
   restAPI: string = "https://cooptravelesim.com/api/v3/"; // V3 with live 
   stripePubliserKey: string = 'pk_live_51ReDyUGzg6l7xu0e5NeN74opJoIQkxDouaxsqDTZDD7ibliD56uuC7xC0hFxprsroP8wcg5MeaoWmCgy3mT5RLs600cFWutvtO';
   whiteLabelId: any = "18";
-  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX';
+  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX'; 
+
 
   constructor(private http: HttpClient) { }
 
