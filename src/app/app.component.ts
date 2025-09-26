@@ -18,7 +18,7 @@ import { Market } from '@ionic-native/market/ngx';
 import {UpdateAppPage} from '../app/update-app/update-app.page'
 import {Device} from '@ionic-native/device/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
-
+import {FirebaseAnalytics} from '@ionic-native/firebase-analytics/ngx';
 register();
 @Component({
   selector: 'app-root',
@@ -259,7 +259,7 @@ export class AppComponent {
     'app_platform': ''
   }
 
-  constructor(private statusBar: StatusBar,private device: Device,private navController: NavController, private market: Market,private translate: TranslateService, private toastController: ToastController, private firebaseCrashlytics: FirebaseCrashlytics, private network: Network, private modalController: ModalController, private http: HttpClient, private alertController: AlertController, private platform: Platform, private apiService: ServicesService, private router: Router) {
+  constructor(private firebaseAnalytics: FirebaseAnalytics,private statusBar: StatusBar,private device: Device,private navController: NavController, private market: Market,private translate: TranslateService, private toastController: ToastController, private firebaseCrashlytics: FirebaseCrashlytics, private network: Network, private modalController: ModalController, private http: HttpClient, private alertController: AlertController, private platform: Platform, private apiService: ServicesService, private router: Router) {
   
     this.todaysDate = moment().format('YYYY-MM-DD');
     this.initCountry();
@@ -399,13 +399,20 @@ forceCrash() {
     this.firebaseCrashlytics.log("Simulated crash: " + error.message);
   }
 }
- // Example usage on app initialization
- ngOnInit() {
-  this.logNonFatalException();
 
-  // Uncomment the line below to simulate a crash for testing
-  //this.forceCrash();
+// Example usage on app initialization
+ngOnInit() {
+  this.platform.ready().then(() => {
+    this.firebaseAnalytics.logEvent('app_open', {})
+      .then(() => {
+        console.log('✅ Firebase Analytics: app_open event logged successfully');
+      })
+      .catch(error => {
+        console.error('❌ Firebase Analytics: Failed to log app_open event', error);
+      });
+  });
 }
+
 
   AppUpdatesCommonFun() {
    //if (this.platform.is('cordova')) {
@@ -453,7 +460,7 @@ forceCrash() {
     if(window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
       this.currencyCode = window.localStorage.getItem("coop_currency");
     else
-    this.currencyCode = 'USD';
+    this.currencyCode = 'GBP';
     window.localStorage.setItem('coop_currency', this.currencyCode);
     window.localStorage.setItem('coop_phone_code',  "+44");
   }
@@ -471,13 +478,13 @@ forceCrash() {
       if(window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
         this.currencyCode = window.localStorage.getItem("coop_currency");
       else
-      this.currencyCode =this.currencyList.includes(country.currency) ? country.currency : 'USD';
+      this.currencyCode = 'GBP';
     } else {
       //If no country 
       if(window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
         this.currencyCode = window.localStorage.getItem("coop_currency");
       else
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     }
     
     window.localStorage.setItem('coop_currency', this.currencyCode);
@@ -486,7 +493,7 @@ forceCrash() {
   //Step 4 Start
 
   initCountry() {
-    this.countryParam.to_currency = this.currencyCode == '' || this.currencyCode == null ? 'USD' : this.currencyCode;
+    this.countryParam.to_currency = this.currencyCode == '' || this.currencyCode == null ? 'GBP' : this.currencyCode;
  const authToken = window.localStorage.getItem('coop_auth_token');
     const isNotiSettingAllowed = window.localStorage.getItem('eSIM_IsNotiSettingAllow');
     

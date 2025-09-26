@@ -18,13 +18,13 @@ export class RefercodeAddedPage implements OnInit {
   @Input("value1") value1: any;
   @Input("value2") value2: any;
   @Input("value3") value3: any;
-  currencyCode:any='USD';
+  currencyCode:any='GBP';
   constructor(private translate: TranslateService,private loadingScreen: LoadingScreenAppPage, private Router: Router,private platform: Platform,  private modalCtrl: ModalController, private toastcntr: ToastController) { }
 
 ngOnInit() {
     //Current currency 
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
     }

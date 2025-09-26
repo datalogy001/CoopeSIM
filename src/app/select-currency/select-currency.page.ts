@@ -35,7 +35,7 @@ export class SelectCurrencyPage implements OnInit {
   ngOnInit() {}
 
   ionViewDidEnter() {
-    this.currencyType = window.localStorage.getItem("coop_currency") == null ? 'USD' : window.localStorage.getItem("coop_currency");
+    this.currencyType = window.localStorage.getItem("coop_currency") == null ? 'GBP' : window.localStorage.getItem("coop_currency");
   }
 
   async changeCurrency(values: any) {

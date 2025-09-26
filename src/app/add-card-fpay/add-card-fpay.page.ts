@@ -163,7 +163,7 @@ export class AddCardFpayPage implements OnInit {
   }
 
 
-  currencyCodeEvent:any= 'USD';
+  currencyCodeEvent:any= 'GBP';
   userDetails:any=[]; 
 
   async ngOnInit() {
@@ -174,7 +174,7 @@ export class AddCardFpayPage implements OnInit {
 
       //Current currency 
       if (window.localStorage.getItem("coop_currency") == null) {
-        this.currencyCodeEvent = 'USD';
+        this.currencyCodeEvent = 'GBP';
       } else {
         this.currencyCodeEvent = window.localStorage.getItem("coop_currency");
       }

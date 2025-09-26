@@ -33,7 +33,7 @@ export class PaymentTopupPage implements OnInit {
   userDetails: any = [];
   paymentType: any = '';
   card_id: any;
-  currencyCode: any = 'USD';
+  currencyCode: any = 'GBP';
   selectedCards: boolean[] = [];
   isData: any = true;
   stripe_key: any = this.service.stripePubliserKey;
@@ -146,7 +146,7 @@ export class PaymentTopupPage implements OnInit {
         console.log(JSON.stringify(this.checkoutObj));
 
         if (window.localStorage.getItem('coop_currency') == null) {
-          this.currencyCode = 'USD';
+          this.currencyCode = 'GBP';
         } else {
           this.currencyCode = window.localStorage.getItem('coop_currency');
         }

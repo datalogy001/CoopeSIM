@@ -28,7 +28,7 @@ import {Market} from '@ionic-native/market/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import {Device} from '@ionic-native/device/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
-
+import {FirebaseAnalytics} from '@ionic-native/firebase-analytics/ngx';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -51,7 +51,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     mode: 'md'
     }), AppRoutingModule,  HttpClientModule],
     providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy, },Clipboard, Camera, Keyboard, Firebase,Market,
-      FirebaseCrashlytics,FileOpener , Device, StatusBar, GooglePlus, Network, LoadingScreenAppPage, EmailComposer, File,InAppBrowser, SocialSharing, Stripe,FileTransfer],
+      FirebaseCrashlytics,FirebaseAnalytics,FileOpener , Device, StatusBar, GooglePlus, Network, LoadingScreenAppPage, EmailComposer, File,InAppBrowser, SocialSharing, Stripe,FileTransfer],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

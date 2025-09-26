@@ -30,7 +30,7 @@ export class Tab2Page {
   currentPage: number = 1;
   recordsPerPage: number = 20;
   mainObj: any = [];
-  currencyCode: any = 'USD';
+  currencyCode: any = 'GBP';
   countryParam: any = { 'to_currency': '' };
   isSearch: any = false;
   searchData: any = [];
@@ -112,7 +112,7 @@ export class Tab2Page {
 
     //Current currency 
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
     }

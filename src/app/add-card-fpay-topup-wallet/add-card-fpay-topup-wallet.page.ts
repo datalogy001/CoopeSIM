@@ -116,14 +116,14 @@ export class AddCardFpayTopupWalletPage implements OnInit {
   }
 
 
-  currencyCodeEvent:any = 'USD';
+  currencyCodeEvent:any = 'GBP';
   async ngOnInit() {
     this.tempUserData = window.localStorage.getItem('coop_userDetails');
     this.tempUserData = JSON.parse(this.tempUserData);
     this.stripeCardObj.PayerID= this.tempUserData.id;
     //Current currency 
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCodeEvent = 'USD';
+      this.currencyCodeEvent = 'GBP';
     } else {
       this.currencyCodeEvent = window.localStorage.getItem("coop_currency");
     }

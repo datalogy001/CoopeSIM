@@ -11,7 +11,7 @@ export class ModalCouponaddedPage implements OnInit {
   @Input("value") value: any;
   @Input("value1") value1: any;
 
-  currencyCode: any = 'USD';
+  currencyCode: any = 'GBP';
 
 
   constructor(private modalCtrl: ModalController) { }
@@ -22,7 +22,7 @@ export class ModalCouponaddedPage implements OnInit {
 
   ngOnInit() {
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
     }

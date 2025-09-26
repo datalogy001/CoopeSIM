@@ -9,12 +9,10 @@ import { Observable } from 'rxjs';
 export class ServicesService {
   
   //Live server for Coop v3 
-
   restAPI: string = "https://cooptravelesim.com/api/v3/"; // V3 with live 
   stripePubliserKey: string = 'pk_live_51ReDyUGzg6l7xu0e5NeN74opJoIQkxDouaxsqDTZDD7ibliD56uuC7xC0hFxprsroP8wcg5MeaoWmCgy3mT5RLs600cFWutvtO';
   whiteLabelId: any = "18";
-  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX'; 
-
+  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX';  
 
   constructor(private http: HttpClient) { }
 
@@ -350,7 +348,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
   //createAccount
   createAccount(obj: any) {
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
-    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'USD' : window.localStorage.getItem('coop_currency');
+    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'GBP' : window.localStorage.getItem('coop_currency');
 
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
@@ -366,12 +364,12 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
       });
     });
   }
-  selectedCurrency:any='USD'; 
+  selectedCurrency:any='GBP'; 
 
   //LoginService
   loginService(obj: any) {
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
-    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'USD' : window.localStorage.getItem('coop_currency');
+    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'GBP' : window.localStorage.getItem('coop_currency');
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
@@ -389,7 +387,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
 
   //Google Login service
   googleLogin(obj: any) {
-    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'USD' : window.localStorage.getItem('coop_currency');
+    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'GBP' : window.localStorage.getItem('coop_currency');
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
@@ -429,7 +427,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
   //Apple sign in service
   appleSignIn(obj: any) {
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
-    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'USD' : window.localStorage.getItem('coop_currency');
+    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'GBP' : window.localStorage.getItem('coop_currency');
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()
         .set('Content-Type', 'application/json; charset=utf-8')
@@ -636,7 +634,7 @@ debitFromAppCreditWallet(obj: any, access_token: any) {
   //Get user details 
   getuserDetails
   () {
-    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'USD' : window.localStorage.getItem('coop_currency');
+    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'GBP' : window.localStorage.getItem('coop_currency');
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
     this.authToken =  window.localStorage.getItem('coop_auth_token');
     return new Promise((resolve, reject) => {
@@ -801,7 +799,7 @@ validate_voucher_code(obj: any, access_token:any) {
   //Updated wallte balance 
   updatedWalletBalance() {
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
-    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'USD' : window.localStorage.getItem('coop_currency');
+    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'GBP' : window.localStorage.getItem('coop_currency');
     this.authToken =  window.localStorage.getItem('coop_auth_token');
     return new Promise((resolve, reject) => {
       const headers = new HttpHeaders()

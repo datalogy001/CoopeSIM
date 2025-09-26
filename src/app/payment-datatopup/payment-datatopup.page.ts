@@ -44,7 +44,7 @@ export class PaymentDatatopupPage implements OnInit {
   isLogin: any = '';
   paymentType: any = '';
   card_id: any;
-  currencyCode: any = 'USD';
+  currencyCode: any = 'GBP';
   backURL: any = '';
   selectedCards: boolean[] = [];
   isData: any = true;
@@ -228,7 +228,7 @@ selectedLang:any;
         ;
 
     if (window.localStorage.getItem('coop_currency') == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem('coop_currency');
     }

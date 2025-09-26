@@ -26,7 +26,7 @@ export class BundlePage implements OnInit {
   bundleiSO: any = '';
   bundleType: any = '';
   bundleList: any = [];
-  currencyCode: any = 'USD';
+  currencyCode: any = 'GBP';
   isLoading: any = true;
   todaysDate: any = '';
   rate: any = '';
@@ -50,8 +50,8 @@ export class BundlePage implements OnInit {
 
     //Get currency 
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
-      this.paramObj.to_currency =  'USD';
+      this.currencyCode = 'GBP';
+      this.paramObj.to_currency =  'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
       this.paramObj.to_currency = window.localStorage.getItem("coop_currency");

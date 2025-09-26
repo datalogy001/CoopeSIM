@@ -184,6 +184,80 @@ ion-button{
 }
   
 
+.searchdiv{
+  position: relative;
+  
+  ion-searchbar{
+    padding-inline-start:0px; padding-inline-end:0px; padding-top: 0; padding-bottom: 0;  
+     --placeholder-color: #999;
+    margin-bottom: 13px;
+    color: var(--theme-color-2); --background:#fff;
+    --box-shadow:none;
+    border-radius:6px;
+    overflow: hidden;
+  }
+  
+}
+.searching{
+  .flagicon{ width: 36px; height: 24px; border-radius: 4px; position: absolute; z-index: 11; left: 15px; top: 15px; overflow: hidden;
+    img{
+      width: 100%; height: 100%; object-fit: cover;
+    }
+  }
+}
+
+//Updated Scsss - 25-09-2025 
+.searchlist{
+  position: absolute; z-index: 111;
+  top: 100%; left: 0; right: 0; overflow-y: auto;
+  max-height: 250px;
+
+  ion-list{
+    background: transparent; margin: 0; padding: 0;
+
+    ion-item{
+      --padding-start: 15px;
+      --inner-padding-end: 15px;
+      border: 1px solid var(--theme-color-1);
+      box-shadow: none;
+      --inner-border-width:0 0 0 0;
+      margin: 0px 0 -1px;
+      --border-radius: 6px;
+      --background: #fff;
+      --min-height: 42px;
+
+        ion-avatar{
+          width: 36px; height: 24px; --border-radius:4px;
+        }
+        ion-label{ 
+          font-size: 15px; color: var(--theme-color-2); font-weight: 500;
+        }
+
+        &:last-child{
+          margin: 0px 0 0px;
+        }
+      }
+    }
+   
+  }
+
+  .countryselectrow{
+    display: flex; flex-direction: row; align-content: center;
+    .countryselect{
+    margin-bottom: 13px;
+     width: 88px; background: var(--input-bg); border-radius: 10px; margin-right: 10px; color: #fff; display: flex; align-items: center; padding: 12px;
+    //  border: 1px solid var(--theme-color-2);
+
+     .countryimg{ width: 25px; margin-right: 5px; border-radius: 2px;}
+     .countrycode{ color: var(--theme-color-2); }
+    }
+    .phoneno{
+     flex: 1 0 0;
+    }
+}
+   
+  //End 
+  
 
 
 

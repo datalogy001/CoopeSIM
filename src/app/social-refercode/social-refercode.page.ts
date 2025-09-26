@@ -22,12 +22,12 @@ export class SocialRefercodePage implements OnInit {
   loginPageUrl:any;
   earnObj:any= {'user_id' : '', 'referer_code' : ''};
   referObj:any={'referer_code' : ''};
-  currencyCode:any='USD';
+  currencyCode:any='GBP';
   tempUserData:any=[];
   ngOnInit() {
        //Current currency 
        if (window.localStorage.getItem("coop_currency") == null) {
-        this.currencyCode = 'USD';
+        this.currencyCode = 'GBP';
       } else {
         this.currencyCode = window.localStorage.getItem("coop_currency");
       }

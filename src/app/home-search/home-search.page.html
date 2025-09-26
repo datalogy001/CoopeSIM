@@ -5,7 +5,9 @@
       <ion-toolbar>
         <!-- <ion-title>
         </ion-title> -->
-
+ <ion-title>
+          <img class="ftel-logo" src="assets/img/coop-logo.png" alt="">
+        </ion-title>
        <ion-chip (click)="gotoTOpup()" slot="end" [ngClass]="getWalletClass()">{{ walletBalance | currency:currencyCode }}</ion-chip>
 
         <ion-buttons slot="end">

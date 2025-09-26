@@ -13,7 +13,7 @@ import { LoadingScreenAppPage } from '../loading-screen-app/loading-screen-app.p
 })
 export class CurrencySettingsPage implements OnInit {
 
-  selectedCurrency: any = 'USD';
+  selectedCurrency: any = 'GBP';
   source: any = '';
   destination: any = '';
   result: any = '';
@@ -39,8 +39,8 @@ export class CurrencySettingsPage implements OnInit {
     }
 
     if (window.localStorage.getItem('currency') == null) {
-      this.selectedCurrency = 'USD';
-      window.localStorage.setItem('currency', 'USD')
+      this.selectedCurrency = 'GBP';
+      window.localStorage.setItem('currency', 'GBP')
     }
     else {
       this.selectedCurrency = window.localStorage.getItem('currency');
@@ -96,7 +96,7 @@ export class CurrencySettingsPage implements OnInit {
 
         if (this.source != this.destination) {
           this.getLoading();
-          this.currencyConverter('USD', this.destination);
+          this.currencyConverter('GBP', this.destination);
         }else{
           this.getLoading();
           console.log("currency is same" + this.source+"=>"+this.destination);

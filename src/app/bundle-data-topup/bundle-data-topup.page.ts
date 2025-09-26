@@ -23,7 +23,7 @@ export class BundleDataTopupPage implements OnInit {
   bundleiSO: any = '';
   bundleType: any = '';
   bundleList: any = [];
-  currencyCode: any = 'USD';
+  currencyCode: any = 'GBP';
   isLoading: any = true;
   todaysDate: any = '';
   rate: any = '';
@@ -44,8 +44,8 @@ export class BundleDataTopupPage implements OnInit {
     this.lang = window.localStorage.getItem("coop_language") || 'en';
     //Get currency 
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
-      this.paramObj.to_currency =  'USD';
+      this.currencyCode = 'GBP';
+      this.paramObj.to_currency =  'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
       this.paramObj.to_currency = window.localStorage.getItem("coop_currency");

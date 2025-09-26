@@ -670,7 +670,7 @@
  
  "Expired" : "Expired",
  "top_up_again":"Top up again",
- "place_expires_in": "Plan expires {{duration}} days after first data used in your destination",
+ "place_expires_in": "Plan expires {{duration}} after first data used in your destination",
  "GB_LEFT": "GB left",
  "LEFT": "left",
  "DAYS_LEFT": "days left",
@@ -803,6 +803,11 @@
   "DAY": "Day",
   "DAYS_FEW": "Days",
   "DAYS_MANY": "Days"
-}
+},
+
+"Country_residence" : "Country of Residence"
+
+
+
 
 }

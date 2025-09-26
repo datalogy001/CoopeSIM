@@ -22,7 +22,7 @@ export class VoucherTopupPage implements OnInit {
     this.tokenValue = window.localStorage.getItem('coop_auth_token');
     //Current currency 
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.voucherObj.currency = 'USD';
+      this.voucherObj.currency = 'GBP';
     } else {
       this.voucherObj.currency = window.localStorage.getItem("coop_currency");
     }

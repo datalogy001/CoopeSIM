@@ -17,7 +17,7 @@ export class ModalRefercodePage implements OnInit {
   @Input("value1") value1: any;
   @Input("value2") value2: any;
   tempDetails:any=[];
-  currencyCode:any='USD';
+  currencyCode:any='GBP';
 
   closePopover(values: any) {
     this.modalCtrl.dismiss();
@@ -28,7 +28,7 @@ export class ModalRefercodePage implements OnInit {
  
    ngOnInit() {
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
     }

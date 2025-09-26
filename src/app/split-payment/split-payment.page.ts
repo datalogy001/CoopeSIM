@@ -18,7 +18,7 @@ export class SplitPaymentPage implements OnInit {
   swiper?: Swiper;
 
   constructor(private translate: TranslateService,private service: ServicesService,private modalCtrl: ModalController, private navController: NavController) { }
-  currencyCode:any='USD';
+  currencyCode:any='GBP';
   cardList: any = [];
   accessToken:any;
   selectedCards: boolean[] = [];
@@ -31,7 +31,7 @@ export class SplitPaymentPage implements OnInit {
     this.accessToken = window.localStorage.getItem('coop_auth_token');
     this.getCreditCards();
     if (window.localStorage.getItem('coop_currency') == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem('coop_currency');
     }

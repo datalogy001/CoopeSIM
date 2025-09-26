@@ -36,7 +36,7 @@ export class ProfilePage implements OnInit {
   tempDetails:any=[]; 
   lang:any;
   tokenValue: any = '';
-  currencyCode:any='USD';
+  currencyCode:any='GBP';
   walletBalance:any=0.00;
   min_refer_amt:any=0.00;
 
@@ -66,7 +66,7 @@ export class ProfilePage implements OnInit {
       }
        //Current currency 
      if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
     }

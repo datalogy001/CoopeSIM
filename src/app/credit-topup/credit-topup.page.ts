@@ -16,7 +16,7 @@ import { PasswordErrorPage } from '../password-error/password-error.page';
 })
 export class CreditTopupPage implements OnInit {
 
-  currencyCode: any = 'USD'; // Default currency
+  currencyCode: any = 'GBP'; // Default currency
   selectedAmount: any;
   customAmount: any;
 
@@ -43,7 +43,7 @@ topupAMTNewList: any = Array.from({ length: 50 }, (_, i) => ({
     
     //Current currency 
     if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
     }

@@ -27,7 +27,7 @@ export class HomeSearchPage implements OnInit {
   isSearch: any = false;
   mainObj: any = [];
   types: any = '';
-  currencyCode: any = 'USD';
+  currencyCode: any = 'GBP';
   iso: any = '';
   isearchIMg: any;
   ignoreScroll: boolean = false; // New flag to ignore scroll events
@@ -153,7 +153,7 @@ this.destinations = window.localStorage.getItem('coop_destinations');
   ionViewDidEnter() {
      //Current currency 
      if (window.localStorage.getItem("coop_currency") == null) {
-      this.currencyCode = 'USD';
+      this.currencyCode = 'GBP';
     } else {
       this.currencyCode = window.localStorage.getItem("coop_currency");
     }

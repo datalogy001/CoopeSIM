@@ -20,6 +20,7 @@
     <p>{{ 'comming_soon' | translate }}</p>
   </div>
 
+  
   <div class="datacontainer">
     <div class="datablock" (click)="gototab2()">
       <img src="assets/img/travel-data.png" alt="">
@@ -31,23 +32,18 @@
       <h4>{{ 'lounge_pass' | translate }}</h4>
       <p>{{ 'comming_soon' | translate }}</p>
     </div>
-  <div class="datablock blockimg" (click)="openInAppBrowser('https://broadband.yourcoop.coop/mobile/', 'Coop Mobile')">
-  <img src="assets/img/Mobile_logo.png" alt="Coop Mobile">
-</div>
-
-<div class="datablock blockimg" (click)="openInAppBrowser('https://broadband.yourcoop.coop/broadband/', 'Coop Broadband')">
-  <img src="assets/img/Broadband_logo.png" alt="Coop Broadband">
-</div>
-
-<div class="datablock blockimg" (click)="openInAppBrowser('https://cooptravelinsurance.coop/', 'Coop Insurance')">
-  <img src="assets/img/Cooptravel_insurance.png" alt="Coop Insurance">
-</div>
-
-<div class="datablock blockimg" (click)="openInAppBrowser('https://www.cooptravel.co.uk/travel-money/', 'Coop Holidays')">
-  <img src="assets/img/Travel_logo.png" alt="Coop Holidays">
-</div>
-
+    <div class="datablock">
+      <img src="assets/img/insurance.png" alt="">
+      <h4>{{ 'insurance' | translate }}</h4>
+      <p>{{ 'comming_soon' | translate }}</p>
+    </div>
+    <div class="datablock">
+      <img src="assets/img/medical.png" alt="">
+      <h4>{{ 'medical' | translate }}</h4>
+      <p>{{ 'comming_soon' | translate }}</p>
+    </div>
   </div>
+
 
 </ion-content>
 
