@@ -466,6 +466,14 @@ const routes: Routes = [
   },
     { path: 'split-payment',
     loadChildren: () => import('./split-payment/split-payment.module').then( m => m.SplitPaymentPageModule)
+  },
+  {
+    path: 'country-code-model',
+    loadChildren: () => import('./country-code-model/country-code-model.module').then( m => m.CountryCodeModelPageModule)
+  },
+  {
+    path: 'socail-login-country-phone',
+    loadChildren: () => import('./socail-login-country-phone/socail-login-country-phone.module').then( m => m.SocailLoginCountryPhonePageModule)
   }
  
  

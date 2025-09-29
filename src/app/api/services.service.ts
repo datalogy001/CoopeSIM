@@ -9,10 +9,17 @@ import { Observable } from 'rxjs';
 export class ServicesService {
   
   //Live server for Coop v3 
-  restAPI: string = "https://cooptravelesim.com/api/v3/"; // V3 with live 
+  /*restAPI: string = "https://cooptravelesim.com/api/v3/"; // V3 with live 
   stripePubliserKey: string = 'pk_live_51ReDyUGzg6l7xu0e5NeN74opJoIQkxDouaxsqDTZDD7ibliD56uuC7xC0hFxprsroP8wcg5MeaoWmCgy3mT5RLs600cFWutvtO';
   whiteLabelId: any = "18";
-  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX';  
+  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX';  */
+
+  //Development server for Coop V3
+  restAPI: string = "https://coop.devdemo.biz/api/v3/"; // V3 with development 
+  stripePubliserKey: string = 'pk_test_51ReDyUGzg6l7xu0eHe8yFHx4Cfkkhs8VgcUoWEmJp1qw0zczINr5me0fhiXJGyoqYFMItiEzMO2iOmKUfFZ0rvPY00y3gsIKb3';     
+  whiteLabelId: any = "18";
+  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX'; 
+  
 
   constructor(private http: HttpClient) { }
 
@@ -796,6 +803,29 @@ validate_voucher_code(obj: any, access_token:any) {
     });
   }
  
+
+   //isProfileIncompleteService  
+   
+  isProfileIncompleteService(obj:any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    this.selectedCurrency = window.localStorage.getItem('coop_currency') == null ? 'GBP' : window.localStorage.getItem('coop_currency');
+    this.authToken =  window.localStorage.getItem('coop_auth_token');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Authorization', 'Bearer ' + this.authToken)
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('currency',this.selectedCurrency)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'user/profilestatus',JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
   //Updated wallte balance 
   updatedWalletBalance() {
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
@@ -1181,6 +1211,26 @@ validate_voucher_code(obj: any, access_token:any) {
         .set('language', this.selectedLang)
         .set('client-token', this.clientToken)
       return this.http.post(this.restAPI + 'applog', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+
+  
+  //API to Complete signup 
+  completeSignup(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'user/completeprofile', JSON.stringify(obj), { headers }).subscribe((res: any) => {
         resolve(res);
       }, (err) => {
         reject(err);

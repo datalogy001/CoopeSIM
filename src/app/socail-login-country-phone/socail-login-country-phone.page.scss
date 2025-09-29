@@ -1,3 +1,39 @@
+
+.verify-box {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.verify-icon {
+  font-size: 60px;
+  color: #009bc5; /* blue color for icon */
+}
+
+.verify-secure {
+  font-size: 18px;
+  letter-spacing: 6px;
+  margin: 5px 0 15px;
+  font-weight: bold;
+  color: #009bc5;
+}
+
+.verify-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 10px 0 5px;
+  color: #000;
+  text-align:  center;
+}
+
+.verify-subtitle {
+  font-size: 14px;
+  text-align:  center;
+  color: #555;
+  margin-bottom: 20px;
+}
 ion-header{
     ion-toolbar{      
         --min-height:150px;
@@ -153,7 +189,7 @@ ion-button{
     &.btn-signup{
       --padding-start:20px;
       --padding-end:20px;
-      margin: 20px 0px 0px;
+      margin: 10px 0px 0px;
     } 
     &::part(native) {
         padding-top: 7px;
@@ -257,7 +293,7 @@ ion-button{
 
 .searchdiv{
   position: relative;
-  margin: 0 0 12px;
+  margin: 0 0 15px;
   
   ion-searchbar{
     padding-inline-start:0px; padding-inline-end:0px; padding-top: 0; padding-bottom: 0;  
@@ -285,8 +321,13 @@ ion-button{
 }
 .searchbar-input.sc-ion-searchbar-md::placeholder{
    font-weight: 300;
+   
 }
   
+.searchbar-input.sc-ion-searchbar-md
+{
+height: 50px !important;
+}
 
 
 
@@ -341,6 +382,15 @@ and (-webkit-min-device-pixel-ratio: 2){
   
 }
 
+.error-msg {
+  font-size: 13px;
+  margin: 4px 0 0 8px;
+  color: #e53935;             /* red */
+  opacity: 0;                 /* hidden by default */
+  transition: opacity 0.3s ease-in-out;
+}
 
-
+.error-msg.visible {
+  opacity: 1;                 /* fade in when error exists */
+}
 

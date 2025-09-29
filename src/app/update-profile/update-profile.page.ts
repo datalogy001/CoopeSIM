@@ -13,7 +13,7 @@ import { ModalDeleteprofilepicPage } from '../modal-deleteprofilepic/modal-delet
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ModalUploadProfileImagePage } from '../modal-upload-profile-image/modal-upload-profile-image.page';
 import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer/ngx';
-
+import { CountryCodeModelPage} from '../country-code-model/country-code-model.page';
 
 @Component({
   selector: 'app-update-profile',
@@ -261,6 +261,7 @@ export class UpdateProfilePage implements OnInit {
     this.token = window.localStorage.getItem("coop_auth_token");
     this.profileObj.first_name = this.tempDetails.first_name;
     this.profileObj.profile_image = this.tempDetails.profile_image;
+    this.profileObj.country_name = this.tempDetails.country_name;
     if (this.profileObj.profile_image && this.profileObj.profile_image.includes("user-theme.png")) {
       this.isDeletedImg = true;
     }else
@@ -347,7 +348,7 @@ if (this.profileObj && typeof this.profileObj.first_name === 'string') {
 
   async chooseCountry() {
     const modal = await this.modalCtrl.create({
-      component: ChooseCountryPage,
+      component: CountryCodeModelPage,
       // componentProps: { value: this.creditCardObj.billing_country }
     });
 

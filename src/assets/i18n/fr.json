@@ -764,7 +764,18 @@
   "COUPON_SUCCESS_AMOUNT": "Cela a fonctionné, vous avez reçu une remise de montant",
    "Voucher": "Bon" ,
    "COUPON_APPLIED": "Coupon appliqué",
-  "refer_signup_msg": "{{amount}} gagnés grâce à {{name}}"
-
+  "refer_signup_msg": "{{amount}} gagnés grâce à {{name}}",
+  "VALIDATION_MSG_SELECT_COUNTRY" : "Veuillez sélectionner votre pays de résidence.",
+  "Country_residence" : "Pays de résidence",
+  "VALIDATION_MSG_ENTER_MOBILE_NUMBER": "Veuillez saisir votre numéro de téléphone portable.",
+"VALIDATION_MSG_ENTER_VALID_MOBILE_NUMBER": "Veuillez saisir un numéro de téléphone portable valide.",
+"SELECT_COUNTRY_CODE": "Sélectionnez le code pays",
+  "SEARCH_COUNTRY_CODE": "Recherche par code pays ou nom de pays",
+  "VALIDATION_MSG_FIRST_NAME_MIN_LENGTH": "Le prénom doit comporter au moins 3 caractères.",
+"VALIDATION_MSG_SURNAME_MIN_LENGTH": "Le nom de famille doit comporter au moins 3 caractères.",
+"VERIFY_TITLE_CONTINUE_SIGNUP": "Continuer l'inscription",
+"VERIFY_SUBTITLE_ENTER_NUMBER": "Veuillez sélectionner votre pays de résidence dans la liste ci-dessous et saisir votre numéro de téléphone dans le champ prévu à cet effet",
+  "SIGNUP_SUCCESS_TITLE": "Bienvenue à bord !",
+  "SIGNUP_SUCCESS_DESCRIPTION": "Votre compte a été créé avec succès."
   
 }

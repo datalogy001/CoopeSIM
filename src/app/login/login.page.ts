@@ -11,7 +11,7 @@ import { PasswordErrorPage } from '../password-error/password-error.page';
 import { SuccessModelPage } from '../success-model/success-model.page';
 import { TranslateService } from '@ngx-translate/core';
 import { Keyboard } from '@ionic-native/keyboard/ngx';
-
+import {SocailLoginCountryPhonePage} from '../socail-login-country-phone/socail-login-country-phone.page';
 
 @Component({
   selector: 'app-login',
@@ -305,15 +305,13 @@ async submit() {
 
    /* SIgn in with google  */
    async loginWithGoogle() {
-   // this.googleSuccess()
-    await this.loadingScreen.presentLoading();
-       
+   await this.loadingScreen.presentLoading();
       const options = {
         prompt: 'consent',
         // other options...
       };
   
-      this.googlePlus.login(options)
+ this.googlePlus.login(options)
         .then(res => {
          // alert("Success" + JSON.stringify(res))
           this.loadingScreen.dismissLoading();
@@ -333,13 +331,9 @@ async submit() {
     async googleSuccess(googleRes:any) {
       //API call for Login section
       await this.loadingScreen.presentLoading();
-      //this.googleLoginObj.userId ="11111111";
-      //this.googleLoginObj.first_name = "Dinesh";
-      //this.googleLoginObj.email = "dinesh1291186012@gmail.com";
-      
-      this.googleLoginObj.userId = googleRes.userId;
+       this.googleLoginObj.userId = googleRes.userId;
       this.googleLoginObj.first_name = googleRes.givenName;
-      this.googleLoginObj.email = googleRes.email;
+     this.googleLoginObj.email = googleRes.email;
       
       this.service.googleLogin(this.googleLoginObj).then((resNew: any) => {
         this.loadingScreen.dismissLoading();
@@ -361,14 +355,10 @@ async submit() {
           window.localStorage.setItem('coop_refer_balance', resNew.data['data']['referal_wallet']);
           window.localStorage.setItem('coop_refer_code', resNew.data['data']['referal_code']);
          
-          if(this.googleAttemp == 0) //If New 
-          this.successMSGModal(this.translate.instant('SUCCESS_MSG_BUTTON'), this.translate.instant('SUCCESS_MSG_TEXT_Wl'), "2000");
-          else
-          this.successMSGModal(this.translate.instant('SUCCESS_MSG_BUTTON'), this.translate.instant('SUCCESS_MSG_TEXT'), "2000");
-         //Already registered  
+            //Already registered  
          if(resNew.data['is_register'] == false)
          {
-
+        this.successMSGModal(this.translate.instant('SUCCESS_MSG_BUTTON'), this.translate.instant('SUCCESS_MSG_TEXT'), "4000");
          if (this.isLogin == true) {
             const loginPageUrl = this.Router.url;
             this.checkoutObj.id = resNew.data['id'];
@@ -384,20 +374,9 @@ async submit() {
             this.Router.navigate(['home-search']);
           } 
          }else{
-    
-
-
-         //First time
-            const loginPageUrl = this.Router.url;
-            this.checkoutObj.id = resNew.data['id'];
-            let navigationExtras: NavigationExtras = {
-              state: {
-                checkoutData: this.checkoutObj,
-                withOutLogin: this.isLogin,
-                payBack: loginPageUrl
-              }
-            };
-         this.Router.navigate(['signup-socialrefer'], navigationExtras);
+     //First time -SIGNUP- Google 
+      //Socail Media Country Model STARTED 
+     this.modelSocailCountry( resNew.data['id'],this.Router.url );
          }
   
         } else {
@@ -405,5 +384,34 @@ async submit() {
         }
       })
   }
+
+  async modelSocailCountry(userId: string, routeURL: string): Promise<void> {
+  const modal = await this.modalController.create({
+    component: SocailLoginCountryPhonePage, // fixed typo
+  });
+
+  modal.onDidDismiss().then((result) => {
+    console.log('Modal result:', result);
+
+    if (result.data.success == true) {
+
+      this.successMSGModal(this.translate.instant('SUCCESS_MSG_BUTTON'), this.translate.instant('SUCCESS_MSG_TEXT_Wl'), "2000");
+
+      this.checkoutObj.id = userId;
+
+      const navigationExtras: NavigationExtras = {
+        state: {
+          checkoutData: this.checkoutObj,
+          withOutLogin: this.isLogin,
+          payBack: routeURL,
+        },
+      };
+
+      this.Router.navigate(['signup-socialrefer'], navigationExtras);
+    }
+  });
+
+  await modal.present();
+}
 
 }

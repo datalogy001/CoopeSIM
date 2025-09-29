@@ -437,6 +437,41 @@
     "AR": "Argentina",
     "AM": "Armenia",
     "AU": "Australia",
+    "AF" : "Afghanistan",
+    "AO" : "Angola",
+    "BZ" : "Belize",
+    "KM" : "Comoros",
+    "CU" : "Cuba", 
+    "GM" :"Gambia",
+    "GY" : "Guyana",
+    "HT" : "Haiti",
+    "KI" : "Kiribati",
+    "LB" : "Lebanon",
+    "LY" : "Libya",
+    "MV": "Maldives",
+    "MH": "Marshall Islands",
+    "FM": "Micronesia",
+    "MM": "Myanmar",
+    "NP": "Nepal",
+    "KP": "North Korea",
+    "PW": "Palau",
+    "WS": "Samoa",
+    "SM": "San Marino",
+    "ST": "Sao Tome and Principe",
+     "SB": "Solomon Islands",
+      "SO": "Somalia",
+       "SS": "South Sudan",
+        "SY": "Syrian Arab Republic",
+        "TM": "Turkmenistan",
+        "TV": "Tuvalu",
+        "VE": "Venezuela",
+        "YE": "Yemen",
+        "ET" : "Ethiopia",  
+    "GQ" : "Equatorial Guinea",
+    "ER" : "Eritrea",
+    "DJ" : "Djibouti",
+    "BT" : "Bhutan",
+    "BI" : "Burundi",
     "AT": "Austria",
     "AZ": "Azerbaijan",
     "BS": "Bahamas",
@@ -623,7 +658,8 @@
     "VG": "Virgin Islands British",
     "VI": "Virgin Islands US",
     "EH": "Western Sahara",
-    "ZM": "Zambia"
+    "ZM": "Zambia",
+    "ZW": "Zimbabwe"
   },
   "ZONES": {
     "Africa": "Africa",
@@ -805,8 +841,18 @@
   "DAYS_MANY": "Days"
 },
 
-"Country_residence" : "Country of Residence"
-
+"Country_residence" : "Country of Residence",
+"VALIDATION_MSG_SELECT_COUNTRY" : "Please select your country of residence.",
+"VALIDATION_MSG_ENTER_MOBILE_NUMBER": "Please enter your mobile number.",
+"VALIDATION_MSG_ENTER_VALID_MOBILE_NUMBER": "Please enter a valid mobile number.",
+"SELECT_COUNTRY_CODE": "Select country code",
+"SEARCH_COUNTRY_CODE": "Search by country code or country name",
+"VALIDATION_MSG_FIRST_NAME_MIN_LENGTH": "First name must be at least 3 characters long.",
+"VALIDATION_MSG_SURNAME_MIN_LENGTH": "Last name must be at least 3 characters long.",
+"VERIFY_TITLE_CONTINUE_SIGNUP": "Continue with Sign Up",
+"VERIFY_SUBTITLE_ENTER_NUMBER": "Please select your country of residence from the list below and enter your contact number in the field.",
+"SIGNUP_SUCCESS_TITLE": "Welcome aboard!",
+"SIGNUP_SUCCESS_DESCRIPTION": "Your account has been successfully created."
 
 
 

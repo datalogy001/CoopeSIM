@@ -53,6 +53,12 @@
           placeholder="{{ 'EMAIL_ADDRESS' | translate }}"></ion-input>
       </ion-item>
 
+        <ion-item lines="none" *ngIf="profileObj.country_name != null && profileObj.country_name != ''">
+        <ion-input readonly type="text" [(ngModel)]="profileObj.country_name"
+          placeholder="{{ 'Country_residence' | translate }}"></ion-input>
+      </ion-item>
+
+
       <!--<ion-item lines="none">
         <ion-input placeholder="{{ 'SELECT_DOB' | translate }}" [(ngModel)]="profileObj.date_of_birth"
           (click)="presentPopover($event)"></ion-input>
@@ -72,7 +78,7 @@
         </div>
         <div class="phoneno">
           <ion-item lines="none">
-            <ion-input type="tel" (keyup)="onSearch($event)" [(ngModel)]="temp_mobile_number" maxLength="13"
+            <ion-input type="tel" (keyup)="onSearch($event)" [(ngModel)]="temp_mobile_number" maxLength="11"
               placeholder="{{ 'MOBILE_NUMBER' | translate }}"></ion-input>
           </ion-item>
         </div>

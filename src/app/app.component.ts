@@ -9,16 +9,19 @@ import * as moment from 'moment';
 import { PushNotificationPage } from '../app/push-notification/push-notification.page'
 import OneSignalPlugin from 'onesignal-cordova-plugin'
 import { Network } from '@ionic-native/network/ngx';
-import { FirebaseCrashlytics } from '@ionic-native/firebase-crashlytics/ngx';
+
 import axios from 'axios';
 import { NointernetPage } from '../app/nointernet/nointernet.page';
 import { TranslateService } from '@ngx-translate/core';
 import { Constants } from './api/constants.enum';
 import { Market } from '@ionic-native/market/ngx';
-import {UpdateAppPage} from '../app/update-app/update-app.page'
-import {Device} from '@ionic-native/device/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
-import {FirebaseAnalytics} from '@ionic-native/firebase-analytics/ngx';
+import { UpdateAppPage } from '../app/update-app/update-app.page'
+import { Device } from '@ionic-native/device/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { FirebaseAnalytics } from '@ionic-native/firebase-analytics/ngx';
+import { SocailLoginCountryPhonePage } from '../app/socail-login-country-phone/socail-login-country-phone.page';
+import { SuccessModelPage } from '../app/success-model/success-model.page';
+
 register();
 @Component({
   selector: 'app-root',
@@ -47,8 +50,8 @@ export class AppComponent {
     , { 'name': 'North America', 'perDay': '' }, { 'name': 'Oceania', 'perDay': '' }];
   currencyList: any = ['USD', 'GBP', 'EUR'];
 
- 
-  countryListWithCodes =[
+
+  countryListWithCodes = [
     { "country": "Afghanistan", "code": "AF", "currency": "AFN", "language": "en", "phone_code_country": "+93" },
     { "country": "Albania", "code": "AL", "currency": "ALL", "language": "en", "phone_code_country": "+355" },
     { "country": "Algeria", "code": "DZ", "currency": "DZD", "language": "en", "phone_code_country": "+213" },
@@ -201,66 +204,66 @@ export class AppComponent {
     { "country": 'Netherlands', "code": 'NL', "currency": 'EUR', "language": 'en', "phone_code_country": '+31' },
     { "country": 'New Zealand', "code": 'NZ', "currency": 'NZD', "language": 'en', "phone_code_country": '+64' },
     { "country": 'Nigeria', "code": 'NG', "currency": 'NGN', "language": 'en', "phone_code_country": '+234' },
- { "country": 'Niue', "code": 'NU', "currency": 'NZD', "language": 'en', "phone_code_country": '+683' },
-  { "country": 'Norfolk Island', "code": 'NF', "currency": 'AUD', "language": 'en', "phone_code_country": '+672' },
-  { "country": 'Northern Mariana Islands', "code": 'MP', "currency": 'USD', "language": 'en', "phone_code_country": '+1-670' },
-  { "country": 'Norway', "code": 'NO', "currency": 'NOK', "language": 'en', "phone_code_country": '+47' },
-  { "country": 'Oman', "code": 'OM', "currency": 'OMR', "language": 'en', "phone_code_country": '+968' },
-  { "country": 'Pakistan', "code": 'PK', "currency": 'PKR', "language": 'en', "phone_code_country": '+92' },
-  { "country": 'Palau', "code": 'PW', "currency": 'USD', "language": 'en', "phone_code_country": '+680' },
-  { "country": 'Palestinian Territory Occupied', "code": 'PS', "currency": 'ILS', "language": 'en', "phone_code_country": '+970' },
-  { "country": 'Panama', "code": 'PA', "currency": 'PAB', "language": 'en', "phone_code_country": '+507' },
-  { "country": 'Papua New Guinea', "code": 'PG', "currency": 'PGK', "language": 'en', "phone_code_country": '+675' },
-  { "country": 'Paraguay', "code": 'PY', "currency": 'PYG', "language": 'en', "phone_code_country": '+595' },
-  { "country": 'Peru', "code": 'PE', "currency": 'PEN', "language": 'en', "phone_code_country": '+51' },
-  { "country": 'Philippines', "code": 'PH', "currency": 'PHP', "language": 'en', "phone_code_country": '+63' },
-  { "country": 'Pitcairn Island', "code": 'PN', "currency": 'NZD', "language": 'en', "phone_code_country": '+64' },
-  { "country": 'Poland', "code": 'PL', "currency": 'PLN', "language": 'en', "phone_code_country": '+48' },
-  { "country": 'Portugal', "code": 'PT', "currency": 'EUR', "language": 'en', "phone_code_country": '+351' },
-  { "country": 'Puerto Rico', "code": 'PR', "currency": 'USD', "language": 'en', "phone_code_country": '+1-787, +1-939' },
-  { "country": 'Qatar', "code": 'QA', "currency": 'QAR', "language": 'en', "phone_code_country": '+974' },
-  { "country": 'Reunion', "code": 'RE', "currency": 'EUR', "language": 'en', "phone_code_country": '+262' },
-  { "country": 'Romania', "code": 'RO', "currency": 'RON', "language": 'en', "phone_code_country": '+40' }, // Set to Turkish
-  { "country": 'Russia', "code": 'RU', "currency": 'RUB', "language": 'en', "phone_code_country": '+7' },
-  { "country": 'Rwanda', "code": 'RW', "currency": 'RWF', "language": 'en', "phone_code_country": '+250' },
-  { "country": 'Saint Helena', "code": 'SH', "currency": 'SHP', "language": 'en', "phone_code_country": '+290' },
-  { "country": 'Saint Kitts And Nevis', "code": 'KN', "currency": 'XCD', "language": 'en', "phone_code_country": '+1-869' },
-  { "country": 'Saint Lucia', "code": 'LC', "currency": 'XCD', "language": 'en', "phone_code_country": '+1-758' },
-  { "country": 'Saint Vincent And The Grenadines', "code": 'VC', "currency": 'XCD', "language": 'en', "phone_code_country": '+1-784' },
-  { "country": 'San Marino', "code": 'SM', "currency": 'EUR', "language": 'en', "phone_code_country": '+378' },
-  { "country": 'Saudi Arabia', "code": 'SA', "currency": 'SAR', "language": 'en', "phone_code_country": '+966' },
-  { "country": 'Senegal', "code": 'SN', "currency": 'XOF', "language": 'en', "phone_code_country": '+221' },
-  { "country": 'Serbia', "code": 'RS', "currency": 'RSD', "language": 'en', "phone_code_country": '+381' }, // Set to Turkish
-  { "country": 'Seychelles', "code": 'SC', "currency": 'SCR', "language": 'en', "phone_code_country": '+248' },
-  { "country": 'Singapore', "code": 'SG', "currency": 'SGD', "language": 'en', "phone_code_country": '+65' },
-  { "country": 'Slovakia', "code": 'SK', "currency": 'EUR', "language": 'en', "phone_code_country": '+421' },
-  { "country": 'Slovenia', "code": 'SI', "currency": 'EUR', "language": 'en', "phone_code_country": '+386' }, // Set to Turkish
-  { "country": 'South Africa', "code": 'ZA', "currency": 'ZAR', "language": 'en', "phone_code_country": '+27' },
-  { "country": 'Spain', "code": 'ES', "currency": 'EUR', "language": 'en', "phone_code_country": '+34' },
-  { "country": 'Sri Lanka', "code": 'LK', "currency": 'LKR', "language": 'en', "phone_code_country": '+94' },
-  { "country": 'Sudan', "code": 'SD', "currency": 'SDG', "language": 'en', "phone_code_country": '+249' },
-  { "country": 'Sweden', "code": 'SE', "currency": 'SEK', "language": 'en', "phone_code_country": '+46' },
-  { "country": 'Switzerland', "code": 'CH', "currency": 'CHF', "language": 'en', "phone_code_country": '+41' },
-  { "country": 'Thailand', "code": 'TH', "currency": 'THB', "language": 'en', "phone_code_country": '+66' },
-  { "country": 'Turkey', "code": 'TR', "currency": 'TRY', "language": 'en', "phone_code_country": '+90' },
-  { "country": 'United Arab Emirates', "code": 'AE', "currency": 'AED', "language": 'en', "phone_code_country": '+971' },
-  { "country": 'United Kingdom', "code": 'GB', "currency": 'GBP', "language": 'en', "phone_code_country": '+44' },
-  { "country": 'United States', "code": 'US', "currency": 'USD', "language": 'en', "phone_code_country": '+1' },
-  { "country": 'Vietnam', "code": 'VN', "currency": 'VND', "language": 'en', "phone_code_country": '+84' },
-  { "country": 'Zambia', "code": 'ZM', "currency": 'ZMW', "language": 'en', "phone_code_country": '+260' },
-  { "country": 'Zimbabwe', "code": 'ZW', "currency": 'ZWL', "language": 'en', "phone_code_country": '+263' }];
-  
+    { "country": 'Niue', "code": 'NU', "currency": 'NZD', "language": 'en', "phone_code_country": '+683' },
+    { "country": 'Norfolk Island', "code": 'NF', "currency": 'AUD', "language": 'en', "phone_code_country": '+672' },
+    { "country": 'Northern Mariana Islands', "code": 'MP', "currency": 'USD', "language": 'en', "phone_code_country": '+1-670' },
+    { "country": 'Norway', "code": 'NO', "currency": 'NOK', "language": 'en', "phone_code_country": '+47' },
+    { "country": 'Oman', "code": 'OM', "currency": 'OMR', "language": 'en', "phone_code_country": '+968' },
+    { "country": 'Pakistan', "code": 'PK', "currency": 'PKR', "language": 'en', "phone_code_country": '+92' },
+    { "country": 'Palau', "code": 'PW', "currency": 'USD', "language": 'en', "phone_code_country": '+680' },
+    { "country": 'Palestinian Territory Occupied', "code": 'PS', "currency": 'ILS', "language": 'en', "phone_code_country": '+970' },
+    { "country": 'Panama', "code": 'PA', "currency": 'PAB', "language": 'en', "phone_code_country": '+507' },
+    { "country": 'Papua New Guinea', "code": 'PG', "currency": 'PGK', "language": 'en', "phone_code_country": '+675' },
+    { "country": 'Paraguay', "code": 'PY', "currency": 'PYG', "language": 'en', "phone_code_country": '+595' },
+    { "country": 'Peru', "code": 'PE', "currency": 'PEN', "language": 'en', "phone_code_country": '+51' },
+    { "country": 'Philippines', "code": 'PH', "currency": 'PHP', "language": 'en', "phone_code_country": '+63' },
+    { "country": 'Pitcairn Island', "code": 'PN', "currency": 'NZD', "language": 'en', "phone_code_country": '+64' },
+    { "country": 'Poland', "code": 'PL', "currency": 'PLN', "language": 'en', "phone_code_country": '+48' },
+    { "country": 'Portugal', "code": 'PT', "currency": 'EUR', "language": 'en', "phone_code_country": '+351' },
+    { "country": 'Puerto Rico', "code": 'PR', "currency": 'USD', "language": 'en', "phone_code_country": '+1-787, +1-939' },
+    { "country": 'Qatar', "code": 'QA', "currency": 'QAR', "language": 'en', "phone_code_country": '+974' },
+    { "country": 'Reunion', "code": 'RE', "currency": 'EUR', "language": 'en', "phone_code_country": '+262' },
+    { "country": 'Romania', "code": 'RO', "currency": 'RON', "language": 'en', "phone_code_country": '+40' }, // Set to Turkish
+    { "country": 'Russia', "code": 'RU', "currency": 'RUB', "language": 'en', "phone_code_country": '+7' },
+    { "country": 'Rwanda', "code": 'RW', "currency": 'RWF', "language": 'en', "phone_code_country": '+250' },
+    { "country": 'Saint Helena', "code": 'SH', "currency": 'SHP', "language": 'en', "phone_code_country": '+290' },
+    { "country": 'Saint Kitts And Nevis', "code": 'KN', "currency": 'XCD', "language": 'en', "phone_code_country": '+1-869' },
+    { "country": 'Saint Lucia', "code": 'LC', "currency": 'XCD', "language": 'en', "phone_code_country": '+1-758' },
+    { "country": 'Saint Vincent And The Grenadines', "code": 'VC', "currency": 'XCD', "language": 'en', "phone_code_country": '+1-784' },
+    { "country": 'San Marino', "code": 'SM', "currency": 'EUR', "language": 'en', "phone_code_country": '+378' },
+    { "country": 'Saudi Arabia', "code": 'SA', "currency": 'SAR', "language": 'en', "phone_code_country": '+966' },
+    { "country": 'Senegal', "code": 'SN', "currency": 'XOF', "language": 'en', "phone_code_country": '+221' },
+    { "country": 'Serbia', "code": 'RS', "currency": 'RSD', "language": 'en', "phone_code_country": '+381' }, // Set to Turkish
+    { "country": 'Seychelles', "code": 'SC', "currency": 'SCR', "language": 'en', "phone_code_country": '+248' },
+    { "country": 'Singapore', "code": 'SG', "currency": 'SGD', "language": 'en', "phone_code_country": '+65' },
+    { "country": 'Slovakia', "code": 'SK', "currency": 'EUR', "language": 'en', "phone_code_country": '+421' },
+    { "country": 'Slovenia', "code": 'SI', "currency": 'EUR', "language": 'en', "phone_code_country": '+386' }, // Set to Turkish
+    { "country": 'South Africa', "code": 'ZA', "currency": 'ZAR', "language": 'en', "phone_code_country": '+27' },
+    { "country": 'Spain', "code": 'ES', "currency": 'EUR', "language": 'en', "phone_code_country": '+34' },
+    { "country": 'Sri Lanka', "code": 'LK', "currency": 'LKR', "language": 'en', "phone_code_country": '+94' },
+    { "country": 'Sudan', "code": 'SD', "currency": 'SDG', "language": 'en', "phone_code_country": '+249' },
+    { "country": 'Sweden', "code": 'SE', "currency": 'SEK', "language": 'en', "phone_code_country": '+46' },
+    { "country": 'Switzerland', "code": 'CH', "currency": 'CHF', "language": 'en', "phone_code_country": '+41' },
+    { "country": 'Thailand', "code": 'TH', "currency": 'THB', "language": 'en', "phone_code_country": '+66' },
+    { "country": 'Turkey', "code": 'TR', "currency": 'TRY', "language": 'en', "phone_code_country": '+90' },
+    { "country": 'United Arab Emirates', "code": 'AE', "currency": 'AED', "language": 'en', "phone_code_country": '+971' },
+    { "country": 'United Kingdom', "code": 'GB', "currency": 'GBP', "language": 'en', "phone_code_country": '+44' },
+    { "country": 'United States', "code": 'US', "currency": 'USD', "language": 'en', "phone_code_country": '+1' },
+    { "country": 'Vietnam', "code": 'VN', "currency": 'VND', "language": 'en', "phone_code_country": '+84' },
+    { "country": 'Zambia', "code": 'ZM', "currency": 'ZMW', "language": 'en', "phone_code_country": '+260' },
+    { "country": 'Zimbabwe', "code": 'ZW', "currency": 'ZWL', "language": 'en', "phone_code_country": '+263' }];
+
   currencyCode: any;
   platformType: any = '';
 
   platformsObj: any =
-  {
-    'app_version': '',
-    'app_platform': ''
-  }
+    {
+      'app_version': '',
+      'app_platform': ''
+    }
 
-  constructor(private firebaseAnalytics: FirebaseAnalytics,private statusBar: StatusBar,private device: Device,private navController: NavController, private market: Market,private translate: TranslateService, private toastController: ToastController, private firebaseCrashlytics: FirebaseCrashlytics, private network: Network, private modalController: ModalController, private http: HttpClient, private alertController: AlertController, private platform: Platform, private apiService: ServicesService, private router: Router) {
-  
+  constructor(private firebaseAnalytics: FirebaseAnalytics, private statusBar: StatusBar, private device: Device, private navController: NavController, private market: Market, private translate: TranslateService, private toastController: ToastController,private network: Network, private modalController: ModalController, private http: HttpClient, private alertController: AlertController, private platform: Platform, private apiService: ServicesService, private router: Router) {
+
     this.todaysDate = moment().format('YYYY-MM-DD');
     this.initCountry();
     this.platform.ready().then(() => {
@@ -270,14 +273,14 @@ export class AppComponent {
       this.detectLanguage();
     });
     //Check internet connection 
-    
+
     if (this.platform.is('android') || this.platform.is('ios')) {
       this.checkInternetConnection();
       this.getIPAddress();
-    }else{
+    } else {
       this.setDefaultCurrencyAndLanguage();
-    } 
-   
+    }
+
     this.initApp();
   }
   deviceLanguage: any = 'en';
@@ -286,7 +289,7 @@ export class AppComponent {
     const supportedLanguages = ['en']; // Only allow English and French
     const savedLanguageStatus = window.localStorage.getItem("coop_Saved_Language");
     const savedLanguage = window.localStorage.getItem("coop_language");
-  
+
     if (savedLanguageStatus === "Yes" || savedLanguageStatus !== null) {
       if (savedLanguage) {
         this.deviceLanguage = savedLanguage;
@@ -298,13 +301,13 @@ export class AppComponent {
       this.deviceLanguage = this.getDeviceLanguage(supportedLanguages);
       window.localStorage.setItem("coop_language", this.deviceLanguage);
     }
-  
+
     // Set language in translation service
     this.translate.addLangs(supportedLanguages);
     this.translate.setDefaultLang(this.deviceLanguage);
     this.translate.use(this.deviceLanguage);
   }
-  
+
   private getDeviceLanguage(supportedLanguages: string[]): string {
     if (typeof navigator !== 'undefined' && navigator.language) {
       const langCode = navigator.language.split('-')[0].toLowerCase(); // Extract and convert to lowercase
@@ -312,11 +315,11 @@ export class AppComponent {
     }
     return 'en'; // Fallback to English
   }
-  
 
 
 
-  langvalue:any;
+
+  langvalue: any;
 
   /* Step:1  */
   checkInternetConnection() {
@@ -349,16 +352,15 @@ export class AppComponent {
     //Configure Push notification 
     this.platform.ready().then(() => {
       if (this.platform.is('android') || this.platform.is('ios')) {
-        this.initializeCrashlytics();
         this.initOneSignal();
       }
     });
-   //App updates popup 
+    //App updates popup 
     this.AppUpdatesCommonFun();
   }
 
-   // Initialize OneSignal Push Notifications
-   initOneSignal() {
+  // Initialize OneSignal Push Notifications
+  initOneSignal() {
     OneSignalPlugin.setAppId('6bacd441-2725-432b-9c48-0cf95e377be8');
     OneSignalPlugin.setNotificationOpenedHandler((jsonData: any) => {
       console.log('Notification opened:', jsonData);
@@ -369,70 +371,40 @@ export class AppComponent {
     });
   }
 
-  // Function to initialize Firebase Crashlytics
-  initializeCrashlytics() {
-    if (this.firebaseCrashlytics) {
-      console.log("Firebase Crashlytics is available");
-      this.firebaseCrashlytics.log("App successfully initialized.");
-    } else {
-      console.warn("Firebase Crashlytics plugin is not available.");
-    }
-  }
- // Log a non-fatal exception
-  logNonFatalException() {
-    try {
-      throw new Error('This is a test non-fatal exception');
-    } catch (error: any) {
-      console.log("Caught a non-fatal error:", error);
-      this.firebaseCrashlytics.log(`Non-fatal error: ${error.message}`);
-      this.firebaseCrashlytics.log(`Non-fatal stack: ${error.stack}`);
-    }
-  }
 
-// Alternative function to simulate a crash
-forceCrash() {
-  try {
-    // Simulating an uncaught error
-    throw new Error('Simulating a crash!');
-  } catch (error:any) {
-    console.log("Simulated crash:", error);
-    this.firebaseCrashlytics.log("Simulated crash: " + error.message);
+  // Example usage on app initialization
+  ngOnInit() {
+    this.platform.ready().then(() => {
+      this.firebaseAnalytics.logEvent('app_open', {})
+        .then(() => {
+          console.log('✅ Firebase Analytics: app_open event logged successfully');
+        })
+        .catch(error => {
+          console.error('❌ Firebase Analytics: Failed to log app_open event', error);
+        });
+    });
   }
-}
-
-// Example usage on app initialization
-ngOnInit() {
-  this.platform.ready().then(() => {
-    this.firebaseAnalytics.logEvent('app_open', {})
-      .then(() => {
-        console.log('✅ Firebase Analytics: app_open event logged successfully');
-      })
-      .catch(error => {
-        console.error('❌ Firebase Analytics: Failed to log app_open event', error);
-      });
-  });
-}
 
 
   AppUpdatesCommonFun() {
-   //if (this.platform.is('cordova')) {
+    //if (this.platform.is('cordova')) {
     this.platformType = this.platform.is('ios') ? 'Ios' : 'Android';
-      const APP_VERSION = this.platformType == 'Ios' ? Constants.IOS_APP_VERSION : Constants.ANDROID_APP_VERSION;
-       //this.platformType = 'Android'; //static removeal
-      //const APP_VERSION = Constants.ANDROID_APP_VERSION; //static removal 
-      this.platformsObj.app_version = APP_VERSION;
-      this.platformsObj.app_platform = this.platformType;
-      //Check API for updated version 
-      this.apiService.checkForAppUpdate(this.platformsObj).then((res: any) => {
-        if (res.code == 200) {
-          if (res.data[0]['app_version'] != this.platformsObj.app_version && res.data[0]['app_version'] > this.platformsObj.app_version) {
-            this.UpdateApp();
-          }
+    const APP_VERSION = this.platformType == 'Ios' ? Constants.IOS_APP_VERSION : Constants.ANDROID_APP_VERSION;
+    //this.platformType = 'Android'; //static removeal
+    //const APP_VERSION = Constants.ANDROID_APP_VERSION; //static removal 
+    this.platformsObj.app_version = APP_VERSION;
+    this.platformsObj.app_platform = this.platformType;
+    //Check API for updated version 
+    this.apiService.checkForAppUpdate(this.platformsObj).then((res: any) => {
+      if (res.code == 200) {
+        if (res.data[0]['app_version'] != this.platformsObj.app_version && res.data[0]['app_version'] > this.platformsObj.app_version) {
+          this.UpdateApp();
         }
-      }, (err) => {
-        //console.log('err ' + err);
-      });
-      //End 
+      }
+    }, (err) => {
+      //console.log('err ' + err);
+    });
+    //End 
     //}
   }
 
@@ -441,52 +413,50 @@ ngOnInit() {
       component: UpdateAppPage,
       backdropDismiss: false, // Prevent dismissal by clicking outside the modal
     });
-  
+
     return await modal.present();
   }
-// Get currency and launage country wise 
+  // Get currency and launage country wise 
 
   getIPAddress() {
-   this.http.get('https://ipinfo.io?token=349a18514afbb8').subscribe((data: any) => {
-    window.localStorage.setItem("coop_IP", data.ip);
-    console.log("Datas"+JSON.stringify(data));
+    this.http.get('https://ipinfo.io?token=349a18514afbb8').subscribe((data: any) => {
+      window.localStorage.setItem("coop_IP", data.ip);
+      window.localStorage.setItem('coop_city', data.city);
+      window.localStorage.setItem('coop_country_code', data.country);
+      console.log("Datas" + JSON.stringify(data));
       this.setCurrencyAndLanguage(data.country);
     }, error => {
+      console.log("hiiiiiiiiiiiii");
       this.setDefaultCurrencyAndLanguage();
-    }); 
+    });
   }
 
   setDefaultCurrencyAndLanguage() {
-    if(window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
+    if (window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
       this.currencyCode = window.localStorage.getItem("coop_currency");
     else
-    this.currencyCode = 'GBP';
+      this.currencyCode = 'GBP';
     window.localStorage.setItem('coop_currency', this.currencyCode);
-    window.localStorage.setItem('coop_phone_code',  "+44");
+    window.localStorage.setItem('coop_phone_code', "+44");
   }
 
 
- setCurrencyAndLanguage(countryCode: string) {
+  setCurrencyAndLanguage(countryCode: string) {
     const country = this.countryListWithCodes.find((c) => c.code == countryCode);
     if (country) {
-     console.log(JSON.stringify(country.phone_code_country));
-      if(window.localStorage.getItem('coop_phone_code') ==null)
-      window.localStorage.setItem('coop_phone_code',  country.phone_code_country);
-
-      console.log(window.localStorage.getItem('coop_phone_code'));
-
-      if(window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
+        window.localStorage.setItem('coop_phone_code', country.phone_code_country);
+      if (window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
         this.currencyCode = window.localStorage.getItem("coop_currency");
       else
-      this.currencyCode = 'GBP';
+        this.currencyCode = 'GBP';
     } else {
       //If no country 
-      if(window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
+      if (window.localStorage.getItem("coop_Saved_Currency") == "Yes" || window.localStorage.getItem("coop_Saved_Currency") != null)
         this.currencyCode = window.localStorage.getItem("coop_currency");
       else
-      this.currencyCode = 'GBP';
+        this.currencyCode = 'GBP';
     }
-    
+
     window.localStorage.setItem('coop_currency', this.currencyCode);
   }
 
@@ -494,39 +464,108 @@ ngOnInit() {
 
   initCountry() {
     this.countryParam.to_currency = this.currencyCode == '' || this.currencyCode == null ? 'GBP' : this.currencyCode;
- const authToken = window.localStorage.getItem('coop_auth_token');
+    const authToken = window.localStorage.getItem('coop_auth_token');
     const isNotiSettingAllowed = window.localStorage.getItem('eSIM_IsNotiSettingAllow');
-    
+
     if (!authToken) {
-    //  this.navController.navigateRoot('start');
-     // return;
+      //  this.navController.navigateRoot('start');
+      // return;
     } else {
+      this.isProfileIncomplete()
       this.getWalletBalance();
     }
-  
+
     // Fetch and store country and zone bundles
-     this.fetchCountryData();
-  
+    this.fetchCountryData();
+
     // Check notification settings and navigate
     if (!authToken && (!isNotiSettingAllowed || isNotiSettingAllowed === '')) {
       this.navController.navigateRoot('start');
     } else {
       this.navController.navigateRoot('home-search');
     }
-  
+
     // Initialize push notifications if accepted
     if (isNotiSettingAllowed === 'yes') {
-       this.initializePushNotifications();
+      this.initializePushNotifications();
     }
   }
 
-  getWalletBalance()
-  {
+  profileStatus: any = {};
+
+  isProfileIncomplete(): void {
+  const userDetails = JSON.parse(
+    window.localStorage.getItem('coop_userDetails') || '{}'
+  );
+
+  if (!userDetails?.id) {
+    console.warn('No user details found in localStorage.');
+    return;
+  }
+
+  this.profileStatus.user_id = userDetails.id;
+
+  this.apiService.isProfileIncompleteService(this.profileStatus)
+    .then((res: any) => {
+      if (res?.code === 200) {
+        if (res.data?.is_first_time === 0) {
+          console.log('Popup will not appear');
+        } else {
+          this.modelSocialCountry(this.profileStatus.user_id);
+          console.log('Popup will appear');
+        }
+      } else {
+        console.error('API error: invalid response code', res);
+      }
+    })
+    .catch((err) => {
+      console.error('API error:', err);
+    });
+}
+
+async modelSocialCountry(userId: string): Promise<void> {
+  try {
+    const modal = await this.modalController.create({
+      component: SocailLoginCountryPhonePage, // ✅ component reference
+      componentProps: { userId }, // 👈 pass userId if needed
+    });
+
+    modal.onDidDismiss().then((result) => {
+      console.log('Modal result:', result);
+
+      if (result?.data?.success === true) {
+        this.successMSGModal(
+          this.translate.instant('SIGNUP_SUCCESS_DESCRIPTION'),
+          this.translate.instant('SIGNUP_SUCCESS_TITLE'),
+          '2000'
+        );
+      }
+    });
+
+    await modal.present();
+  } catch (err) {
+    console.error('Error opening modal:', err);
+  }
+}
+
+
+
+  // Success Modal
+  async successMSGModal(buttonText: any, msg: any, times: any) {
+    const modal = await this.modalController.create({
+      component: SuccessModelPage,
+      componentProps: { 'value': msg, 'value1': buttonText, 'value2': times }
+    });
+
+    modal.onDidDismiss();
+    return await modal.present();
+  }
+
+  getWalletBalance() {
     this.apiService.updatedWalletBalance().then((res: any) => {
       if (res.code == 200) {
-        if(res.data)
-        {
-         window.localStorage.setItem('coop_user_wallets', res.data.user_wallet);
+        if (res.data) {
+          window.localStorage.setItem('coop_user_wallets', res.data.user_wallet);
           window.localStorage.setItem('coop_refer_balance', res.data.referal_wallet);
         }
       }
@@ -547,7 +586,7 @@ ngOnInit() {
     }).catch(err => {
     })
   }
-  
+
   // Function to initialize push notifications and update player ID
   async initializePushNotifications() {
     if (this.platform.is('android') || this.platform.is('ios')) {
@@ -555,7 +594,7 @@ ngOnInit() {
         try {
           const response = await this.getDeviceState();
           const storedPlayerId = window.localStorage.getItem('coop_PLAYER_ID');
-  
+
           if (!storedPlayerId && response.userId) {
             window.localStorage.setItem('coop_PLAYER_ID', response.userId);
             await this.updatePlayerId(response.userId);
@@ -566,7 +605,7 @@ ngOnInit() {
       }, 500);
     }
   }
-  
+
   // Helper function to get device state
   getDeviceState(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -579,17 +618,17 @@ ngOnInit() {
       });
     });
   }
-  
+
   // Function to update the player ID in the database
   async updatePlayerId(pushToken: string) {
     const authToken = window.localStorage.getItem('coop_auth_token');
     if (!authToken) return;
-  
+
     try {
       const userDetails = JSON.parse(window.localStorage.getItem('coop_userDetails') || '{}');
       this.pushDBToken.deviceToken = pushToken;
       this.pushDBToken.userid = userDetails.id;
-  
+
       const response: any = await this.apiService.addPlayerId(this.pushDBToken, authToken);
       if (response.code === 200) {
         console.log('Added player ID successfully');
