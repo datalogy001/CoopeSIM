@@ -570,11 +570,11 @@ showCountryError(msg: string) {
     await this.loadingScreen.presentLoading();
 
     const res: any = await this.service.completeSignup(this.paramObj, this.token);
-
     this.loadingScreen.dismissLoading();
-
     if (res.code === 200) {
-     this.modalController.dismiss({ success: true });
+          console.log(JSON.stringify(res.data[0]['data']));
+          window.localStorage.setItem('coop_userDetails', JSON.stringify(res.data[0]['data']));
+         this.modalController.dismiss({ success: true });
     } else {
       this.errorMSGModal(res.message, this.translate.instant('VALIDATION_MSG_BUTTON_TRY_AGAIN'));
     }

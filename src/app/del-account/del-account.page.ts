@@ -55,6 +55,7 @@ export class DelAccountPage implements OnInit {
          // window.localStorage.removeItem('coop_currency');
           window.localStorage.removeItem('coop_currency_rate');
           window.localStorage.removeItem('coop_storagePrompt');
+          window.localStorage.removeItem('coop_country_code');
           window.localStorage.removeItem('coop_fbAccessToken');
           window.localStorage.removeItem('coop_Bundles_list');
           window.localStorage.removeItem('coop_isSavedDetails');

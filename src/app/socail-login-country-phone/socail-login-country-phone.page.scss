@@ -189,7 +189,7 @@ ion-button{
     &.btn-signup{
       --padding-start:20px;
       --padding-end:20px;
-      margin: 10px 0px 0px;
+      margin: 20px 0px 0px;
     } 
     &::part(native) {
         padding-top: 7px;
@@ -242,7 +242,7 @@ ion-button{
   .countryselectrow{
     display: flex; flex-direction: row; align-content: center;
     .countryselect{
-    margin-bottom: 13px;
+    margin-bottom: 5px;
      width: 88px; background: var(--input-bg); border-radius: 10px; margin-right: 10px; color: #fff; display: flex; align-items: center; padding: 12px;
      min-height: 56px;
     //  border: 1px solid var(--theme-color-2);
@@ -260,7 +260,7 @@ ion-button{
 .searchlist{
   position: absolute; z-index: 111;
   top: 100%; left: 0; right: 0; overflow-y: auto;
-  max-height: 216px;
+  max-height: 172px;
 
   ion-list{
     background: transparent; margin: 0; padding: 0;
@@ -293,7 +293,7 @@ ion-button{
 
 .searchdiv{
   position: relative;
-  margin: 0 0 15px;
+  margin: 0 0 25px;
   
   ion-searchbar{
     padding-inline-start:0px; padding-inline-end:0px; padding-top: 0; padding-bottom: 0;  
@@ -384,10 +384,12 @@ and (-webkit-min-device-pixel-ratio: 2){
 
 .error-msg {
   font-size: 13px;
-  margin: 4px 0 0 8px;
+  margin: 0 0 0 8px;
   color: #e53935;             /* red */
   opacity: 0;                 /* hidden by default */
   transition: opacity 0.3s ease-in-out;
+  position: absolute;
+  z-index: 1;
 }
 
 .error-msg.visible {
