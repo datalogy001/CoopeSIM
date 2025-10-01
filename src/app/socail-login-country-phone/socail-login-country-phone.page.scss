@@ -114,6 +114,30 @@ a{
     color: var(--theme-color-2);
 }
 
+.countryselect {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.countryimg {
+  width: 24px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+.countrycode {
+  font-size: 14px;
+}
+
+.phoneno {
+  flex: 1; /* take remaining space */
+}
+
+.phoneno.fullwidth {
+  flex: 100%; /* expand to full when no country selected */
+}
+
 ion-row{
     &.checkrow{
         margin: 15px 0 0px;

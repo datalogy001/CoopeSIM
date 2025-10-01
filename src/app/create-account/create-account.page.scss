@@ -78,6 +78,31 @@ a{
     color: var(--theme-color-2);
 }
 
+.countryselect {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.countryimg {
+  width: 24px;
+  height: 16px;
+  margin-right: 5px;
+}
+
+.countrycode {
+  font-size: 14px;
+}
+
+.phoneno {
+  flex: 1; /* take remaining space */
+}
+
+.phoneno.fullwidth {
+  flex: 100%; /* expand to full when no country selected */
+}
+
+
 ion-row{
     &.checkrow{
         margin: 15px 0 0px;
@@ -206,7 +231,6 @@ ion-button{
   .countryselectrow{
     display: flex; flex-direction: row; align-content: center;
     .countryselect{
-    margin-bottom: 13px;
      width: 88px; background: var(--input-bg); border-radius: 10px; margin-right: 10px; color: #fff; display: flex; align-items: center; padding: 12px;
      min-height: 56px;
     //  border: 1px solid var(--theme-color-2);
@@ -219,6 +243,19 @@ ion-button{
     }
 }
 //End 
+
+.reffercode {
+  margin-top: 12px;
+  ion-item {
+    --background: #DFF2FF;
+    border: 1px solid rgba(0, 240, 181, 0.2);
+    --border-radius: 6px;
+    --min-height: 56px;
+    ion-input {
+      color: var(--theme-color-2);
+    }
+  }
+}
 
 
 .searchlist{

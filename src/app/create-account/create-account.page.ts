@@ -505,22 +505,28 @@ export class CreateAccountPage implements OnInit {
     this.isearchIMg = '';
     this.searchData = this.tempCountry;
     this.isCountrySelected =false;
+     this.countryCodeObj = {};
     this.searchDiv.nativeElement.classList.remove('searching');
   }
 
 
-  findMatchingItems(searchTerm: string): any[] {
-    const normalizedSearch = searchTerm.toLowerCase();
-    const matchingItems = this.countryListWithCodes.filter((item: any) =>
-      item.name.toLowerCase().startsWith(normalizedSearch)
-    );
+ findMatchingItems(searchTerm: string): any[] {
+  // normalize input (lowercase + remove spaces)
+  const normalizedSearch = searchTerm.toLowerCase().replace(/\s+/g, "");
 
-    const uniqueItemsMap = new Map<number, any>();
-    matchingItems.forEach((item: any) => {
-      uniqueItemsMap.set(item.name, item);
-    });
-    return Array.from(uniqueItemsMap.values());
-  }
+  const matchingItems = this.countryListWithCodes.filter((item: any) => {
+    const normalizedName = item.name.toLowerCase().replace(/\s+/g, "");
+    return normalizedName.startsWith(normalizedSearch);
+  });
+
+  // Ensure uniqueness by country name
+  const uniqueItemsMap = new Map<string, any>();
+  matchingItems.forEach((item: any) => {
+    uniqueItemsMap.set(item.name, item);
+  });
+
+  return Array.from(uniqueItemsMap.values());
+}
 
   temp_mobile_number: any = '';
 
@@ -544,18 +550,19 @@ onSearchMobile(event: any) {
   }
   isCountrySelected:any =false;
 
-   gotoSelect(countryRES:any) {
-    this.isSearch = false;
-    this.isearchIMg = countryRES.iso;
-    this.searchTerm = countryRES.name;
-    this.searchDiv.nativeElement.classList.add('searching');
-    this.isCountrySelected =true;
-    this.registerObj.country_name = countryRES.name;
-    this.countryCodeObj.code = countryRES.countrycode;
-    this.countryCodeObj.flag = countryRES.iso;
-    console.log(JSON.stringify(countryRES));
-  } 
+ gotoSelect(countryRES: any) {
+  this.isSearch = false;
+  this.isearchIMg = countryRES.iso;
+  this.searchTerm = countryRES.name;
+  this.searchDiv.nativeElement.classList.add('searching');
+  this.isCountrySelected = true;
 
+  this.registerObj.country_name = countryRES.name;
+  this.countryCodeObj.code = countryRES.countrycode;
+  this.countryCodeObj.flag = countryRES.iso;
+
+  console.log(JSON.stringify(countryRES));
+}
 
     async chooseCountry() {
       const modal = await this.modalController.create({
@@ -578,8 +585,8 @@ onSearchMobile(event: any) {
   ngOnInit() {
     this.langDefault = window.localStorage.getItem('coop_language');
     this.registerObj.city = window.localStorage.getItem('coop_city') || '' ;
-    this.countryCodeObj.code = window.localStorage.getItem('coop_phone_code') || '+44';
-    this.countryCodeObj.flag = window.localStorage.getItem('coop_country_code') || 'gb';
+    //this.countryCodeObj.code = window.localStorage.getItem('coop_phone_code') || '+44';
+    //this.countryCodeObj.flag = window.localStorage.getItem('coop_country_code') || 'gb';
 
     this.translate.use(this.langDefault).subscribe(() => {
       this.searchData = this.searchData.map((country: any) => ({

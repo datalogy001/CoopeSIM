@@ -467,21 +467,26 @@ showCountryError(msg: string) {
     this.isCountrySelected = false;
     this.paramObj.country_name='';
     this.searchDiv.nativeElement.classList.remove('searching');
+    this.countryCodeObj = {};
   }
 
-  findMatchingItems(searchTerm: string): any[] {
-    const normalizedSearch = searchTerm.toLowerCase();
-    const matchingItems = this.countryListWithCodes.filter((item: any) =>
-      item.name.toLowerCase().startsWith(normalizedSearch)
-    );
+ findMatchingItems(searchTerm: string): any[] {
+  // normalize input (lowercase + remove spaces)
+  const normalizedSearch = searchTerm.toLowerCase().replace(/\s+/g, "");
 
-    const uniqueItemsMap = new Map<number, any>();
-    matchingItems.forEach((item: any) => {
-      uniqueItemsMap.set(item.name, item);
-    });
-    return Array.from(uniqueItemsMap.values());
-  }
+  const matchingItems = this.countryListWithCodes.filter((item: any) => {
+    const normalizedName = item.name.toLowerCase().replace(/\s+/g, "");
+    return normalizedName.startsWith(normalizedSearch);
+  });
 
+  // Ensure uniqueness by country name
+  const uniqueItemsMap = new Map<string, any>();
+  matchingItems.forEach((item: any) => {
+    uniqueItemsMap.set(item.name, item);
+  });
+
+  return Array.from(uniqueItemsMap.values());
+}
   gotoSelect(countryRES: any) {
     this.isSearch = false;
     this.isearchIMg = countryRES.iso;
@@ -536,8 +541,8 @@ showCountryError(msg: string) {
     this.langDefault = window.localStorage.getItem('coop_language');
     this.tempDetails = window.localStorage.getItem('coop_userDetails');
     this.paramObj.city = window.localStorage.getItem('coop_city') || '' ;
-    this.countryCodeObj.code = window.localStorage.getItem('coop_phone_code') || '+44';
-    this.countryCodeObj.flag = window.localStorage.getItem('coop_country_code') || 'gb';
+    //this.countryCodeObj.code = window.localStorage.getItem('coop_phone_code') || '+44';
+    //this.countryCodeObj.flag = window.localStorage.getItem('coop_country_code') || 'gb';
     this.tempDetails = JSON.parse(this.tempDetails);
     this.paramObj.user_id = this.tempDetails.id;
     this.token = window.localStorage.getItem("coop_auth_token");

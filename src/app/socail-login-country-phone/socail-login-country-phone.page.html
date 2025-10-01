@@ -30,20 +30,7 @@
       <ion-list>
         <ion-item *ngFor="let item of searchData" (click)="gotoSelect(item)">
           <!-- Flags -->
-          <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'latam'">
-            <img src="assets/flags/la.svg" alt="LATAM flag">
-          </ion-avatar>
-          <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'europe+'">
-            <img src="assets/flags/eur.svg" alt="Europe+ flag">
-          </ion-avatar>
-          <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'north america'">
-            <img src="assets/flags/northam.svg" alt="North America flag">
-          </ion-avatar>
-          <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'middle east'">
-            <img src="assets/flags/middleast.svg" alt="Middle East flag">
-          </ion-avatar>
-          <ion-avatar slot="start"
-            *ngIf="item.iso?.toLowerCase() !== 'latam' && item.iso?.toLowerCase() !== 'europe+' && item.iso?.toLowerCase() !== 'north america' && item.iso?.toLowerCase() !== 'middle east'">
+           <ion-avatar slot="start">
             <img src="assets/flags/{{ item.iso | lowercase }}.svg" alt="{{ item.iso }} flag">
           </ion-avatar>
 
@@ -56,26 +43,25 @@
   </div>
 
   <div class="countryselectrow">
-    <div class="countryselect" (click)="chooseCountry()">
-      <img class="countryimg" *ngIf="countryCodeObj.iso == 'LATAM'" src="assets/flags/la.svg" alt="">
-      <img class="countryimg" *ngIf="countryCodeObj.iso == 'Europe+'" src="assets/flags/eur.svg" alt="">
-      <img class="countryimg" *ngIf="countryCodeObj.iso == 'North America'" src="assets/flags/northam.svg" alt="">
-      <img class="countryimg" *ngIf="countryCodeObj.iso == 'Middle East'" src="assets/flags/middleast.svg" alt="">
-      <img class="countryimg"
-        *ngIf="countryCodeObj.iso != 'Middle East' && countryCodeObj.iso != 'North America' && countryCodeObj.iso != 'Europe+' && countryCodeObj.iso != 'LATAM'"
-        src="assets/flags/{{countryCodeObj.flag | lowercase}}.svg">
+    <div class="countryselect" *ngIf="isCountrySelected"  (click)="chooseCountry()">
+   <img class="countryimg"
+      *ngIf="countryCodeObj?.flag"
+      src="assets/flags/{{countryCodeObj.flag | lowercase}}.svg">
 
-      <span class="countrycode">{{countryCodeObj.code}}</span>
+      <span class="countrycode">{{ countryCodeObj?.code }}</span>
     </div>
 
-    <div class="phoneno">
-      <ion-item lines="none">
-        <ion-input type="tel" (ionInput)="onSearchMobile($event)" [(ngModel)]="temp_mobile_number" maxlength="11"
-          placeholder="{{ 'MOBILE_NUMBER' | translate }}">
-        </ion-input>
-      </ion-item> <!-- ✅ Properly closed -->
-      <!-- Error message for phone -->
-    </div>
+      <!-- Mobile number input -->
+  <div class="phoneno" [ngClass]="{ 'fullwidth': !isCountrySelected }">
+    <ion-item lines="none">
+      <ion-input type="tel"
+        (ionInput)="onSearchMobile($event)" 
+        [(ngModel)]="temp_mobile_number"
+        maxlength="11"
+        placeholder="{{ 'MOBILE_NUMBER' | translate }}">
+      </ion-input>
+    </ion-item>
+  </div>
   </div>
   <p class="error-msg" [class.visible]="!!phoneError">{{ phoneError }}</p>
   <ion-button expand="block"  (click)="submit()" class="btn-green btn-signup">{{

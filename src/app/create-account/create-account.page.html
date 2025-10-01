@@ -99,34 +99,37 @@
         <!-- Search list end -->
       </div>
 
-     <div class="countryselectrow" >
-  <div class="countryselect" (click)="chooseCountry()">
-    <img class="countryimg" *ngIf="countryCodeObj.iso == 'LATAM'" src="assets/flags/la.svg" alt="">
-    <img class="countryimg" *ngIf="countryCodeObj.iso == 'Europe+'" src="assets/flags/eur.svg" alt="">
-    <img class="countryimg" *ngIf="countryCodeObj.iso == 'North America'" src="assets/flags/northam.svg" alt="">
-    <img class="countryimg" *ngIf="countryCodeObj.iso == 'Middle East'" src="assets/flags/middleast.svg" alt="">
+  <div class="countryselectrow">
+  <!-- Country selector -->
+  <div class="countryselect" *ngIf="isCountrySelected" (click)="chooseCountry()">
     <img class="countryimg"
-      *ngIf="countryCodeObj.iso != 'Middle East' && countryCodeObj.iso != 'North America' && countryCodeObj.iso != 'Europe+' && countryCodeObj.iso != 'LATAM'"
+      *ngIf="countryCodeObj?.flag"
       src="assets/flags/{{countryCodeObj.flag | lowercase}}.svg">
-
-    <span class="countrycode">{{countryCodeObj.code}}</span>
+    <span class="countrycode">{{ countryCodeObj?.code }}</span>
   </div>
 
-  <div class="phoneno">
+  <!-- Mobile number input -->
+  <div class="phoneno" [ngClass]="{ 'fullwidth': !isCountrySelected }">
     <ion-item lines="none">
-      <ion-input type="tel" (ionInput)="onSearchMobile($event)" 
-        [(ngModel)]="temp_mobile_number" maxlength="11"
+      <ion-input type="tel"
+        (ionInput)="onSearchMobile($event)" 
+        [(ngModel)]="temp_mobile_number"
+        maxlength="11"
         placeholder="{{ 'MOBILE_NUMBER' | translate }}">
       </ion-input>
-    </ion-item> <!-- ✅ Properly closed -->
+    </ion-item>
   </div>
 </div>
 
-
-      <ion-item class="reffercode">
-        <ion-input type="text" [(ngModel)]="registerObj.referal_code"
-          placeholder="{{ 'Referral_code' | translate }}"></ion-input>
-      </ion-item>
+<!-- Referral code input -->
+<div class="reffercode">
+  <ion-item lines="none" class="reffercode">
+    <ion-input type="text"
+      [(ngModel)]="registerObj.referral_code"
+      placeholder="{{ 'Referral_code' | translate }}">
+    </ion-input>
+  </ion-item>
+</div>
 
     <!-- </ion-list> -->
 

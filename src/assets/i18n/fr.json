@@ -242,7 +242,7 @@
   "SHARE_TITLE": "Partager maintenant",
   "SHARE_INFO_MESSAGE": "Partagez cette eSIM avec un autre appareil ou une autre personne en utilisant les paramètres de partage de votre téléphone",
   "SHARE_BUTTON_TEXT": "Partager maintenant",
-  "EMAIL_SUBJECT": "Bonjour,\n\nVous avez reçu un code QR eSIM de la part de {{email}}\n\nRésumé de la commande : {{orderSummary}}\n\nICCID : {{iccid}}\n\nContactez-nous : support@coop.com\n\nMerci !",
+  "EMAIL_SUBJECT": "Bonjour,\n\nVous avez reçu un code QR eSIM de la part de {{email}}\n\nRésumé de la commande : {{orderSummary}}\n\nICCID : {{iccid}}\n\nContactez-nous : support@cooptravelesim.com\n\nMerci !",
   "ERROR_SHARE_MSG": "Erreur lors du partage du code QR eSIM",
   "ERROR_MODAL_BUTTON": "Réessayer",
   "HEY": "Hey",
