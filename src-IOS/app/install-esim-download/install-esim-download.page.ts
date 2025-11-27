@@ -24,6 +24,7 @@ export class InstallEsimDownloadPage implements OnInit {
   inputText: any;
   tempDetails: any = [];
   sharingData: any = [];
+  userDetails:any=[]; 
   iccid: any;
   private longPressTimeout: any;
   private longPressTriggered: boolean = false;
@@ -33,6 +34,8 @@ export class InstallEsimDownloadPage implements OnInit {
   ngOnInit() {
     this.tempDetails = this.Router.getCurrentNavigation()?.extras.state;
     this.sharingData = this.tempDetails.sharingData;
+   this.userDetails = window.localStorage.getItem('coop_userDetails');
+    this.userDetails = JSON.parse(this.userDetails);
     this.iccid = this.tempDetails.iccid;
     this.generateQRCode();
   }
@@ -80,9 +83,11 @@ export class InstallEsimDownloadPage implements OnInit {
   }
 
   async shareQRCode() {
+
+    console.log("Hi I m here");
     // Translate the email subject message and replace placeholders
     this.translate.get('EMAIL_SUBJECT', {
-      email: this.tempDetails.email,
+     email: this.userDetails.email,
       orderSummary: this.sharingData.country + ": " + this.sharingData.dataamount + " • " + this.sharingData.days,
       iccid: this.sharingData.iccid,
       url: this.sharingData.qr_img_link// <== include URL here

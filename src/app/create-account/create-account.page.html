@@ -17,7 +17,7 @@
 
   <div class="ion-padding">
 
-    <!-- <ion-list> -->
+    <ion-list> 
 
       <ion-item>
         <ion-input type="text" autocapitalize="on" (ionInput)="validateName($event, 'first')"
@@ -50,7 +50,7 @@
       </ion-item>
 
       <!-- SEARCH BAR-->
-      <div class="searchdiv" #searchDiv>
+      <div class="searchdiv countrySearch" #searchDiv>
         <!-- Flag for main search -->
         <div class="flagicon" *ngIf="isearchIMg">
           <img *ngIf="isearchIMg.toLowerCase() === 'latam'" src="assets/flags/la.svg" alt="LATAM flag">
@@ -62,43 +62,41 @@
         </div>
 
         <ion-searchbar 
-          (keyup)="onSearch($event)" 
-          (ionClear)="onClearSearch()" 
-          class="homesearch"
-          [placeholder]="'Country_residence' | translate" 
-          [(ngModel)]="searchTerm">
-        </ion-searchbar>
+  (ionFocus)="onFocusSearch()"  
+  (keyup)="onSearch($event)" 
+  (ionClear)="onClearSearch()" 
+  class="homesearch"
+  [placeholder]="'Country_residence' | translate" 
+  [(ngModel)]="searchTerm">
+</ion-searchbar>
 
-        <!-- Search results -->
-        <div class="searchlist" *ngIf="isSearch && searchData.length > 0">
-          <ion-list>
-            <ion-item *ngFor="let item of searchData" (click)="gotoSelect(item)">
-              <!-- Flags -->
-              <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'latam'">
-                <img src="assets/flags/la.svg" alt="LATAM flag">
-              </ion-avatar>
-              <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'europe+'">
-                <img src="assets/flags/eur.svg" alt="Europe+ flag">
-              </ion-avatar>
-              <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'north america'">
-                <img src="assets/flags/northam.svg" alt="North America flag">
-              </ion-avatar>
-              <ion-avatar slot="start" *ngIf="item.iso?.toLowerCase() === 'middle east'">
-                <img src="assets/flags/middleast.svg" alt="Middle East flag">
-              </ion-avatar>
-              <ion-avatar slot="start"
-                *ngIf="item.iso?.toLowerCase() !== 'latam' && item.iso?.toLowerCase() !== 'europe+' && item.iso?.toLowerCase() !== 'north america' && item.iso?.toLowerCase() !== 'middle east'">
-                <img src="assets/flags/{{ item.iso | lowercase }}.svg" alt="{{ item.iso }} flag">
-              </ion-avatar>
-              
-              <!-- Dynamic name display -->
-              <ion-label>{{ item.name }}</ion-label>
-            </ion-item>
-          </ion-list>
-        </div>
-        <!-- Search list end -->
-      </div>
-
+      <!-- Search results -->
+<div class="searchlist" *ngIf="isSearch && searchData.length > 0">
+  <ion-list>
+    <ion-item *ngFor="let item of searchData" (click)="gotoSelect(item)">
+      <ion-avatar slot="start" *ngIf="item.short_name?.toLowerCase() === 'latam'">
+        <img src="assets/flags/la.svg" alt="LATAM flag">
+      </ion-avatar>
+      <ion-avatar slot="start" *ngIf="item.short_name?.toLowerCase() === 'europe+'">
+        <img src="assets/flags/eur.svg" alt="Europe+ flag">
+      </ion-avatar>
+      <ion-avatar slot="start" *ngIf="item.short_name?.toLowerCase() === 'north america'">
+        <img src="assets/flags/northam.svg" alt="North America flag">
+      </ion-avatar>
+      <ion-avatar slot="start" *ngIf="item.short_name?.toLowerCase() === 'middle east'">
+        <img src="assets/flags/middleast.svg" alt="Middle East flag">
+      </ion-avatar>
+      <ion-avatar slot="start"
+        *ngIf="item.short_name?.toLowerCase() !== 'latam' && item.short_name?.toLowerCase() !== 'europe+' && item.short_name?.toLowerCase() !== 'north america' && item.short_name?.toLowerCase() !== 'middle east'">
+        <img src="assets/flags/{{ item.short_name | lowercase }}.svg" alt="{{ item.short_name }} flag">
+      </ion-avatar>
+      
+      <ion-label>{{ item.country_name }}</ion-label>
+    </ion-item>
+  </ion-list>
+</div>
+<!-- Search list end -->
+</div>
   <div class="countryselectrow">
   <!-- Country selector -->
   <div class="countryselect" *ngIf="isCountrySelected" (click)="chooseCountry()">
@@ -131,7 +129,7 @@
   </ion-item>
 </div>
 
-    <!-- </ion-list> -->
+     </ion-list> 
 
     <p class="text">
       {{ 'CREATE_ACCOUNT_AGREE_TEXT' | translate }}

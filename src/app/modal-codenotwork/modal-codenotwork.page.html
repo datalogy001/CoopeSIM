@@ -2,9 +2,8 @@
   <div class="closeerror">
     <img src="assets/img/no-refferal-code-white.png" alt="">
   </div>
-  <p>
-    {{value}}
-  </p>
+<p [innerHTML]="value"></p>
+
   <div class="updatenow">
     <ion-button (click)="dismissModal()">
       {{value1}}

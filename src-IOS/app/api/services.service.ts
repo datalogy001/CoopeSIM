@@ -14,7 +14,6 @@ export class ServicesService {
   whiteLabelId: any = "18";
   clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX'; 
 
-
   constructor(private http: HttpClient) { }
 
   //Paypal API's

@@ -474,7 +474,12 @@ const routes: Routes = [
   {
     path: 'socail-login-country-phone',
     loadChildren: () => import('./socail-login-country-phone/socail-login-country-phone.module').then( m => m.SocailLoginCountryPhonePageModule)
-  }
+  },
+    {
+      path: 'topup-not-applied-modal',
+      loadChildren: () => import('./topup-not-applied-modal/topup-not-applied-modal.module').then( m => m.TopupNotAppliedModalPageModule)
+    }
+   
  
  
  

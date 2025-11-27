@@ -745,6 +745,8 @@ export class YourPackagePage implements OnInit {
         this.navController.navigateRoot('/profile');
     }
     //End of common footers
+
+
  gotoToup() {
         //Checking for Platinum and Diamond bundles 
         if (this.bundleDatas.is_bundle_topup_available == 1) {

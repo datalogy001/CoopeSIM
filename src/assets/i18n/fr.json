@@ -480,6 +480,7 @@
   "GI": "Gibraltar",
   "GR": "Grèce",
   "GL": "Groenland",
+  "SL" : "Sierra Leone",
   "GD": "Grenade",
   "GP": "Guadeloupe",
   "GU": "Guam",
@@ -503,7 +504,7 @@
   "IT": "Italie",
   "JM": "Jamaïque",
   "JP": "Japon",
-  "JE": "Jersey",
+ "JE": "Channel Islands",
   "JO": "Jordanie",
   "KZ": "Kazakhstan",
   "KE": "Kenya",
@@ -776,6 +777,8 @@
 "VERIFY_TITLE_CONTINUE_SIGNUP": "Continuer l'inscription",
 "VERIFY_SUBTITLE_ENTER_NUMBER": "Veuillez sélectionner votre pays de résidence dans la liste ci-dessous et saisir votre numéro de téléphone dans le champ prévu à cet effet",
   "SIGNUP_SUCCESS_TITLE": "Bienvenue à bord !",
-  "SIGNUP_SUCCESS_DESCRIPTION": "Votre compte a été créé avec succès."
+  "SIGNUP_SUCCESS_DESCRIPTION": "Votre compte a été créé avec succès.",
+  "topup_not_allowed": "Unfortunately, you cannot top up this eSIM. <br> Please purchase a new bundle.",
+"BUY_NOW" : "Buy Now"
   
 }

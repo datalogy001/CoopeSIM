@@ -6,7 +6,7 @@
     'VERIFY_SUBTITLE_ENTER_NUMBER' | translate }}
   </p>
   <!-- SEARCH BAR-->
-  <div class="searchdiv" #searchDiv>
+  <div class="searchdiv socialCountry" #searchDiv>
     <!-- Flag for main search -->
     <div class="flagicon" *ngIf="isearchIMg">
       <img *ngIf="isearchIMg.toLowerCase() === 'latam'" src="assets/flags/la.svg" alt="LATAM flag">
@@ -18,9 +18,15 @@
         src="assets/flags/{{ isearchIMg | lowercase }}.svg" alt="{{ isearchIMg }} flag">
     </div>
 
-    <ion-searchbar (keyup)="onSearch($event)" (ionClear)="onClearSearch()" class="homesearch"
-      [placeholder]="'Country_residence' | translate" [(ngModel)]="searchTerm">
-    </ion-searchbar>
+       <ion-searchbar 
+  (ionFocus)="onFocusSearch()"  
+  (keyup)="onSearch($event)" 
+  (ionClear)="onClearSearch()" 
+  class="homesearch"
+  [placeholder]="'Country_residence' | translate" 
+  [(ngModel)]="searchTerm">
+</ion-searchbar>
+
 
 <!-- Error message always takes space -->
 <p class="error-msg" [class.visible]="!!countryError">{{ countryError }}</p>
@@ -31,11 +37,11 @@
         <ion-item *ngFor="let item of searchData" (click)="gotoSelect(item)">
           <!-- Flags -->
            <ion-avatar slot="start">
-            <img src="assets/flags/{{ item.iso | lowercase }}.svg" alt="{{ item.iso }} flag">
+            <img src="assets/flags/{{ item.short_name | lowercase }}.svg" alt="{{ item.short_name }} flag">
           </ion-avatar>
 
           <!-- Dynamic name display -->
-          <ion-label>{{ item.name }}</ion-label>
+          <ion-label>{{ item.country_name }}</ion-label>
         </ion-item>
       </ion-list>
     </div>

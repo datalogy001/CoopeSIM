@@ -42,7 +42,7 @@
       </div>
     
       <!-- Search bar -->
-      <ion-searchbar 
+      <ion-searchbar  (ionFocus)="onFocusSearch()" 
         (keyup)="onSearch($event)" 
         (ionClear)="onClearSearch()" 
         class="homesearch"

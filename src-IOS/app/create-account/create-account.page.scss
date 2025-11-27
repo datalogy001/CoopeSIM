@@ -261,8 +261,7 @@ ion-button{
 .searchlist{
   position: absolute; z-index: 111;
   top: 100%; left: 0; right: 0; overflow-y: auto;
-  max-height: 216px;
-
+  max-height: 130px;
   ion-list{
     background: transparent; margin: 0; padding: 0;
 

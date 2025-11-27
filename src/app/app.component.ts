@@ -315,6 +315,8 @@ export class AppComponent {
     }
     return 'en'; // Fallback to English
   }
+  
+  
 
 
 
@@ -399,6 +401,15 @@ export class AppComponent {
       if (res.code == 200) {
         if (res.data[0]['app_version'] != this.platformsObj.app_version && res.data[0]['app_version'] > this.platformsObj.app_version) {
           this.UpdateApp();
+        } else {
+          console.log("After Login Social Model will call ")
+          const authToken = window.localStorage.getItem('coop_auth_token');
+          if (!authToken) {
+            //  this.navController.navigateRoot('start');
+            // return;
+          } else {
+            this.isProfileIncomplete()
+          }
         }
       }
     }, (err) => {
@@ -471,7 +482,6 @@ export class AppComponent {
       //  this.navController.navigateRoot('start');
       // return;
     } else {
-      this.isProfileIncomplete()
       this.getWalletBalance();
     }
 

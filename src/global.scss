@@ -290,6 +290,25 @@ ion-footer .footer-toolbar-padding ion-toolbar:last-of-type {
   padding-bottom: 16px;
 }
 
+.countrySearch{
+    .searchbar-input.sc-ion-searchbar-md {
+        border: none;
+        font-weight: 300;
+    }
+}
+
+.socialCountry{
+  .searchbar-input.sc-ion-searchbar-md{
+    color: #000;
+  }
+  .searchbar-search-icon.sc-ion-searchbar-md {
+    color: #000;
+  }
+  .searchbar-has-value.searchbar-should-show-clear.sc-ion-searchbar-md-h .searchbar-clear-button.sc-ion-searchbar-md {
+    color: #000;
+  }
+}
+
 
 /*************************** Alert css*/
 
@@ -407,7 +426,7 @@ ion-alert{
   border-radius: 10px;
   color: var(--theme-color-2);
   // border: 1px solid var(--theme-color-2);
-  font-size: 17px;
+  font-size: 15px;
   background: #e7e9ec;
 }
 .searchbar-search-icon.sc-ion-searchbar-md{
@@ -733,6 +752,15 @@ ion-modal {
     left: 50%;
     transform: translateX(-50%);
   }
+
+app-topup-not-applied-modal.ion-page {
+    top: calc(100% - 275px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 170px;
+  }
+
   app-version-modal.ion-page{
     height: 220px; top: calc(100% - 290px);      //language
   }
@@ -1399,6 +1427,7 @@ and (-webkit-min-device-pixel-ratio: 2){
   ion-modal app-password-error.ion-page{ width: 100%; height: 260px; top: calc(100% - 260px); }
   ion-modal app-version-modal.ion-page { height: 270px; top: calc(100% - 270px); }
   ion-modal app-delete-card.ion-page { height: 275px; top: calc(100% - 275px); }
+  ion-modal app-topup-not-applied-modal.ion-page { height: 270px; top: calc(100% - 270px); }
 
   ion-modal ion-header ion-toolbar ion-buttons ion-button { font-size: 30px; height: 30px; }
   

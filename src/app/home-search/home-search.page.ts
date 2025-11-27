@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { ModalController, NavController, ToastController, Platform } from '@ionic/angular';
 import { NointernetPage } from '../nointernet/nointernet.page';
 import { UpdateAppPage } from '../update-app/update-app.page';
@@ -43,7 +43,8 @@ export class HomeSearchPage implements OnInit {
     private keyboard: Keyboard,
     private router: Router,
     private navController: NavController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private eRef: ElementRef
   
   ) { }
 
@@ -194,6 +195,27 @@ this.destinations = window.localStorage.getItem('coop_destinations');
     }, 300);
   }
 
+   // Show list on focus
+  onFocusSearch() {
+    this.onFocus();
+    this.isSearch = true;
+       setTimeout(() => {
+      this.translate.use(this.langDefault).subscribe(() => {
+        console.log(JSON.stringify(this.mainObj));
+        this.searchData = this.mainObj.map((country: any) => ({
+          name: this.translate.instant(`COUNTRIES.${country.iso}`),
+          region: country.region,
+          iso: country.iso,
+          is_destination: false,
+          country_name: this.translate.instant(`COUNTRIES.${country.iso}`)
+        }));
+
+      });
+    }, 200);
+
+  }
+
+
   onSearch(event: any) {
     this.onFocus();
     const searchTerm: string = event.target.value;
@@ -207,7 +229,7 @@ this.destinations = window.localStorage.getItem('coop_destinations');
     } else {
       this.isearchIMg = '';
       this.searchDiv.nativeElement.classList.remove('searching');
-      this.isSearch = false;
+       this.isSearch = false;
     }
   }
 
@@ -221,6 +243,26 @@ this.destinations = window.localStorage.getItem('coop_destinations');
     this.searchData = this.tempAllCountry;
   }
 
+
+   // Detect click outside this component or on any ion-input
+  @HostListener('document:click', ['$event'])
+  handleClick(event: Event) {
+    const target = event.target as HTMLElement;
+
+    // Close if click is outside this component
+    const clickedOutside = !this.eRef.nativeElement.contains(target);
+
+    // Close if clicked on another ion-input
+    const clickedOtherInput = target.tagName.toLowerCase() === 'ion-input' ||
+                              target.closest('ion-input') !== null;
+
+    if (clickedOutside || clickedOtherInput) {
+      this.isSearch = false;
+    }
+  }
+
+
+  
   findMatchingItems(searchTerm: string, language: string): any[] {
   const normalize = (str: string) =>
     str?.toLowerCase().trim().replace(/\s+/g, ''); // remove all extra spaces

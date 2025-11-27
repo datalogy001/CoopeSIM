@@ -64,7 +64,7 @@ export class InstallEsimPage implements OnInit {
       this.txt =  this.sharingData.country+ ":" + this.translate.instant('UNLIMITED_DAILY_PASS_FOR') +  this.sharingData.days;
     }
 
-console.log(this.txt);
+
 
     // Translate the email subject message and replace placeholders
     this.translate.get('EMAIL_SUBJECT', {
@@ -77,6 +77,8 @@ console.log(this.txt);
         message: translatedMessage
       };
 
+      console.log(options);
+      
       this.socialSharing.shareWithOptions(options)
         .then(() => {
           this.modalCtrl.dismiss();

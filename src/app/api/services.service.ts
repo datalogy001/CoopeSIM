@@ -9,17 +9,11 @@ import { Observable } from 'rxjs';
 export class ServicesService {
   
   //Live server for Coop v3 
-  /*restAPI: string = "https://cooptravelesim.com/api/v3/"; // V3 with live 
+  restAPI: string = "https://cooptravelesim.com/api/v3/"; // V3 with live 
   stripePubliserKey: string = 'pk_live_51ReDyUGzg6l7xu0e5NeN74opJoIQkxDouaxsqDTZDD7ibliD56uuC7xC0hFxprsroP8wcg5MeaoWmCgy3mT5RLs600cFWutvtO';
   whiteLabelId: any = "18";
-  clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX';  */
-
-  //Development server for Coop V3
-  restAPI: string = "https://coop.devdemo.biz/api/v3/"; // V3 with development 
-  stripePubliserKey: string = 'pk_test_51ReDyUGzg6l7xu0eHe8yFHx4Cfkkhs8VgcUoWEmJp1qw0zczINr5me0fhiXJGyoqYFMItiEzMO2iOmKUfFZ0rvPY00y3gsIKb3';     
-  whiteLabelId: any = "18";
   clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX'; 
-  
+
 
   constructor(private http: HttpClient) { }
 
@@ -1238,5 +1232,22 @@ validate_voucher_code(obj: any, access_token:any) {
     });
   }
 
+      //API to get country for residence 
+ countryObj:any  ={'language' :''};  
+ listOfCountriesForResidence() {
+    this.countryObj.language = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('whitelabel', this.whiteLabelId)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'resisenceofCountry',JSON.stringify(this.countryObj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+  
 }
 

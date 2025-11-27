@@ -813,7 +813,7 @@
  "insurance" : "Insurance",
  "medical" : "Medical",
 "App_credit" : "Wallet",
-"you_dont_have_credit":"You dont have enough credit.",
+"you_dont_have_credit":"You don't have enough credit.",
 "you_dont_have_credit_desc":"Your app credit is too low to pay for this transaction. Please choose another method of payment.",
 "help_desc": "Sorry to hear you're having trouble with something — but we'd be happy to help.",
 "credit": "Credit",

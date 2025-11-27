@@ -218,8 +218,8 @@ ion-button{
     }
 }
 .text {
-    margin: 15px 0 0px;
-    font-size: 12px;
+    margin: 15px 5px 0;
+    font-size: 14px;
     color: var(--theme-color-2); 
     line-height: 20px;
 }
@@ -261,7 +261,7 @@ ion-button{
 .searchlist{
   position: absolute; z-index: 111;
   top: 100%; left: 0; right: 0; overflow-y: auto;
-  max-height: 216px;
+  max-height: 130px;
 
   ion-list{
     background: transparent; margin: 0; padding: 0;
