@@ -27,7 +27,7 @@ import { IonInfiniteScroll, IonContent } from '@ionic/angular';
 export class CreateAccountPage implements OnInit {
   @ViewChild('searchDiv', { static: true }) searchDiv!: ElementRef;
    @ViewChild(IonContent, { static: false }) content?: IonContent;
-  registerObj: any = { 'referal_code': '', 'mobile_number' : '', 'country_name' : '',  'city':'','first_name': '', 'last_name': '', 'password': '', 'email': '', 'isPrivacySelected': false, 'isTermsSelected': false, 'confirmPass': '', 'deviceToken': '' ,'lang' : ''};
+  registerObj: any = { 'promotion_email' : false, 'referal_code': '', 'mobile_number' : '', 'country_name' : '',  'city':'','first_name': '', 'last_name': '', 'password': '', 'email': '', 'isPrivacySelected': false, 'isTermsSelected': false, 'confirmPass': '', 'deviceToken': '' ,'lang' : ''};
   terms: any = [];
   privacy: any = [];
   passwordType: string = 'password';

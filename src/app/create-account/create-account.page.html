@@ -131,10 +131,17 @@
 
      </ion-list> 
 
+      <ion-row class="checkrowOPT">
+    <ion-col>
+      <ion-checkbox labelPlacement="end" [(ngModel)]="registerObj.promotion_email">{{ 'receive_promotional_emails' | translate }}</ion-checkbox>
+    </ion-col>
+  </ion-row>
+
     <p class="text">
       {{ 'CREATE_ACCOUNT_AGREE_TEXT' | translate }}
     </p>
 
+  
     <ion-row class="checkrow">
       <ion-col size="6">
         <div class="checkdiv">
@@ -149,6 +156,9 @@
         </div>
       </ion-col>
     </ion-row>
+
+     
+    
 
     <ion-button expand="block" class="btn-green btn-signup" (click)="submit()">
       {{ 'CREATE_ACCOUNT_SIGN_UP_BUTTON' | translate }}

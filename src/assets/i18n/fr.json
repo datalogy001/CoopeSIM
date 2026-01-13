@@ -779,6 +779,7 @@
   "SIGNUP_SUCCESS_TITLE": "Bienvenue à bord !",
   "SIGNUP_SUCCESS_DESCRIPTION": "Votre compte a été créé avec succès.",
   "topup_not_allowed": "Unfortunately, you cannot top up this eSIM. <br> Please purchase a new bundle.",
-"BUY_NOW" : "Buy Now"
+"BUY_NOW" : "Buy Now",
+"receive_promotional_emails" : "I would like to receive promotional emails."
   
 }

@@ -69,7 +69,8 @@ export class PaymentDatatopupPage implements OnInit {
   creditDebitType: any = '';
   googlePayType: any = '';
 
-
+  private browserInstance: any;  // To store the reference to the browser
+  private backButtonSubscription: any;  // To store the back button subscription
 
   @ViewChild(IonContent, { static: false }) content?: IonContent;
   constructor(private zone: NgZone,private keyboard: Keyboard,private translate: TranslateService, private popoverController: PopoverController, private loadingScreen: LoadingScreenAppPage, private platform: Platform, private loadCtr: LoadingController, private service: ServicesService, private navController: NavController, private toastController: ToastController, private Router: Router, private modalController: ModalController) {
