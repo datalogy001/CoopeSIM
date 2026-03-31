@@ -53,7 +53,7 @@
             <li>Samsung Galaxy Z Flip3 5G</li>
             <li>Samsung Galaxy Z Flip4</li>
             <li>Samsung S24</li>
-            
+
           </ul>
         </div>
       </ion-accordion>
@@ -120,22 +120,35 @@
 
       <ion-accordion value="fifth">
         <ion-item slot="header">
+          <ion-label>Fairphone Devices</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <ul>
+            <li>Fairphone 4 (first with eSIM)</li>
+            <li>Fairphone 5</li>
+            <li>Fairphone Gen 6</li>
+          </ul>
+        </div>
+      </ion-accordion>
+
+      <ion-accordion value="sixth">
+        <ion-item slot="header">
           <ion-label>{{ 'OTHERS_DEVICES' | translate }}</ion-label>
         </ion-item>
         <div class="ion-padding" slot="content">
           <ul>
             <li>Motorola Razr 2019</li>
-              <li>Motorola Razr 5G</li>
-          <li>Motorola Razr 40 </li>
-          <li>Motorola Razr 40 Ultra</li>
-          <li>Motorola Edge+ Series</li>
-          <li>Motorola Edge 40 </li>
-          <li>Motorola Edge 40 Pro</li>
-          <li>Motorola G Series 34</li>
-          <li>Motorola G Series 52</li>
-          <li>Motorola G Series 53</li>
-          <li>Motorola G Series 54</li>
-          <li>Motorola G Series 84</li>
+            <li>Motorola Razr 5G</li>
+            <li>Motorola Razr 40 </li>
+            <li>Motorola Razr 40 Ultra</li>
+            <li>Motorola Edge+ Series</li>
+            <li>Motorola Edge 40 </li>
+            <li>Motorola Edge 40 Pro</li>
+            <li>Motorola G Series 34</li>
+            <li>Motorola G Series 52</li>
+            <li>Motorola G Series 53</li>
+            <li>Motorola G Series 54</li>
+            <li>Motorola G Series 84</li>
             <li>Gemini PDA</li>
             <li>Rakuten Mini</li>
             <li>Rakuten Big-S</li>
@@ -146,7 +159,6 @@
             <li>Sony Xperia 10 IV</li>
             <li>Xperia 1 IV</li>
             <li>Honor Magic 4 Pro</li>
-            <li>Fairphone 4</li>
             <li>Sharp Aquos Sense6s</li>
             <li>Sharp Aquos Wish</li>
             <li>Xiaomi 12T Pro</li>
@@ -156,6 +168,8 @@
           </ul>
         </div>
       </ion-accordion>
+
+
 
     </ion-accordion-group>
 
@@ -185,7 +199,7 @@
       <ion-button (click)="gotoTab5()" class="selected">
         <img class="normal" src="assets/img/icons/user.png" alt="">
         <img class="active" src="assets/img/icons/user-yellow.png" alt="">
-      </ion-button>      
+      </ion-button>
     </div>
 
   </ion-toolbar>
