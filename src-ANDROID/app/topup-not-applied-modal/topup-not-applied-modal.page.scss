@@ -1,0 +1,72 @@
+ion-header {
+    ion-toolbar {
+      --min-height: 50px;
+      height: 50px;
+    }
+  }
+
+ion-content{
+    color: var(--theme-content-bg);
+}
+p{
+    color: #fff; text-align: center; margin: 10px 0 20px; font-size: 15x; line-height:  1.6;
+}
+
+.btn-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px; // space between buttons
+  margin-top: 10px;
+
+  ion-button {
+    flex: 1;                // both buttons equal width
+    max-width: 200px;       // optional: control max width
+    height: 48px;
+    font-size: 17px;
+    --border-radius: 8px;
+    margin: 0;
+  }
+
+  .btn-green {
+    font-weight: 300;
+    --background: var(--theme-color-1);
+    --color: #fff;
+  }
+
+  ion-button[fill="outline"] {
+    --color: #fff;
+    --border-color: #fff;
+  }
+}
+
+
+
+
+
+
+
+
+
+/**************************************************************/
+/***** iPad 11, iPad Pro, iPad mini ****/
+@media only screen 
+and (min-device-width: 768px) 
+and (min-device-height: 1024px)
+and (-webkit-min-device-pixel-ratio: 2) {
+
+  p { 
+    margin: 15px 0 30px; 
+    font-size: 21px;  
+  }
+
+  .btn-div {
+    gap: 20px;
+  }
+
+  .btn-div ion-button {
+    max-width: 350px;
+    height: 58px; 
+    font-size: 24px;
+  }
+}
