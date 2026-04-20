@@ -11,8 +11,12 @@ export class ServicesService {
   //Live server for Coop v3 
   restAPI: string = "https://cooptravelesim.com/api/v3/"; // V3 with live 
   stripePubliserKey: string = 'pk_live_51ReDyUGzg6l7xu0e5NeN74opJoIQkxDouaxsqDTZDD7ibliD56uuC7xC0hFxprsroP8wcg5MeaoWmCgy3mT5RLs600cFWutvtO';
+
+
   whiteLabelId: any = "18";
   clientToken:any = 'xMS16efoDDrqhq22iL14yNFVWAAujqfAIU508wLd1jlUSNlVi6yei1xzsUnX'; 
+
+
 
   constructor(private http: HttpClient) { }
 
@@ -1176,7 +1180,7 @@ validate_voucher_code(obj: any, access_token:any) {
         .set('Content-Type', 'application/json; charset=utf-8')
         .set('whitelabel', this.whiteLabelId)
         .set('client-token', this.clientToken)
-      return this.http.post(this.restAPI + 'esimcountries', JSON.stringify(paramObj), { headers }).subscribe((res: any) => {
+      return this.http.post(this.restAPI + 'esim_countries_zone', JSON.stringify(paramObj), { headers }).subscribe((res: any) => {
         resolve(res);
       }, (err) => {
         reject(err);
@@ -1209,6 +1213,81 @@ validate_voucher_code(obj: any, access_token:any) {
       });
     });
   }
+
+    // Stripe with 3d createCardPaymentIntent
+    createCardPaymentIntent(obj: any, authToken: any) {
+      this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+      return new Promise((resolve, reject) => {
+        const headers = new HttpHeaders()
+          .set('Content-Type', 'application/json; charset=utf-8')
+          .set('Authorization', 'Bearer ' + authToken)
+          .set('whitelabel', this.whiteLabelId)
+          .set('language', this.selectedLang)
+          .set('client-token', this.clientToken)
+        return this.http.post(this.restAPI + 'card/create-payment-intent/purchase-bundle', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+          resolve(res);
+        }, (err) => {
+          reject(err);
+        });
+      });
+    }
+    
+     // Stripe with 3d secure start
+  createCardTopupPaymentIntent(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'card/create-payment-intent/top-up', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+  // Stripe with NEW API for APPLE PAY - CREATE INTENT WITH ALL ORDER DATA- 07-04-2026 
+
+  createIntentForApplePay(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'apple-pay/create-payment-intent/purchase-bundle', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+
+    createApplePayIntentTopUp(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'apple-pay/create-payment-intent/top-up', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+
 
   // Stripe with 3d secure start
   createPaymentIntent(obj: any, authToken: any) {

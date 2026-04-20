@@ -38,7 +38,7 @@ import { IonInfiniteScroll, IonContent } from '@ionic/angular';
 export class CreateAccountPage implements OnInit {
   @ViewChild('searchDiv', { static: true }) searchDiv!: ElementRef;
    @ViewChild(IonContent, { static: false }) content?: IonContent;
-  registerObj: any = { 'referal_code': '', 'mobile_number' : '', 'country_name' : '',  'city':'','first_name': '', 'last_name': '', 'password': '', 'email': '', 'isPrivacySelected': false, 'isTermsSelected': false, 'confirmPass': '', 'deviceToken': '' ,'lang' : ''};
+  registerObj: any = { 'promotion_email' : false, 'referal_code': '', 'mobile_number' : '', 'country_name' : '',  'city':'','first_name': '', 'last_name': '', 'password': '', 'email': '', 'isPrivacySelected': false, 'isTermsSelected': false, 'confirmPass': '', 'deviceToken': '' ,'lang' : ''};
   terms: any = [];
   privacy: any = [];
   passwordType: string = 'password';
@@ -372,6 +372,12 @@ async googleSuccess(googleRes:any) {
      //First time -SIGNUP- Google 
       //Socail Media Country Model STARTED 
      this.modelSocailCountry( resNew.data['id'],this.Router.url );
+       if (this.platform.is('cordova')) {
+            if (this.platform.is('android') || this.platform.is('ios')) {
+              //For users who haven't signed up yet, this tag will simply not exist.
+              OneSignalPlugin.sendTag("signed_up", "true");
+            }
+          }
      }
 
     } else {
@@ -865,6 +871,13 @@ async signInWithAppleFunSuccess(appleRes: any) {
      //First time -SIGNUP- Google 
       //Socail Media Country Model STARTED 
      this.modelSocailCountry( resNew.data['id'],this.Router.url );
+        if (this.platform.is('cordova')) {
+            if (this.platform.is('android') || this.platform.is('ios')) {
+              //For users who haven't signed up yet, this tag will simply not exist.
+              OneSignalPlugin.sendTag("signed_up", "true");
+
+            }
+          }
          }
   
         } else {
@@ -933,6 +946,13 @@ async callAppleAPI(appleItem: any) {
      //First time -SIGNUP- Google 
       //Socail Media Country Model STARTED 
      this.modelSocailCountry( resNew.data['id'],this.Router.url );
+        if (this.platform.is('cordova')) {
+            if (this.platform.is('android') || this.platform.is('ios')) {
+              //For users who haven't signed up yet, this tag will simply not exist.
+              OneSignalPlugin.sendTag("signed_up", "true");
+            }
+          }
+
          }
   
         } else {

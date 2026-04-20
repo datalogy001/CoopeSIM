@@ -371,6 +371,12 @@ export class LoginPage implements OnInit {
           //First time -SIGNUP- Google 
           //Socail Media Country Model STARTED 
           this.modelSocailCountry(resNew.data['id'], this.Router.url);
+          if (this.platform.is('cordova')) {
+            if (this.platform.is('android') || this.platform.is('ios')) {
+              //For users who haven't signed up yet, this tag will simply not exist.
+              OneSignalPlugin.sendTag("signed_up", "true");
+            }
+          }
         }
 
       } else {
@@ -443,6 +449,13 @@ export class LoginPage implements OnInit {
           //First time -SIGNUP- Google 
           //Socail Media Country Model STARTED 
           this.modelSocailCountry(resNew.data['id'], this.Router.url);
+           if (this.platform.is('cordova')) {
+            if (this.platform.is('android') || this.platform.is('ios')) {
+              //For users who haven't signed up yet, this tag will simply not exist.
+              OneSignalPlugin.sendTag("signed_up", "true");
+            }
+          }
+          
         }
 
       } else {
@@ -525,6 +538,12 @@ export class LoginPage implements OnInit {
           //First time -SIGNUP- Google 
           //Socail Media Country Model STARTED 
           this.modelSocailCountry(resNew.data['id'], this.Router.url);
+           if (this.platform.is('cordova')) {
+            if (this.platform.is('android') || this.platform.is('ios')) {
+              //For users who haven't signed up yet, this tag will simply not exist.
+              OneSignalPlugin.sendTag("signed_up", "true");
+            }
+          }
         }
 
       } else {

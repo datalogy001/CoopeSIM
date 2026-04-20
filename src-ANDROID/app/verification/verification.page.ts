@@ -10,7 +10,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { LoadingScreenAppPage } from '../loading-screen-app/loading-screen-app.page';
 import { debounceTime, Subject } from 'rxjs';
-
+import OneSignalPlugin from 'onesignal-cordova-plugin';
 
 @Component({
   selector: 'app-verification',
@@ -223,6 +223,17 @@ export class VerificationPage implements OnInit {
           }
         };
         this.router.navigate(['/account-created'], navigationExtras);
+
+           if (this.platform.is('cordova')) {
+        if (this.platform.is('android') || this.platform.is('ios')) {
+          // For users who haven't signed up yet, this tag will simply not exist.
+          OneSignalPlugin.sendTag("signed_up", "true");
+        }
+      } else {
+        console.log('Skipped — running on web browser');
+      }
+
+
 
       }
     }).catch(err => {

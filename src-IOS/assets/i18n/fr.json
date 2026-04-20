@@ -865,9 +865,10 @@
 "VERIFY_TITLE_CONTINUE_SIGNUP": "Continuer l'inscription",
 "VERIFY_SUBTITLE_ENTER_NUMBER": "Veuillez sélectionner votre pays de résidence dans la liste ci-dessous et saisir votre numéro de téléphone dans le champ prévu à cet effet",
   "SIGNUP_SUCCESS_TITLE": "Bienvenue à bord !",
-  "SIGNUP_SUCCESS_DESCRIPTION": "Votre compte a été créé avec succès."
+  "SIGNUP_SUCCESS_DESCRIPTION": "Votre compte a été créé avec succès.",
+  "receive_promotional_emails" : "I would like to receive promotional emails."
   
-,
+
 
   
 }

@@ -1143,6 +1143,81 @@ validate_voucher_code(obj: any, access_token:any) {
     });
   }
 
+    // Stripe with 3d createCardPaymentIntent
+  createCardPaymentIntent(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'card/create-payment-intent/purchase-bundle', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+   // Stripe with 3d secure createGooglePaymentIntent
+  createGooglePaymentIntent(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'google-pay/create-payment-intent/purchase-bundle', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+
+   // Stripe with 3d secure start
+  createCardTopupPaymentIntent(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'card/create-payment-intent/top-up', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+  
+
+   // Stripe with 3d secure start
+  creategooglePayTopupPaymentIntent(obj: any, authToken: any) {
+    this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');
+    return new Promise((resolve, reject) => {
+      const headers = new HttpHeaders()
+        .set('Content-Type', 'application/json; charset=utf-8')
+        .set('Authorization', 'Bearer ' + authToken)
+        .set('whitelabel', this.whiteLabelId)
+        .set('language', this.selectedLang)
+        .set('client-token', this.clientToken)
+      return this.http.post(this.restAPI + 'google-pay/create-payment-intent/top-up', JSON.stringify(obj), { headers }).subscribe((res: any) => {
+        resolve(res);
+      }, (err) => {
+        reject(err);
+      });
+    });
+  }
+  
+
+
   // Stripe with 3d secure start
   createPaymentIntent(obj: any, authToken: any) {
     this.selectedLang = window.localStorage.getItem('coop_language') == null ? 'en' : window.localStorage.getItem('coop_language');

@@ -402,7 +402,7 @@ paymentIntentApplePayObj: any = { 'amount': '', 'currency': '', 'plan': '' };
       this.paymentIntentApplePayObj.plan = "Credit TOP-UP";
 
       // NEW CREATE INTENT API STARTED
-      this.service.createIntentFromBackend(this.paymentIntentApplePayObj, this.accessToken).then((res: any) => {
+      this.service.createApplePayIntentTopUp(this.paymentIntentApplePayObj, this.accessToken).then((res: any) => {
         if (res.code == 200) {
 
           this.loadingScreen.dismissLoading();
@@ -417,7 +417,7 @@ paymentIntentApplePayObj: any = { 'amount': '', 'currency': '', 'plan': '' };
           );
 
           // Apple pay plugin native code started 
-          customStripePlugin.makePayment({ "amount": parseFloat(this.checkoutObj.amount), "countryCode": this.countryCode, "currency": this.currencyCode, "description": "Credit TOP-UP", "NosetupApplePay": this.noApplePaySetup, "api_key": this.service.stripePubliserKey, "client_secret": clientSecret, "payment_intent_id": paymentIntentId },
+          customStripePlugin.makePayment({ "amount": parseFloat(this.checkoutObj.amount), "countryCode": this.countryCode, "currency": this.currencyCode, "description": "Coop Travel eSIM", "NosetupApplePay": this.noApplePaySetup, "api_key": this.service.stripePubliserKey, "client_secret": clientSecret, "payment_intent_id": paymentIntentId },
             async (successResponse: any) => {
               //Success call back
               this.managingAppLogs(
@@ -496,7 +496,7 @@ paymentIntentApplePayObj: any = { 'amount': '', 'currency': '', 'plan': '' };
           this.paymentIntentObj.amount = this.checkoutObj.amount;
           this.paymentIntentObj.plan = "TOP-UP";
           this.managingAppLogs("From App Step 1 Credit-Topup Card Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
-          this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
+          this.service.createCardTopupPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
   
             if (res.code == 200) {
               // this.presentToast("Initialize Payment Intent", "Success");

@@ -55,7 +55,6 @@ export class PaymentDatatopupPage implements OnInit {
   paymentMethod: any = [];
   isDataAvail: any = true;
   clientSecret: any = '';
-  paymentIntentObj: any = { 'amount': '', 'currency': '', 'plan': '' };
   cardIntentObj: any = { 'card_id': '', 'intent_id': '' };
   types: any = '';
   dataBrowsing: any = [];
@@ -65,7 +64,7 @@ export class PaymentDatatopupPage implements OnInit {
   browsing_music: any;
   browsing_video: any;
   isCardSelected: any = false;
-
+  createIntentCardPayObj: any = { 'amount': '', 'currency': '', 'plan': '', 'order_data' : '' };
   creditDebitType: any = '';
   googlePayType: any = '';
 
@@ -288,7 +287,10 @@ selectedLang:any;
     else if (this.selectedPaymentType == 'wallet-pay') {
       this.creditDebitType = '';
       this.isCardSelected = false;
-    }
+    }else{
+      this.creditDebitType = '';
+      this.isCardSelected = false;
+      }
   }
 
   async gotoNocreditbalance(buttonText: any, msg: any, times: any) {
@@ -371,15 +373,17 @@ selectedLang:any;
         sgap
           .requestPayment(totalAmount.toString(), currency)
           .then((responsePayment: any) => {
-            this.managingAppLogs("From App Step 2 eSIM Top-up:  Google Pay Native SDK Success: " + JSON.stringify(responsePayment) ,this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+                 this.managingAppLogs("From App Step 2 eSIM Top-up:  Google Pay Native SDK Success: " + JSON.stringify(responsePayment) ,this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
+       
             this.actualStripePaymentGooglrPay(this.clientSecret, responsePayment);
           })
           .catch((errorPayment: any) => {
-            this.managingAppLogs("From App Step 2 eSIM Top-up: Google Pay Native SDK Error: " + JSON.stringify(errorPayment) ,this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+            this.managingAppLogs("From App Step 2 eSIM Top-up: Google Pay Native SDK Error: " + JSON.stringify(errorPayment) ,this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
             this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('payment_cancelled') );
           });
       }).catch((error: any) => {
-        this.managingAppLogs("From App Step 2 eSIM Top-up: Google Pay Native SDK Payment Cancelled : " + JSON.stringify(error) ,this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+            this.managingAppLogs("From App Step 2 eSIM Top-up: Google Pay Native SDK Payment Cancelled : " + JSON.stringify(error) ,this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
+    
         this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('payment_cancelled') );
       });
     } else {
@@ -406,15 +410,17 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
 
   if (confirmError) {
     this.loadingScreen.dismissLoading();
-    this.managingAppLogs("From App Step 3 eSIM Top-up: Google Pay confirmation Payment Failed:" + JSON.stringify(confirmError),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+
     this.errorMSGModal(
       this.translate.instant('ERROR_TRY_AGAIN'),
       this.translate.instant('PAYMENT_CONFIRMATION_FAILED')
     );
+    this.managingAppLogs("From App Step 3 eSIM Top-up: Google Pay confirmation Payment Failed:" + JSON.stringify(confirmError),this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
   } else if (paymentIntent && paymentIntent.status == 'succeeded') {
 
     this.stripeCardObj.payment_intent = paymentIntent;
-    this.managingAppLogs("From App Step 3 eSIM Top-up: Google Pay Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);   
+    this.managingAppLogs("From App Step 3 eSIM Top-up: Google Pay Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);   
+    
     this.loadingScreen.dismissLoading();
     const modalFirstOpt = await this.modalController.create({
       component: ProcessingBarGooglePayPage,
@@ -461,15 +467,18 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
           //First step: Generate client secret key
           console.log("Google Pay" + JSON.stringify(this.stripeCardObj));
           await this.loadingScreen.presentLoading();
-          this.paymentIntentObj.currency = this.currencyCode;
-          this.paymentIntentObj.amount = this.stripeCardObj.amt_from_other_payment;
-          this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
-           this.managingAppLogs("From App Step 1 eSIM Top-up: Google Pay- Split Payment Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
-          this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
+          this.createIntentCardPayObj.currency = this.currencyCode;
+          this.createIntentCardPayObj.amount = this.stripeCardObj.amt_from_other_payment;
+          this.createIntentCardPayObj.plan = this.stripeCardObj.bundle.bundleData.name;
+          this.createIntentCardPayObj.order_data = this.stripeCardObj;
+
+
+           this.managingAppLogs("From App Step 1 eSIM Top-up: Google Pay- Split Payment Intent Started",this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
+          this.service.createGooglePaymentIntent(this.createIntentCardPayObj, this.accessToken).then((res: any) => {
             if (res.code == 200) {
               this.clientSecret = res.data[0].client_secret;
               this.loadingScreen.dismissLoading();
-              this.setupGooglePay(this.paymentIntentObj.amount, this.currencyCode);
+              this.setupGooglePay(this.createIntentCardPayObj.amount, this.currencyCode);
             } else {
               this.loadingScreen.dismissLoading();
               this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
@@ -501,13 +510,15 @@ async actualStripePaymentGooglrPay(client_secret: string, token: string) {
 
             await this.loadingScreen.presentLoading();
             this.stripeCardObj.isTermsSelected = true;
+
             // Step 1-> Get Client secret key from Server side 
-            this.paymentIntentObj.currency = this.currencyCode;
-            this.paymentIntentObj.amount = this.stripeCardObj.amt_from_other_payment;
-            console.log("stripe=>" + this.paymentIntentObj.amount);
-            this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
-            this.managingAppLogs("From App Step 1 eSIM Top-up: Card Payment- Split Payment Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
-            this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
+            this.createIntentCardPayObj.amount = this.stripeCardObj.amt_from_other_payment;
+            this.createIntentCardPayObj.currency = this.stripeCardObj.currency,
+            this.createIntentCardPayObj.plan = this.stripeCardObj.bundle.bundleData.name;
+            this.createIntentCardPayObj.order_data = this.stripeCardObj;
+
+            this.managingAppLogs("From App Step 1 eSIM Top-up: Card Payment- Split Payment Intent Started",this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
+            this.service.createCardPaymentIntent(this.createIntentCardPayObj, this.accessToken).then((res: any) => {
 
               if (res.code == 200) {
                 // this.presentToast("Initialize Payment Intent", "Success");
@@ -619,34 +630,39 @@ Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' '
       }
     }
     else
-      if (this.selectedPaymentType == 'google-pay') {
+     if (this.selectedPaymentType == 'google-pay') {
+   
+      //this.errorMSGModal(this.translate.instant('VALIDATION_MSG_BUTTON'), this.translate.instant('SERVICE_NOT_AVAIABLE'));
+      if (this.platform.is('android') || this.platform.is('ios')) {
+      //First step: Generate client secret key
+      await this.loadingScreen.presentLoading();
       
-        //this.errorMSGModal(this.translate.instant('VALIDATION_MSG_BUTTON'), this.translate.instant('SERVICE_NOT_AVAIABLE'));
-        if (this.platform.is('android') || this.platform.is('ios')) {
-          //First step: Generate client secret key
-          await this.loadingScreen.presentLoading();
-          this.paymentIntentObj.currency = this.currencyCode;
-          this.paymentIntentObj.amount = this.stripeCardObj.is_couped_applied == 0 ? this.stripeCardObj.bundle.extraAmount : this.stripeCardObj.original_amount;
-          this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
-          this.managingAppLogs("From App Step 1 eSIM Top-up: Google Pay Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
-          this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
-            if (res.code == 200) {
-              this.clientSecret = res.data[0].client_secret;
-              this.loadingScreen.dismissLoading();
-              this.setupGooglePay(this.paymentIntentObj.amount, this.currencyCode);
-            } else {
-              this.loadingScreen.dismissLoading();
-              this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
-              this.clientSecret = '';
-            }
-          }).catch(err => {
-            this.loadingScreen.dismissLoading();
-            this.errorMSGModal(this.translate.instant('ERROR_TRY_AGAIN'), this.translate.instant('ERROR_MESSAGE'));
-            this.clientSecret = '';
-          })
+      
+         this.createIntentCardPayObj.amount = this.stripeCardObj.is_couped_applied == 0 ? this.stripeCardObj.bundle.extraAmount : this.stripeCardObj.original_amount;
+            this.createIntentCardPayObj.currency =  this.currencyCode;
+            this.createIntentCardPayObj.plan = this.stripeCardObj.bundle.bundleData.name;
+            this.createIntentCardPayObj.order_data = this.stripeCardObj;
+        
+
+      this.managingAppLogs("From App Step 1 eSIM Top-up: Google Pay Intent Started",this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
+      this.service.createGooglePaymentIntent(this.createIntentCardPayObj, this.accessToken).then((res: any) => {
+        if (res.code == 200) {
+          this.clientSecret = res.data[0].client_secret;
+          this.loadingScreen.dismissLoading();
+          this.setupGooglePay(this.createIntentCardPayObj.amount,  this.currencyCode);
         } else {
-          console.log("We are in web");
+          this.loadingScreen.dismissLoading();
+          this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('ERROR_MESSAGE'));
+          this.clientSecret = '';
         }
+      }).catch(err => {
+        this.loadingScreen.dismissLoading();
+        this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('ERROR_MESSAGE'));
+        this.clientSecret = '';
+      })
+        }else{
+        console.log("We are in web");
+        }  
       } else {
         if (this.cardList.length > 0 && this.isCardSelected == false) {
           this.gotoPernissionModel();
@@ -657,11 +673,15 @@ Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' '
         await this.loadingScreen.presentLoading();
         this.stripeCardObj.isTermsSelected = true;
         // Step 1-> Get Client secret key from Server side 
-        this.paymentIntentObj.currency = this.currencyCode;
-        this.paymentIntentObj.amount = this.stripeCardObj.is_couped_applied ==0? this.stripeCardObj.bundle.extraAmount: this.stripeCardObj.original_amount; 
-        this.paymentIntentObj.plan = this.stripeCardObj.bundle.bundleData.name;
-        this.managingAppLogs("From App Step 1 eSIM Top-up: Card Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
-        this.service.createPaymentIntent(this.paymentIntentObj, this.accessToken).then((res: any) => {
+            this.createIntentCardPayObj.currency = this.currencyCode;
+            console.log("this.stripeCardObj.is_couped_applied=>" + this.stripeCardObj.is_couped_applied);
+            this.createIntentCardPayObj.amount = this.stripeCardObj.is_couped_applied == 0 ? this.stripeCardObj.bundle.extraAmount : this.stripeCardObj.original_amount;
+            console.log("stripe=>" + this.createIntentCardPayObj.amount);
+            this.createIntentCardPayObj.plan = this.stripeCardObj.bundle.bundleData.name;
+             this.createIntentCardPayObj.order_data = this.stripeCardObj;
+
+        this.managingAppLogs("From App Step 1 eSIM Top-up: Card Intent Started",this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
+        this.service.createCardPaymentIntent(this.createIntentCardPayObj, this.accessToken).then((res: any) => {
 
           if (res.code == 200) {
             // this.presentToast("Initialize Payment Intent", "Success");
@@ -700,7 +720,7 @@ Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' '
 
   //Step 2 : Send Intent and card Id to server 
   async callPaymentIntentFromApp(paymentObj: any) {
-    this.managingAppLogs("From App Step 2 eSIM Top-up: Payment Intent Started",this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+    this.managingAppLogs("From App Step 2 eSIM Top-up: Payment Intent Started",this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
     
     this.service.paymentCardIntent(paymentObj, this.accessToken).then((res: any) => {
       if (res.code == 200) {
@@ -728,11 +748,12 @@ Customer_name: `${this.userDetails.first_name}${this.userDetails.last_name ? ' '
 
     if (confirmError) {
       this.loadingScreen.dismissLoading();
-      this.managingAppLogs("From App Step 3 eSIM Top-up: Card Confirmation Payment Failed:" + JSON.stringify(confirmError),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+      this.managingAppLogs("From App Step 3 eSIM Top-up: Card Confirmation Payment Failed:" + JSON.stringify(confirmError),this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
       this.errorMSGModal( this.translate.instant('ERROR_TRY_AGAIN'),  this.translate.instant('PAYMENT_CONFIRMATION_FAILED'));
     } else if (paymentIntent && paymentIntent.status == 'succeeded') {
       this.stripeCardObj.payment_intent = paymentIntent;
-      this.managingAppLogs("From App Step 3 eSIM Top-up: Card Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.currencyCode,  this.paymentIntentObj.amount, this.paymentIntentObj.plan);
+        this.managingAppLogs("From App Step 3 eSIM Top-up: Card Confirmation Payment Success:" + JSON.stringify(paymentIntent),this.currencyCode,  this.createIntentCardPayObj.amount, this.createIntentCardPayObj.plan);
+    
       // For Card selected Credit/debit card 
       this.loadingScreen.dismissLoading();
       const modalFirstOpt = await this.modalController.create({

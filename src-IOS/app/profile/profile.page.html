@@ -68,7 +68,15 @@
 
       <!-- credit start -->
       <div class="credit" *ngSwitchCase="'credit'">
-        <h2>{{ walletBalance | currency:currencyCode }}</h2>
+      <!-- Loader -->
+  <div class="wallet-loader" *ngIf="isWalletLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+  </div>
+
+      <!-- Wallet Balance -->
+      <h2 *ngIf="!isWalletLoading">
+        {{ walletBalance | currency: currencyCode }}
+      </h2>
         <div class="btn-blcok">
           <ion-button expand="block" class="btn-green" (click)="gotoTopup()">
             {{ 'Top_up'  | translate}}

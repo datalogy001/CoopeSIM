@@ -43,6 +43,12 @@ export class ProcessingBarApplepayPage implements OnInit, OnDestroy{
         window.localStorage.setItem('coop_user_result',  "true");
     this.managingAppLogs("From App Step 4: Apple Pay payment Success:",this.value.bundle.extraAmount,this.value.bundle.bundleData.name);
 
+       if (this.platform.is('android') || this.platform.is('ios')) { 
+          //Make purchase TAG
+             // Mark as completed
+           OneSignalPlugin.sendTag("made_purchase", "true");
+        }
+
       } else {
         this.error = true;
         this.managingAppLogs("From App Step 4: Apple pay payment Error:" + JSON.stringify(res),this.value.bundle.extraAmount,this.value.bundle.bundleData.name);

@@ -10,7 +10,7 @@ import { Keyboard } from '@ionic-native/keyboard/ngx';
 import { TranslateService } from '@ngx-translate/core';
 import { LoadingScreenAppPage } from '../loading-screen-app/loading-screen-app.page';
 import { debounceTime, Subject } from 'rxjs';
-
+import OneSignalPlugin from 'onesignal-cordova-plugin'
 
 @Component({
   selector: 'app-verification',
@@ -37,8 +37,10 @@ export class VerificationPage implements OnInit {
     private platform: Platform
   ) {}
 
-  timer: number = 30; // Initial timer value in seconds
+ isDisabled: boolean = true;
+  timer: number = 30;
   interval: any;
+
   num1: any = '';
   num2: any = '';
   num3: any = '';
@@ -46,7 +48,7 @@ export class VerificationPage implements OnInit {
   tempOTP: any = '';
   tempParam: any = [];
   otp: any = '';
-  isDisabled: any = false;
+
   verifyObj: any = { 'name': '', 'email': '' };
   tempData: any = [];
 
@@ -60,9 +62,28 @@ export class VerificationPage implements OnInit {
     this.verifyObj.name = this.tempData.value2;
     this.verifyObj.email = this.tempData.value1;
 
+    this.startTimer();
+
     this.otpInputChanged.pipe(debounceTime(300)).subscribe(() => {
       this.validate();
     });
+  }
+
+  // ================= TIMER =================
+  startTimer() {
+    this.isDisabled = true;
+    this.timer = 30;
+
+    if (this.interval) clearInterval(this.interval);
+
+    this.interval = setInterval(() => {
+      this.timer--;
+
+      if (this.timer <= 0) {
+        clearInterval(this.interval);
+        this.isDisabled = false;
+      }
+    }, 1000);
   }
 
   onPaste(event: ClipboardEvent, currentInput: any, ...nextInputs: any[]): void {
@@ -177,6 +198,12 @@ export class VerificationPage implements OnInit {
     this.service.createAccount(this.tempData.registerObj).then((res: any) => {
       this.loadingScreen.dismissLoading();
       if (res.code == 200) {
+         if (this.platform.is('cordova')) {
+          if (this.platform.is('android') || this.platform.is('ios')) {
+          //For users who haven't signed up yet, this tag will simply not exist.
+          OneSignalPlugin.sendTag("signed_up", "true");
+          }
+        }
       
         this.userLanguage.language = window.localStorage.getItem("coop_language") || 'en';
         this.updateUserLanguage(res.data[0]['token']); 
@@ -212,6 +239,10 @@ export class VerificationPage implements OnInit {
 
   //Retry code 
   async retryCode() {
+ if (this.isDisabled) return;
+
+    this.startTimer();
+
     this.num1 = '';
     this.num2 = '';
     this.num3 = '';
@@ -219,17 +250,21 @@ export class VerificationPage implements OnInit {
     this.otp = '';
     this.tempOTP = '';
     //Call API to get New code 
-    await this.loadingScreen.presentLoading();
+    //await this.loadingScreen.presentLoading();
     this.service.verifyAccount(this.verifyObj).then((res: any) => {
-      this.loadingScreen.dismissLoading();
+     // this.loadingScreen.dismissLoading();
       if (res.code == 200) {
+
+        // ✅ FIX: prevent overlap issue
+        if (this.isVerifying) return;
+
         this.successMSGModal(this.translate.instant('VERIFY_EMAIL_RESEND_MESSAGE_TITLE'), this.translate.instant('VERIFY_EMAIL_RESEND_MESSAGE_BODY'), "2000");
         this.otp = res.data.OTP;
       } else {
         this.errorMSGModal(this.translate.instant("Ok"), res.message);
       }
     }).catch(err => {
-      this.loadingScreen.dismissLoading();
+    //  this.loadingScreen.dismissLoading();
       this.errorMSGModal(this.translate.instant('VERIFY_EMAIL_TRY_AGAIN'), this.translate.instant('VERIFY_EMAIL_ERROR_MESSAGE'));
     });
   }
@@ -243,23 +278,36 @@ export class VerificationPage implements OnInit {
 
   //Error Modal
   async errorMSGModal(buttonText: any, msg: any) {
+    await this.modalCtrl.dismiss().catch(() => {}); // ✅ FIX
+
     const modal = await this.modalCtrl.create({
       component: PasswordErrorPage,
       componentProps: { 'value': msg, 'value1': buttonText }
     });
 
-    modal.onDidDismiss();
     return await modal.present();
   }
 
   //Success Modal
   async successMSGModal(buttonText: any, msg: any, times: any) {
+    await this.modalCtrl.dismiss().catch(() => {}); // ✅ FIX
+
     const modal = await this.modalCtrl.create({
       component: SuccessModelPage,
       componentProps: { 'value': msg, 'value1': buttonText, 'value2': times }
     });
 
-    modal.onDidDismiss();
-    return await modal.present();
+    await modal.present();
+
+    // ✅ FIX: force auto dismiss
+    if (times) {
+      setTimeout(async () => {
+        try {
+          await modal.dismiss();
+        } catch (e) {}
+      }, parseInt(times));
+    }
+
+    return modal;
   }
 }
