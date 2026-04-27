@@ -114,6 +114,8 @@ export class YourPackagePage implements OnInit {
         }
     }
 
+    
+      
   dataamountField:any;
     dataDaysField:any  ;
    
@@ -529,245 +531,246 @@ export class YourPackagePage implements OnInit {
     expiredates:any; 
     isDepleted:any= false;
    
-    checkBundleState(assignmenrtArr: any) {
+    
+   checkBundleState(assignmenrtArr: any) {
 
-        console.log("Hiiiii");
-        this.loadingScreen.dismissLoading();
-        this.IsDatabalanceLoaded =true;
-        this.topupArray = this.bundleDatas.topups;
-        for (let i = 0; i < this.topupArray.length; i++) {
-            for (let j = 0; j < assignmenrtArr.length; j++) {
-                if (this.topupArray[i]['assignmentReference'] + '-0' == assignmenrtArr[j]['assignmentReference']) {
-                    if (assignmenrtArr[j]['bundleState'] == 'depleted') {
-                        console.log(assignmenrtArr[j]['bundleState']['endTime']);
-                 // Example: inside your function where you get bundleExpireDate
+    this.loadingScreen.dismissLoading();
+    this.IsDatabalanceLoaded = true;
+  this.topupArray = this.bundleDatas.topups;
 
-const endDate = moment.utc(assignmenrtArr[j]['endTime']);
-this.bundleExpireDate = endDate.format('DD-MM-YYYY');
+    let selectedBundle: any = null;
 
-const endDate1 = moment.utc(assignmenrtArr[j]['endTime']).startOf('day');
-const today = moment.utc().startOf('day');
+    // ✅ STEP 1: Find correct bundle (priority: Active > Depleted)
+    for (let j = 0; j < assignmenrtArr.length; j++) {
 
-this.expRemainDays = endDate1.diff(today, 'days');
-console.log("expRemainDays date => 3 => " + this.expRemainDays); 
+        let state = assignmenrtArr[j]['bundleState'];
 
+        if (state == 'active' || state == 'Active') {
+            selectedBundle = assignmenrtArr[j];
+            break; // Active found → stop
+        }
 
-
-
-      this.bundleDatas.isUnlimited = assignmenrtArr[j]['unlimited'];
-                        if(this.bundleDatas.isUnlimited == true)
-                            this.dataDaysField = this.topupArray[i]['days'];
-                        else
-                            this.dataamountField = this.topupArray[i]['dataAmount'];
-                        this.bundleDatas.short_name_country = this.topupArray[i]['shortname'];
-                        this.bundleDatas.country = this.topupArray[i]['country'];
-                        this.countryBanner = this.bundleDatas.short_name_country + '.jpg';
-
-                        this.isDepleted = true;
-                        let thirdPart = assignmenrtArr[j]['name'].split('_')[2]; // This gives "7D"
-                        let numberOfDays = parseInt(thirdPart.match(/\d+/)[0]);  // Extracts the number (7)
-                        // Convert the start time to a moment object
-                        let startDate = moment(assignmenrtArr[j]['startTime'], moment.ISO_8601);
-                        // Add the number of days to the start date
-                        let expirationDate = startDate.add(numberOfDays, 'days');
-                        // Format the new date in "dd/mm/yyyy"
-                        this.expiredates = expirationDate.format('DD/MM/YYYY');
-                    } 
-                }
-            }
+        if (state == 'depleted' && !selectedBundle) {
+            selectedBundle = assignmenrtArr[j];
         }
     }
+
+    // ✅ STEP 2: Apply data ONLY ONCE
+    if (selectedBundle) {
+
+        // find matching topup
+        let matchedTopup = this.topupArray.find(
+            (t: any) => t.assignmentReference + '-0' == selectedBundle.assignmentReference
+        );
+
+        if (!matchedTopup) return;
+
+        const endDate = moment.utc(selectedBundle['endTime']);
+        this.bundleExpireDate = endDate.format('DD-MM-YYYY');
+
+        const endDate1 = moment.utc(selectedBundle['endTime']).startOf('day');
+        const today = moment.utc().startOf('day');
+        this.expRemainDays = endDate1.diff(today, 'days');
+
+        this.bundleDatas.isUnlimited = selectedBundle['unlimited'];
+
+        if (this.bundleDatas.isUnlimited)
+            this.dataDaysField = matchedTopup['days'];
+        else
+            this.dataamountField = matchedTopup['dataAmount'];
+
+        this.bundleDatas.short_name_country = matchedTopup['shortname'];
+        this.bundleDatas.country = matchedTopup['country'];
+        this.countryBanner = this.bundleDatas.short_name_country + '.jpg';
+
+        // ✅ Only if DEPLETED
+        if (selectedBundle['bundleState'] == 'depleted') {
+
+            this.isDepleted = true;
+
+            let thirdPart = selectedBundle['name'].split('_')[2];
+            let numberOfDays = parseInt(thirdPart.match(/\d+/)[0]);
+
+            let startDate = moment(selectedBundle['startTime'], moment.ISO_8601);
+            let expirationDate = startDate.add(numberOfDays, 'days');
+
+            this.expiredates = expirationDate.format('DD/MM/YYYY');
+        }
+    }
+}
 
     bundleExpireDate:any; 
-    checkWithTopups(assignmenrtArr: any) {
-        this.topupArray = this.bundleDatas.topups;
-        this.loadingScreen.dismissLoading();
-        this.IsDatabalanceLoaded =true;
-        for (let i = 0; i < this.topupArray.length; i++) {
-            let foundMatch = false; // Flag to check if a match is found
 
-            for (let j = 0; j < assignmenrtArr.length; j++) {
-                if (this.topupArray[i]['assignmentReference'] + '-0' == assignmenrtArr[j]['assignmentReference']) {
-                    foundMatch = true;
+checkWithTopups(assignmenrtArr: any) {
 
-                    console.log(JSON.stringify(assignmenrtArr[j]['bundleState']));
-                    // No use data amount and start and end time
-                    if (assignmenrtArr[j]['bundleState'] == 'queued') {
-                        this.topupArray[i]['status'] = 'Queued';
+      this.topupArray = this.bundleDatas.topups;
 
-                    }
-                    else if (assignmenrtArr[j]['bundleState'] == 'depleted') {
-                        console.log(assignmenrtArr[j]['bundleState']['endTime']);
-                      // Example: inside your function where you get bundleExpireDate
+    this.loadingScreen.dismissLoading();
+    this.IsDatabalanceLoaded = true;
 
-const endDate = moment.utc(assignmenrtArr[j]['endTime']);
-this.bundleExpireDate = endDate.format('DD-MM-YYYY');
+    let globalActive: any = null;
+    let globalDepleted: any = null;
+    let globalQueued: any = null;
 
-const endDate1 = moment.utc(assignmenrtArr[j]['endTime']).startOf('day');
-const today = moment.utc().startOf('day');
+    // ✅ STEP 1: Find BEST bundle globally
+    for (let j = 0; j < assignmenrtArr.length; j++) {
 
-this.expRemainDays = endDate1.diff(today, 'days');
-console.log("expRemainDays date =>1 => " + this.expRemainDays); 
+        let state = assignmenrtArr[j]['bundleState'];
 
+        if (state == 'active' || state == 'Active') {
+            globalActive = assignmenrtArr[j];
+        } else if (state == 'depleted') {
+            if (!globalDepleted) globalDepleted = assignmenrtArr[j];
+        } else if (state == 'queued') {
+            if (!globalQueued) globalQueued = assignmenrtArr[j];
+        }
+    }
 
-                        this.bundleDatas.isUnlimited = assignmenrtArr[j]['unlimited'];
-                        if(this.bundleDatas.isUnlimited == true)
-                            this.dataDaysField = this.topupArray[i]['days'];
-                        else
-                            this.dataamountField = this.topupArray[i]['dataAmount'];
-                        this.bundleDatas.short_name_country = this.topupArray[i]['shortname'];
-                        this.bundleDatas.country = this.topupArray[i]['country'];
-                        this.countryBanner = this.bundleDatas.short_name_country + '.jpg';
-                        this.topupArray[i]['status'] = 'Depleted';
-                        //Value Data plan 
-                        if (assignmenrtArr[j]['unlimited'] == false) {
-                            
-                            setTimeout(() => {
-                                this.updateProgressValueData(assignmenrtArr[j]['initialQuantity'], assignmenrtArr[j]['remainingQuantity'])    
-                            }, 100);
-                            
-                        } else { // Mega Daily Plan  
+    let selectedGlobal = globalActive || globalDepleted || globalQueued;
 
-                            this.currDate = moment();
-                            this.startDate = moment(assignmenrtArr[j]['startTime'], moment.ISO_8601);
-                            this.endDate = moment(assignmenrtArr[j]['endTime'], moment.ISO_8601);
+    // ✅ STEP 2: UPDATE UI ONLY ONCE
+    if (selectedGlobal) {
 
-                            // Calculate total days and hours
-                            const totalDays = this.endDate.diff(this.startDate, 'days');// Total days
-                            const totalHours = this.endDate.diff(this.startDate, 'hours'); // Total hours for percentage
-                            const remainingTimeInMinutes = this.endDate.diff(this.currDate, 'minutes'); // Remaining time in minutes
+        const endDate = moment.utc(selectedGlobal['endTime']);
+        this.bundleExpireDate = endDate.format('DD-MM-YYYY');
 
-                            if (remainingTimeInMinutes > 0) {
-                                const remainingDays = Math.floor(remainingTimeInMinutes / (24 * 60)); // Complete days remaining
-                                const remainingHours = Math.floor((remainingTimeInMinutes % (24 * 60)) / 60); // Hours left
-                                const remainingMinutes = remainingTimeInMinutes % 60; // Minutes left
+        const endDate1 = moment.utc(selectedGlobal['endTime']).startOf('day');
+        const today = moment.utc().startOf('day');
+        this.expRemainDays = endDate1.diff(today, 'days');
 
-                                if (remainingDays > 0) {
-                                    // Display in days if more than 1 day left
-                                    this.remainDataamount = `${remainingDays} Days`;
-                                    setTimeout(() => {
-                                    this.updateProgressMegaDaily(totalDays, remainingDays, 'days');
-                                }, 100);
-                                } else if (remainingHours > 0 || remainingMinutes > 0) {
-                                    // Display hours and minutes if less than 24 hours
-                                    this.remainDataamount = `${remainingHours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
-                                    setTimeout(() => {
-                                    this.updateProgressMegaDaily(totalHours, remainingHours + (remainingMinutes > 0 ? 1 : 0), 'hours');
-                                }, 100);
-                                } else {
-                                    // Less than 1 hour, show only minutes
-                                    this.remainDataamount = `${remainingMinutes} Minutes`;
-                                    setTimeout(() => {
-                                    this.updateProgressMegaDaily(60, remainingMinutes, 'minutes');
-                                }, 100);
-                                }
-                            } else {
-                                // If no time is remaining, mark status as expired
-                                this.remainDataamount = 'Expired';
-                            }
-                        }
+        this.bundleDatas.isUnlimited = selectedGlobal['unlimited'];
 
-                    } else if (assignmenrtArr[j]['bundleState'] == 'active' || assignmenrtArr[j]['bundleState'] == 'Active') {
-                        this.topupArray[i]['status'] = 'Active';
-                        //For Active Bundle status 
-                        // Example: inside your function where you get bundleExpireDate
-const endDate = moment.utc(assignmenrtArr[j]['endTime']);
-this.bundleExpireDate = endDate.format('DD-MM-YYYY');
+        // find matching topup for display fields
+        let matchedTopup = this.topupArray.find(
+            (t: any) => t.assignmentReference + '-0' == selectedGlobal.assignmentReference
+        );
 
-const endDate1 = moment.utc(assignmenrtArr[j]['endTime']).startOf('day');
-const today = moment.utc().startOf('day');
+        if (matchedTopup) {
+            if (this.bundleDatas.isUnlimited)
+                this.dataDaysField = matchedTopup['days'];
+            else
+                this.dataamountField = matchedTopup['dataAmount'];
 
-this.expRemainDays = endDate1.diff(today, 'days');
-console.log("expRemainDays date => 2=> " + this.expRemainDays); 
+            this.bundleDatas.short_name_country = matchedTopup['shortname'];
+            this.bundleDatas.country = matchedTopup['country'];
+            this.countryBanner = this.bundleDatas.short_name_country + '.jpg';
+        }
 
+        // VALUE PLAN
+        if (!selectedGlobal['unlimited']) {
 
-                        this.bundleDatas.isUnlimited = assignmenrtArr[j]['unlimited'];
+            setTimeout(() => {
+                this.updateProgressValueData(
+                    selectedGlobal['initialQuantity'],
+                    selectedGlobal['remainingQuantity']
+                );
+            }, 100);
 
-                        if(this.bundleDatas.isUnlimited == true)
-                            this.dataDaysField = this.topupArray[i]['days'];
-                        else
-                            this.dataamountField = this.topupArray[i]['dataAmount'];
+        } else {
+            this.handleUnlimitedPlan(selectedGlobal);
+        }
+    }
 
-                        this.bundleDatas.short_name_country = this.topupArray[i]['shortname'];
-                        this.bundleDatas.country = this.topupArray[i]['country'];
-                        this.countryBanner = this.bundleDatas.short_name_country + '.jpg';
+    // ✅ STEP 3: SET STATUS PER ITEM (NO UI LOGIC HERE)
+    for (let i = 0; i < this.topupArray.length; i++) {
 
-                        //Value Data plan 
-                        if (assignmenrtArr[j]['unlimited'] == false) {
-                            setTimeout(() => {
-                                this.updateProgressValueData(assignmenrtArr[j]['initialQuantity'], assignmenrtArr[j]['remainingQuantity'])
-                            }, 100); 
-                        } else { // Mega Daily Plan  
+        let foundMatch = false;
 
-                            this.currDate = moment();
-                            this.startDate = moment(assignmenrtArr[j]['startTime'], moment.ISO_8601);
-                            this.endDate = moment(assignmenrtArr[j]['endTime'], moment.ISO_8601);
+        for (let j = 0; j < assignmenrtArr.length; j++) {
 
-                            // Calculate total days and hours
-                            const totalDays = this.endDate.diff(this.startDate, 'days');// Total days
-                            const totalHours = this.endDate.diff(this.startDate, 'hours'); // Total hours for percentage
-                            const remainingTimeInMinutes = this.endDate.diff(this.currDate, 'minutes'); // Remaining time in minutes
+            if (this.topupArray[i]['assignmentReference'] + '-0' == assignmenrtArr[j]['assignmentReference']) {
 
-                            if (remainingTimeInMinutes > 0) {
-                                const remainingDays = Math.floor(remainingTimeInMinutes / (24 * 60)); // Complete days remaining
-                                const remainingHours = Math.floor((remainingTimeInMinutes % (24 * 60)) / 60); // Hours left
-                                const remainingMinutes = remainingTimeInMinutes % 60; // Minutes left
+                foundMatch = true;
 
-                                if (remainingDays > 0) {
-                                    // Display in days if more than 1 day left
-                                    this.remainDataamount = `${remainingDays} Days`;
-                                    setTimeout(() => {
-                                    this.updateProgressMegaDaily(totalDays, remainingDays, 'days');
-                                    },100); 
-                                } else if (remainingHours > 0 || remainingMinutes > 0) {
-                                    // Display hours and minutes if less than 24 hours
-                                    this.remainDataamount = `${remainingHours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
-                                    setTimeout(() => {
-                                    this.updateProgressMegaDaily(totalHours, remainingHours + (remainingMinutes > 0 ? 1 : 0), 'hours');
-                                },100); 
-                                } else {
-                                    // Less than 1 hour, show only minutes
-                                    this.remainDataamount = `${remainingMinutes} Minutes`;
-                                    setTimeout(() => {
-                                    this.updateProgressMegaDaily(60, remainingMinutes, 'minutes');
-                                },100); 
-                                }
-                            } else {
-                                // If no time is remaining, mark status as expired
-                                this.remainDataamount = 'Expired';
-                            }
-                        }
-                        //END 
-                    } else {
-                        this.topupArray[i]['status'] = 'Expired';
-                    }
+                let state = assignmenrtArr[j]['bundleState'];
+
+                if (state == 'active' || state == 'Active') {
+                    this.topupArray[i]['status'] = 'Active';
+                    break;
+                } else if (state == 'depleted') {
+                    this.topupArray[i]['status'] = 'Depleted';
+                } else if (state == 'queued') {
+                    this.topupArray[i]['status'] = 'Queued';
+                } else {
+                    this.topupArray[i]['status'] = 'Expired';
                 }
-            }
-
-            // If no match is found, update the status to 'Expired'
-            if (!foundMatch) {
-                this.topupArray[i]['status'] = 'Expired';
             }
         }
 
-        this.queuedArray = this.topupArray.filter((item: any) => item.status == 'Queued');
-        //console.log("before" + JSON.stringify(this.topupArray) );
-        this.topupArray.sort((a: any, b: any) => {
-            this.statusOrder = { 'Active': 1, 'Queued': 2, 'Depleted': 3, 'Expired': 4 };
-            return this.statusOrder[a.status] - this.statusOrder[b.status];
-        });
-
+        if (!foundMatch) {
+            this.topupArray[i]['status'] = 'Expired';
+        }
     }
 
+    // SORT
+    this.queuedArray = this.topupArray.filter((item: any) => item.status == 'Queued');
+
+    this.topupArray.sort((a: any, b: any) => {
+        this.statusOrder = { 'Active': 1, 'Queued': 2, 'Depleted': 3, 'Expired': 4 };
+        return this.statusOrder[a.status] - this.statusOrder[b.status];
+    });
+
+    console.log("FINAL FIX", JSON.stringify(this.topupArray));
+}
     queuedArray: any = [];
 
 
+handleUnlimitedPlan(bundle: any) {
 
+    this.currDate = moment();
+    this.startDate = moment(bundle['startTime'], moment.ISO_8601);
+    this.endDate = moment(bundle['endTime'], moment.ISO_8601);
 
-	gotoMarketPlace()
-		  {
-		    this.navController.navigateRoot('marketplace');
-		  }
+    // Calculate total days and hours
+    const totalDays = this.endDate.diff(this.startDate, 'days');
+    const totalHours = this.endDate.diff(this.startDate, 'hours');
+    const remainingTimeInMinutes = this.endDate.diff(this.currDate, 'minutes');
+
+    if (remainingTimeInMinutes > 0) {
+
+        const remainingDays = Math.floor(remainingTimeInMinutes / (24 * 60));
+        const remainingHours = Math.floor((remainingTimeInMinutes % (24 * 60)) / 60);
+        const remainingMinutes = remainingTimeInMinutes % 60;
+
+        if (remainingDays > 0) {
+
+            this.remainDataamount = `${remainingDays} Days`;
+
+            setTimeout(() => {
+                this.updateProgressMegaDaily(totalDays, remainingDays, 'days');
+            }, 100);
+
+        } else if (remainingHours > 0 || remainingMinutes > 0) {
+
+            this.remainDataamount = `${remainingHours}:${remainingMinutes < 10 ? '0' : ''}${remainingMinutes}`;
+
+            setTimeout(() => {
+                this.updateProgressMegaDaily(
+                    totalHours,
+                    remainingHours + (remainingMinutes > 0 ? 1 : 0),
+                    'hours'
+                );
+            }, 100);
+
+        } else {
+
+            this.remainDataamount = `${remainingMinutes} Minutes`;
+
+            setTimeout(() => {
+                this.updateProgressMegaDaily(60, remainingMinutes, 'minutes');
+            }, 100);
+        }
+
+    } else {
+        this.remainDataamount = 'Expired';
+    }
+}
+
+    gotoMarketPlace()
+          {
+            this.navController.navigateRoot('marketplace');
+          }
+
 
 
           
@@ -838,6 +841,7 @@ console.log("expRemainDays date => 2=> " + this.expRemainDays);
         });
         return await modal.present();
 
+        
     }
 
 
